@@ -1,3 +1,9 @@
+2005-03-19      Benedikt Meurer <benny@xfce.org>
+
+	* m4macros/xdt-features.m4: --enable-final is now on by default again.
+	  The glib assertions are now toggled by --disable-asserts, as suggested
+	  by Olivier.
+
 2005-03-17      Benedikt Meurer <benny@xfce.org>
 
 	* m4macros/xdt-features.m4: --enable-final is now disabled by default

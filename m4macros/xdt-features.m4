@@ -93,23 +93,29 @@ AC_HELP_STRING([--disable-gcov],
     AC_MSG_RESULT([no])
   fi
 
+dnl # --disable-asserts
+  AC_ARG_ENABLE([asserts],
+AC_HELP_STRING([--disable-asserts], [Disable assertions [DANGEROUS]]),
+    [], [enable_asserts=no])
+
+  AC_MSG_CHECKING([whether to disable assertions])
+  if test x"$enable_asserts" = x"no"; then
+    AC_MSG_RESULT([yes])
+    CPPFLAGS="$CPPFLAGS -DG_DISABLE_CHECKS -DG_DISABLE_ASSERT"
+    CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS"
+  else
+    AC_MSG_RESULT([no])
+  fi
+
 dnl # --enable-final
   AC_REQUIRE([AC_PROG_LD])
   AC_ARG_ENABLE([final],
 AC_HELP_STRING([--enable-final], [Build final version]),
-    [], [enable_final=no])
+    [], [enable_final=yes])
 
   AC_MSG_CHECKING([whether to build final version])
   if test x"$enable_final" = x"yes"; then
     AC_MSG_RESULT([yes])
-    AC_MSG_CHECKING([whether to disable assertions])
-    if x"$enable_debug" = x"no"; then
-      AC_MSG_RESULT([yes])
-      CPPFLAGS="$CPPFLAGS -DG_DISABLE_CHECKS -DG_DISABLE_ASSERT"
-      CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS"
-    else
-      AC_MSG_RESULT([no])
-    fi
     AC_MSG_CHECKING([whether $LD accepts -O1])
     case `$LD -O1 -v 2>&1 </dev/null` in
     *GNU* | *'with BFD'*)
