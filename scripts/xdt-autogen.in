@@ -72,7 +72,7 @@ if test x"$1" = x"clean"; then
    rm -f stamp-h1 *.spec ;
    rm -f mkinstalldirs libtool ;
    rm -rf autom4te.cache ;
-   rm -f intltool-*)
+   rm -f intltool-* gtk-doc.make)
   rm -f `find ${SOURCE_DIR} -name Makefile.in`
 
   exit 0
