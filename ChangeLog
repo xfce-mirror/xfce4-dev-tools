@@ -1,5 +1,9 @@
 2005-03-08      Benedikt Meurer <benny@xfce.org>
 
+	* m4macros/xdt-i18n.m4: Fix typo, its Q_() not O_().
+
+2005-03-08      Benedikt Meurer <benny@xfce.org>
+
 	* scripts/xdt-autogen.in, m4macros/xdt-i18n.m4: Add better handling
 	  of XGETTEXT_ARGS to automatically support the O_() translation
 	  keyword.

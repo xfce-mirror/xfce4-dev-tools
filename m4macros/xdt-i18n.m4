@@ -53,9 +53,9 @@ AC_DEFUN([XDT_I18N],
   dnl Determine additional xgettext flags
   AC_MSG_CHECKING([for additional xgettext flags])
   if test x"$XGETTEXT_ARGS" = x""; then
-    XGETTEXT_ARGS="--keyword=O_";
+    XGETTEXT_ARGS="--keyword=Q_";
   else
-    XGETTEXT_ARGS="$XGETTEXT_ARGS --keyword=O_";
+    XGETTEXT_ARGS="$XGETTEXT_ARGS --keyword=Q_";
   fi
   AC_SUBST([XGETTEXT_ARGS])
   AC_MSG_RESULT([$XGETTEXT_ARGS])
