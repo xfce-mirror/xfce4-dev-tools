@@ -367,7 +367,7 @@ AC_DEFUN([XDT_I18N],
 [
   dnl Substitute GETTEXT_PACKAGE variable
   GETTEXT_PACKAGE=m4_default([$2], [AC_PACKAGE_TARNAME()])
-  AC_DEFINE([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [Name of default gettext domain])
+  AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [Name of default gettext domain])
   AC_SUBST([GETTEXT_PACKAGE])
 
   dnl gettext and stuff

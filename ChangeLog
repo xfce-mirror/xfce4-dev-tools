@@ -1,5 +1,10 @@
 2005-01-26      Benedikt Meurer <benny@xfce.org>
 
+	* m4macros/xdt-i18n.m4: Need to use AC_DEFINE_UNQUOTED() when
+	  using shell variables.
+
+2005-01-26      Benedikt Meurer <benny@xfce.org>
+
 	* autogen.sh: Be sure to pass command line parameters to xdt-autogen
 	  and configure.
 	* m4macros/xdt-i18n.m4: Add missing fi, so now XDT_I18N() works
