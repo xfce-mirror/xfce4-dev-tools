@@ -1,3 +1,9 @@
+2005-03-04      Benedikt Meurer <benny@xfce.org>
+
+	* scripts/.cvsignore: Add vim swap files.
+	* scripts/xdt-autogen.in: Add support for AC_CONFIG_SUBDIRS(), currently
+	  required by xfcalendar. Improve the clean logic.
+
 2005-02-19      Benedikt Meurer <benny@xfce.org>
 
 	* m4macros/xdt-python.m4, m4macros/Makefile.am: Add M4 file for Python
