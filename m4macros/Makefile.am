@@ -11,6 +11,7 @@ macro_DATA =								\
 	xdt-depends.m4							\
 	xdt-features.m4							\
 	xdt-i18n.m4							\
+	xdt-python.m4							\
 	xdt-xfce.m4
 
 EXTRA_DIST =								\

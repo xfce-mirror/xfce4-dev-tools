@@ -1,3 +1,9 @@
+2005-02-19      Benedikt Meurer <benny@xfce.org>
+
+	* m4macros/xdt-python.m4, m4macros/Makefile.am: Add M4 file for Python
+	  related checks, currently contains an autoconf check to find header
+	  files required to build Python extensions on the target system.
+
 2005-01-31      Benedikt Meurer <benny@xfce.org>
 
 	* m4macros/xdt-depends.m4: XDT_CHECK_OPTIONAL_PACKAGE() also
