@@ -1,3 +1,8 @@
+2005-03-17      Benedikt Meurer <benny@xfce.org>
+
+	* scripts/xdt-autogen.in: Escape the special characters in the tr sets
+	  twice as they are also expanded by the shell.
+
 2005-03-08      Benedikt Meurer <benny@xfce.org>
 
 	* m4macros/xdt-i18n.m4: Fix typo, its Q_() not O_().

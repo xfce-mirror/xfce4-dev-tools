@@ -36,7 +36,7 @@ EOF
     CONFIGURE_FILES="$CONFIGURE_FILES $configure_file";
   fi
 
-  subdirs=`cat ${configure_file} | tr '\n\t\\' '   ' | sed -ne 's|.*AC_CONFIG_SUBDIRS(\[\{0,1\}\([[:alnum:]_ @/-]\{1,\}\).*|\1|p'`
+  subdirs=`cat ${configure_file} | tr '\\n\\t\\\\' '   ' | sed -ne 's|.*AC_CONFIG_SUBDIRS(\[\{0,1\}\([[:alnum:]_ @/-]\{1,\}\).*|\1|p'`
   for subdir in $subdirs; do
     lookup_configure_files "$1/$subdir";
   done
@@ -101,7 +101,7 @@ if test x"$1" = x"clean"; then
      rm -f intltool-* gtk-doc.make)
 
     # determine the output files used in this package directory
-    output_files=`tr '\n\\\t' '   ' < ${configure_file} | sed -ne 's|.*AC_OUTPUT(\[\{0,1\}\([[:alnum:]_@/\. -]\{1,\}\).*|\1|p'`;
+    output_files=`tr '\\n\\t\\\\' '   ' < ${configure_file} | sed -ne 's|.*AC_OUTPUT(\[\{0,1\}\([[:alnum:]_@/\. -]\{1,\}\).*|\1|p'`;
     for output_file in $output_files; do
       if test x`basename $output_file` = x"Makefile"; then
         rm -f "${directory}/${output_file}.in";
@@ -111,7 +111,7 @@ if test x"$1" = x"clean"; then
     done
 
     # determine translations used in this package directory
-    translations=`tr '\n\\' '  ' < ${configure_file} | sed -ne 's/.*XDT_I18N(\[\{0,1\}\([a-zA-Z_@ ]\{1,\}\).*/\1/p'`;
+    translations=`tr '\\n\\\\' '  ' < ${configure_file} | sed -ne 's/.*XDT_I18N(\[\{0,1\}\([a-zA-Z_@ ]\{1,\}\).*/\1/p'`;
     for translation in $translations; do
       rm -f "${directory}/po/${translation}.gmo";
     done
