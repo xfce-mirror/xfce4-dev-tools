@@ -101,7 +101,7 @@ if test x"$1" = x"clean"; then
      rm -f intltool-* gtk-doc.make)
 
     # determine the output files used in this package directory
-    output_files=`tr '\n\\\t' '   ' < configure.ac | sed -ne 's|.*AC_OUTPUT(\[\{0,1\}\([[:alnum:]_@/\. -]\{1,\}\).*|\1|p'`;
+    output_files=`tr '\n\\\t' '   ' < ${configure_file} | sed -ne 's|.*AC_OUTPUT(\[\{0,1\}\([[:alnum:]_@/\. -]\{1,\}\).*|\1|p'`;
     for output_file in $output_files; do
       if test x`basename $output_file` = x"Makefile"; then
         rm -f "${directory}/${output_file}.in";

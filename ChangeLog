@@ -1,3 +1,8 @@
+2005-03-05      Benedikt Meurer <benny@xfce.org>
+
+	* scripts/xdt-autogen.in: Fix a type where configure.ac was still
+	  hardcoded into the script.
+
 2005-03-04      Benedikt Meurer <benny@xfce.org>
 
 	* scripts/.cvsignore: Add vim swap files.
