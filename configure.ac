@@ -10,7 +10,7 @@ dnl Version information
 m4_define([xdt_version_major], [4])
 m4_define([xdt_version_minor], [3])
 m4_define([xdt_version_micro], [0])
-m4_define([xdt_version_tag], [svn])
+m4_define([xdt_version_tag], [cvs])
 m4_define([xdt_version], [xdt_version_major().xdt_version_minor().xdt_version_micro()xdt_version_tag()])
 
 
@@ -19,18 +19,16 @@ dnl # YOU ARE DOING.
 
 
 dnl Initialize autoconf
+AC_INIT([xfce4-dev-tools], [xdt_version()], [xfce4-dev@xfce.org])
 AC_COPYRIGHT([Copyright (c) 2002-2005
         The Xfce development team. All rights reserved.
 
 Written for Xfce by Benedikt Meurer <benny@xfce.org>.])
-AC_INIT([xfce4-dev-tools], [xdt_version()], [xfce4-dev@xfce.org])
-AC_PREREQ([2.50])
 AC_REVISION([$Id$])
 
-dnl Initialize automake
-XDT_VERSION=xdt_version()
-AM_INIT_AUTOMAKE([xfce4-dev-tools], [$XDT_VERSION])
-AM_MAINTAINER_MODE
+dnl Initialize the other autotools
+AM_INIT_AUTOMAKE([AC_PACKAGE_TARNAME()], [AC_PACKAGE_VERSION()])
+AM_MAINTAINER_MODE()
 
 dnl Check for basic programs
 AC_PROG_INSTALL

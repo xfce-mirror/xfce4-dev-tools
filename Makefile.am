@@ -11,7 +11,7 @@ SUBDIRS = 								\
 	scripts
 
 distclean-local:
-	rm -rf *.spec *.cache *~ TerminalHelp
+	rm -rf *.spec *.cache *~
 
 dist-bz2: dist
 	zcat $(PACKAGE)-$(VERSION).tar.gz | \
@@ -26,13 +26,5 @@ rpm: dist
 	@rm -f $(PACKAGE)-$(VERSION).tar.gz
 
 EXTRA_DIST =								\
-	AUTHORS								\
-	COPYING								\
-	ChangeLog							\
 	HACKING								\
-	INSTALL								\
-	NEWS								\
-	README								\
-	xfce4-dev-tools.spec.in						\
 	xfce4-dev-tools.spec
-
