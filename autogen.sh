@@ -9,12 +9,12 @@
 #
 
 if (type xdt-autogen) >/dev/null 2>&1; then
-  exec xdt-autogen
+  exec xdt-autogen $@
 else
   (aclocal &&
    automake --add-missing --copy --gnu &&
    autoconf &&
-   ./configure --enable-maintainer-mode "$@" &&
+   ./configure --enable-maintainer-mode $@ &&
    echo "Now type \"make\" to build.") || exit 1
 fi
 

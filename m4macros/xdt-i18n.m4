@@ -387,6 +387,7 @@ AC_DEFUN([XDT_I18N],
       localedir=$libdir/locale
     else
       localedir=$datadir/locale
+    fi
   ])
   AC_MSG_RESULT([$localdir])
   AC_SUBST([localdir])
