@@ -1,3 +1,8 @@
 2005-01-26      Benedikt Meurer <benny@xfce.org>
 
+	* HACKING: Added notes for developers with write access to the
+	  Xfce CVS repository.
+
+2005-01-26      Benedikt Meurer <benny@xfce.org>
+
 	* Initial import.

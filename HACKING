@@ -5,6 +5,16 @@ Please use the Xfce bugtracking system at http://bugzilla.xfce.org/ to report
 bugs and post feature requests.
 
 
+Notes to developers
+===================
+
+If you are a Xfce developer with write access to the Xfce CVS repository,
+and you feel like you want or need to change something in this module,
+do not simply commit your changes, unless its really a trivial fix. If it's
+a non-trivial change, discuss the change on xfce4-dev@xfce.org first. In
+either case, don't forget to update the ChangeLog file before you commit!
+
+
 Patches
 =======
 
