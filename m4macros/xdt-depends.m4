@@ -188,6 +188,8 @@ AC_HELP_STRING([--disable-$4], [Disable checking for $5]),
     AC_MSG_CHECKING([for optional package $2])
     AC_MSG_RESULT([disabled])
   fi
+
+  AM_CONDITIONAL([HAVE_$1], [test x"$$1_FOUND" = x"yes"])
 ])
 
 
