@@ -44,23 +44,23 @@ AC_DEFUN([XDT_PROG_PKG_CONFIG],
       echo "***"
       exit 1
     fi
-  fi
 
-  # check pkg-config version
-  AC_MSG_CHECKING([for pkg-config >= $xdt_cv_PKG_CONFIG_MIN_VERSION])
-  if $PKG_CONFIG --atleast-pkgconfig-version $xdt_cv_PKG_CONFIG_MIN_VERSION; then
-    xdt_cv_PKG_CONFIG_VERSION=`$PKG_CONFIG --version`
-    AC_MSG_RESULT([$xdt_cv_PKG_CONFIG_VERSION])
-  else
-    xdt_cv_PKG_CONFIG_VERSION=`$PKG_CONFIG --version`
-    AC_MSG_RESULT([$xdt_cv_PKG_CONFIG_VERSION])
-    echo "*** Your version of pkg-config is too old. You need atleast"
-    echo "*** pkg-config $xdt_cv_PKG_CONFIG_MIN_VERSION or newer. You can download pkg-config "
-    echo "*** from the freedesktop.org software repository at"
-    echo "***"
-    echo "***    http://www.freedesktop.org/software/pkgconfig"
-    echo "***"
-    exit 1
+    # check pkg-config version
+    AC_MSG_CHECKING([for pkg-config >= $xdt_cv_PKG_CONFIG_MIN_VERSION])
+    if $PKG_CONFIG --atleast-pkgconfig-version $xdt_cv_PKG_CONFIG_MIN_VERSION; then
+      xdt_cv_PKG_CONFIG_VERSION=`$PKG_CONFIG --version`
+      AC_MSG_RESULT([$xdt_cv_PKG_CONFIG_VERSION])
+    else
+      xdt_cv_PKG_CONFIG_VERSION=`$PKG_CONFIG --version`
+      AC_MSG_RESULT([$xdt_cv_PKG_CONFIG_VERSION])
+      echo "*** Your version of pkg-config is too old. You need atleast"
+      echo "*** pkg-config $xdt_cv_PKG_CONFIG_MIN_VERSION or newer. You can download pkg-config "
+      echo "*** from the freedesktop.org software repository at"
+      echo "***"
+      echo "***    http://www.freedesktop.org/software/pkgconfig"
+      echo "***"
+      exit 1
+    fi
   fi
 ])
 
@@ -89,7 +89,7 @@ dnl be terminated with exit code 1.
 dnl
 AC_DEFUN([XDT_CHECK_PACKAGE],
 [
-  AC_REQUIRE([XDT_PROG_PKG_CONFIG])
+  XDT_PROG_PKG_CONFIG()
 
   AC_MSG_CHECKING([for $2 >= $3])
   if $PKG_CONFIG "--atleast-version=$3" "$2" >/dev/null 2>&1; then
