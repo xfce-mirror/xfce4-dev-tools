@@ -147,7 +147,7 @@ test -z "${XDT_PROG_GTKDOCIZE}" && XDT_PROG_GTKDOCIZE="gtkdocize"
 if grep "^GTK_DOC_CHECK" "${CONFIGURE_FILE}" >/dev/null 2>&1; then
   (${XDT_PROG_GTKDOCIZE} --version) </dev/null >/dev/null 2>&1 || {
     cat >&2 <<EOF
-xdt-autogen: You have "gtk-doc" installed. You can get if from
+xdt-autogen: You must have "gtk-doc" installed. You can get if from
              http://www.gtk.org/gtk-doc/.
 EOF
     exit 1
