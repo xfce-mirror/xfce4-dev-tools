@@ -208,10 +208,14 @@ fi
 ##
 ## Run configure
 ##
-(echo "Running ${SOURCE_DIR}/configure ${CONFIGURE_FLAGS}..." &&
- cd "${SOURCE_DIR}" &&
- ./configure ${CONFIGURE_FLAGS} &&
- echo "Now type \"make\" to compile.") || exit 1
+if test x"${NOCONFIGURE}" = x""; then
+  (echo "Running ${SOURCE_DIR}/configure ${CONFIGURE_FLAGS}..." &&
+   cd "${SOURCE_DIR}" &&
+   ./configure ${CONFIGURE_FLAGS} &&
+   echo "Now type \"make\" to compile.") || exit 1
+else
+  echo "Skipping configure process."
+fi
 
 
 # vi:set ts=2 sw=2 et ai:
