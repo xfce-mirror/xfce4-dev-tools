@@ -313,6 +313,28 @@ for configure_file in ${CONFIGURE_FILES}; do
      ${XDT_PROG_INTLTOOLIZE} --automake --copy --force) || exit 1
   fi
 
+  # patch the po/Makefile.in.in to take into account the setting of
+  # XGETTEXT_ARGS properly
+  if test -f "${source_dir}/po/Makefile.in.in"; then
+    grep -q '^XGETTEXT_ARGS[ ]*=[ ]*@XGETTEXT_ARGS@$' \
+      "${source_dir}/po/Makefile.in.in" 2> /dev/null
+    if test $? -ne 0; then
+      echo "Patching file 'po/Makefile.in.in'"
+      sed \
+        -e 's/^\(XGETTEXT[ ]*=[ ]*@XGETTEXT@\)[ ]*$/\1 $(XGETTEXT_ARGS)/' \
+        -e 's/^\(MSGMERGE[ ]*=\)[ ]*\(INTLTOOL_EXTRACT=\)/\1 XGETTEXT_ARGS="$(XGETTEXT_ARGS)" \2/' \
+        -e 's/^\(GENPOT[ ]*=\)[ ]*\(INTLTOOL_EXTRACT=\)/\1 XGETTEXT_ARGS="$(XGETTEXT_ARGS)" \2/' \
+        -e "/^XGETTEXT = @XGETTEXT@/{
+i\\
+XGETTEXT_ARGS = @XGETTEXT_ARGS@
+}" < "${source_dir}/po/Makefile.in.in" > "${source_dir}/po/Makefile.in.in.tmp"
+      if test $? -eq 0; then
+        mv -f "${source_dir}/po/Makefile.in.in.tmp" \
+          "${source_dir}/po/Makefile.in.in" || exit 1
+      fi
+    fi
+  fi
+
   if grep "^AC_PROG_LIBTOOL" "${configure_file}" >/dev/null 2>&1; then
     (echo "Running ${XDT_PROG_LIBTOOLIZE} --force --copy..." &&
      cd "${source_dir}" &&

@@ -49,6 +49,16 @@ AC_DEFUN([XDT_I18N],
   ])
   AC_MSG_RESULT([$localedir])
   AC_SUBST([localedir])
+
+  dnl Determine additional xgettext flags
+  AC_MSG_CHECKING([for additional xgettext flags])
+  if test x"$XGETTEXT_ARGS" = x""; then
+    XGETTEXT_ARGS="--keyword=O_";
+  else
+    XGETTEXT_ARGS="$XGETTEXT_ARGS --keyword=O_";
+  fi
+  AC_SUBST([XGETTEXT_ARGS])
+  AC_MSG_RESULT([$XGETTEXT_ARGS])
 ])
 
 
