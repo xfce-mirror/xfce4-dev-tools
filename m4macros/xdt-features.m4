@@ -96,7 +96,7 @@ AC_HELP_STRING([--disable-gcov],
 dnl # --disable-asserts
   AC_ARG_ENABLE([asserts],
 AC_HELP_STRING([--disable-asserts], [Disable assertions [DANGEROUS]]),
-    [], [enable_asserts=no])
+    [], [enable_asserts=yes])
 
   AC_MSG_CHECKING([whether to disable assertions])
   if test x"$enable_asserts" = x"no"; then
