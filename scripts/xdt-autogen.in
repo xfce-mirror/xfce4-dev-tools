@@ -111,10 +111,11 @@ if test x"$1" = x"clean"; then
     done
 
     # determine translations used in this package directory
-    translations=`tr '\\n\\\\' '  ' < ${configure_file} | sed -ne 's/.*XDT_I18N(\[\{0,1\}\([a-zA-Z_@ ]\{1,\}\).*/\1/p'`;
-    for translation in $translations; do
-      rm -f "${directory}/po/${translation}.gmo";
-    done
+#    translations=`tr '\\n\\\\' '  ' < ${configure_file} | sed -ne 's/.*XDT_I18N(\[\{0,1\}\([a-zA-Z_@ ]\{1,\}\).*/\1/p'`;
+#    for translation in $translations; do
+#      rm -f "${directory}/po/${translation}.gmo";
+#    done
+    rm -f ${directory}/po/*.gmo;
   done
 
   exit 0
