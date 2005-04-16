@@ -19,7 +19,7 @@ dnl # YOU ARE DOING.
 
 
 dnl Initialize autoconf
-AC_INIT([xfce4-dev-tools], [xdt_version()], [xfce4-dev@xfce.org])
+AC_INIT([xfce4-dev-tools], [xdt_version], [xfce4-dev@xfce.org])
 AC_COPYRIGHT([Copyright (c) 2002-2005
         The Xfce development team. All rights reserved.
 
@@ -27,7 +27,7 @@ Written for Xfce by Benedikt Meurer <benny@xfce.org>.])
 AC_REVISION([$Id$])
 
 dnl Initialize the other autotools
-AM_INIT_AUTOMAKE([AC_PACKAGE_TARNAME()], [AC_PACKAGE_VERSION()])
+AM_INIT_AUTOMAKE([xfce4-dev-tools], [xdt_version])
 AM_MAINTAINER_MODE()
 
 dnl Check for basic programs
