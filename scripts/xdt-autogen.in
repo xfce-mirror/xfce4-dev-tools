@@ -123,10 +123,16 @@ fi
 
 
 ##
-## Check for autoconf
+## Check for autoconf, first trying autoconf-2.59, then autoconf-2.58, then
+## autoconf-2.57, then autoconf-2.53, and finally simply autoconf.
 ##
-test -z "${XDT_PROG_AUTOCONF}" && XDT_PROG_AUTOCONF="autoconf"
-(${XDT_PROG_AUTOCONF} --version) </dev/null >/dev/null 2>&0 || {
+test -z "${XDT_PROG_AUTOCONF}" &&
+for i in autoconf-2.59 autoconf-2.58 autoconf-2.57 autoconf-2.53 autoconf; do
+  (${i} --version) </dev/null >/dev/null 2>&1 &&
+  XDT_PROG_AUTOCONF=${i} && break
+done
+
+test -z "${XDT_PROG_AUTOCONF}" && {
   cat >&2 <<EOF
 xdt-autogen: You must have "autoconf" installed on your system.
              Download the appropriate package for your distribution,
@@ -212,12 +218,18 @@ done
 
 
 ##
-## Check for aclocal
+## Check for aclocal, first trying aclocal-1.9, then aclocal-1.8, and finally
+## simply aclocal.
 ##
-test -z "${XDT_PROG_ACLOCAL}" && XDT_PROG_ACLOCAL="aclocal"
-(${XDT_PROG_ACLOCAL} --version) </dev/null >/dev/null 2>&1 || {
+test -z "${XDT_PROG_ACLOCAL}" &&
+for i in aclocal-1.9 aclocal-1.8 aclocal; do
+  (${i} --version) </dev/null >/dev/null 2>&1 &&
+  XDT_PROG_ACLOCAL=${i} && break
+done
+
+test -z "${XDT_PROG_ACLOCAL}" && {
   cat >&2 <<EOF
-xdt-autogen: You must have "autoconf" installed (which includes the
+xdt-autogen: You must have "automake" installed (which includes the
              "aclocal" tool). You can get the source tarball at
              ftp://ftp.gnu.org/pub/gnu/.
 EOF
@@ -226,12 +238,17 @@ EOF
 
 
 ##
-## Check for autoheader
+## Check for autoheader, first trying autoheader-2.59, then autoheader-2.58,
+## then autoheader-2.57, then autoheader-2.53, and finally simply autoheader.
 ##
-test -z "${XDT_PROG_AUTOHEADER}" && XDT_PROG_AUTOHEADER="autoheader"
+test -z "${XDT_PROG_AUTOHEADER}" &&
 for configure_file in $CONFIGURE_FILES; do
   if grep "^AM_CONFIG_HEADER" "${configure_file}" >/dev/null 2>&1; then
-    (${XDT_PROG_AUTOHEADER} --version) </dev/null >/dev/null 2>&1 || {
+    for i in autoheader-2.59 autoheader-2.58 autoheader-2.57 autoheader-2.53 autoheader; do
+      (${i} --version) </dev/null >/dev/null 2>&1 &&
+      XDT_PROG_AUTOHEADER=${i} && break
+    done
+    test -z "${XDT_PROG_AUTOHEADER}" && {
       cat >&2 <<EOF
 xdt-autogen: You must have "autoconf" installed (which includes the
              "autoheader" tool). You can get the source tarball at
@@ -245,10 +262,16 @@ done
 
 
 ##
-## Check for automake
+## Check for automake, first trying automake-1.9, then automake-1.8, and finally
+## simply automake.
 ##
-test -z "${XDT_PROG_AUTOMAKE}" && XDT_PROG_AUTOMAKE="automake"
-(${XDT_PROG_AUTOMAKE} --version) </dev/null >/dev/null 2>&1 || {
+test -z "${XDT_PROG_AUTOMAKE}" &&
+for i in automake-1.9 automake-1.8 automake; do
+  (${i} --version) </dev/null >/dev/null 2>&1 &&
+  XDT_PROG_AUTOMAKE=${i} && break
+done
+
+test -z "${XDT_PROG_AUTOMAKE}" && {
   cat >&2 <<EOF
 xdt-autogen: You must have "automake" installed on your system.
              You can get the source tarball at

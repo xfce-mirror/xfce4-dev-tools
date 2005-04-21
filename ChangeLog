@@ -1,3 +1,13 @@
+2005-04-20      Brian Tarricone <bjt23@cornell.edu>
+
+    * Modify checks for autoheader and autoconf so they first check for
+      versioned binaries (-2.59, -2.58, -2.57, -2.53) before falling back to a
+      non-versioned binary.
+    * Modify checks for automake and aclocal so they first check for
+      versioned binaries (-1.9, -1.8) before falling back to a non-
+      versioned binary.
+    * Fix two typos; 2>&0 -> 2>&1, autoconf -> automake.
+
 2005-03-19      Benedikt Meurer <benny@xfce.org>
 
 	* m4macros/xdt-features.m4: Fix typo.
