@@ -1,144 +1,127 @@
+2005-05-04 21:00  olivier
+
+	* ChangeLog: Update ChangeLog
+
 2005-04-21 00:18  kelnos
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/scripts/xdt-autogen.in: * Modify checks for
-	  autoheader and autoconf so they first check for versioned binaries
-	  (-2.59, -2.58, -2.57, -2.53) before falling back to a
-	  non-versioned binary. * Modify checks for automake and aclocal so
-	  they first check for versioned binaries (-1.9, -1.8) before
-	  falling back to a non- versioned binary. * Fix two typos; 2>&0 ->
-	  2>&1, autoconf -> automake.
+	* ChangeLog, scripts/xdt-autogen.in: * Modify checks for autoheader
+	  and autoconf so they first check for versioned binaries (-2.59,
+	  -2.58, -2.57, -2.53) before falling back to a non-versioned
+	  binary. * Modify checks for automake and aclocal so they first
+	  check for versioned binaries (-1.9, -1.8) before falling back to a
+	  non- versioned binary. * Fix two typos; 2>&0 -> 2>&1, autoconf ->
+	  automake.
 
 2005-04-17 11:48  olivier
 
-	* xfce4-dev-tools/trunk/configure.ac: REverting my last change, it's
-	  my Ubuntu install that is broken, not that script.
+	* configure.ac: REverting my last change, it's my Ubuntu install
+	  that is broken, not that script.
 
 2005-04-16 20:55  olivier
 
-	* xfce4-dev-tools/trunk/configure.ac: The package did not build for
-	  me
+	* configure.ac: The package did not build for me
 
 2005-04-12 12:55  jasper
 
-	* xfce4-dev-tools/trunk/scripts/xdt-autogen.in: Not all gmo files
-	  were removed; this at least works.
+	* scripts/xdt-autogen.in: Not all gmo files were removed; this at
+	  least works.
 
 2005-04-06 07:33  perldude
 
-	* xfce4-dev-tools/trunk/.cvsignore,
-	  xfce4-dev-tools/trunk/m4macros/.cvsignore,
-	  xfce4-dev-tools/trunk/scripts/.cvsignore: remove .cvsignore cruft
+	* .cvsignore, m4macros/.cvsignore, scripts/.cvsignore: remove
+	  .cvsignore cruft
 
 2005-03-19 16:00  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/m4macros/xdt-features.m4: 2005-03-19
-	  Benedikt Meurer <benny@xfce.org> * m4macros/xdt-features.m4: Fix
-	  typo.
+	* ChangeLog, m4macros/xdt-features.m4: 2005-03-19 Benedikt Meurer
+	  <benny@xfce.org> * m4macros/xdt-features.m4: Fix typo.
 
 2005-03-19 15:56  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/m4macros/xdt-features.m4: 2005-03-19
-	  Benedikt Meurer <benny@xfce.org> * m4macros/xdt-features.m4:
-	  --enable-final is now on by default again. The glib assertions are
-	  now toggled by --disable-asserts, as suggested by Olivier.
+	* ChangeLog, m4macros/xdt-features.m4: 2005-03-19 Benedikt Meurer
+	  <benny@xfce.org> * m4macros/xdt-features.m4: --enable-final is now
+	  on by default again. The glib assertions are now toggled by
+	  --disable-asserts, as suggested by Olivier.
 
 2005-03-17 22:37  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/m4macros/xdt-features.m4: 2005-03-17
-	  Benedikt Meurer <benny@xfce.org> * m4macros/xdt-features.m4:
-	  --enable-final is now disabled by default and glib assertions will
-	  only be disabled if --enable-final is specified and debugging is
-	  disabled.
+	* ChangeLog, m4macros/xdt-features.m4: 2005-03-17 Benedikt Meurer
+	  <benny@xfce.org> * m4macros/xdt-features.m4: --enable-final is now
+	  disabled by default and glib assertions will only be disabled if
+	  --enable-final is specified and debugging is disabled.
 
 2005-03-17 10:14  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/scripts/xdt-autogen.in: 2005-03-17 Benedikt
-	  Meurer <benny@xfce.org> * scripts/xdt-autogen.in: Escape the
-	  special characters in the tr sets twice as they are also expanded
-	  by the shell.
+	* ChangeLog, scripts/xdt-autogen.in: 2005-03-17 Benedikt Meurer
+	  <benny@xfce.org> * scripts/xdt-autogen.in: Escape the special
+	  characters in the tr sets twice as they are also expanded by the
+	  shell.
 
 2005-03-08 15:23  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/m4macros/xdt-i18n.m4: 2005-03-08 Benedikt
-	  Meurer <benny@xfce.org> * m4macros/xdt-i18n.m4: Fix typo, its Q_()
-	  not O_().
+	* ChangeLog, m4macros/xdt-i18n.m4: 2005-03-08 Benedikt Meurer
+	  <benny@xfce.org> * m4macros/xdt-i18n.m4: Fix typo, its Q_() not
+	  O_().
 
 2005-03-08 15:16  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/m4macros/xdt-i18n.m4,
-	  xfce4-dev-tools/trunk/scripts/xdt-autogen.in: 2005-03-08 Benedikt
-	  Meurer <benny@xfce.org> * scripts/xdt-autogen.in,
-	  m4macros/xdt-i18n.m4: Add better handling of XGETTEXT_ARGS to
-	  automatically support the O_() translation keyword.
+	* ChangeLog, m4macros/xdt-i18n.m4, scripts/xdt-autogen.in:
+	  2005-03-08 Benedikt Meurer <benny@xfce.org> *
+	  scripts/xdt-autogen.in, m4macros/xdt-i18n.m4: Add better handling
+	  of XGETTEXT_ARGS to automatically support the O_() translation
+	  keyword.
 
 2005-03-05 19:05  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/scripts/xdt-autogen.in: 2005-03-05 Benedikt
-	  Meurer <benny@xfce.org> * scripts/xdt-autogen.in: Fix a type where
+	* ChangeLog, scripts/xdt-autogen.in: 2005-03-05 Benedikt Meurer
+	  <benny@xfce.org> * scripts/xdt-autogen.in: Fix a type where
 	  configure.ac was still hardcoded into the script.
 
 2005-03-04 13:58  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog, xfce4-dev-tools/trunk/scripts,
-	  xfce4-dev-tools/trunk/scripts/.cvsignore,
-	  xfce4-dev-tools/trunk/scripts/xdt-autogen.in: 2005-03-04 Benedikt
-	  Meurer <benny@xfce.org> * scripts/.cvsignore: Add vim swap files.
-	  * scripts/xdt-autogen.in: Add support for AC_CONFIG_SUBDIRS(),
-	  currently required by xfcalendar. Improve the clean logic.
+	* ChangeLog, scripts, scripts/.cvsignore, scripts/xdt-autogen.in:
+	  2005-03-04 Benedikt Meurer <benny@xfce.org> * scripts/.cvsignore:
+	  Add vim swap files. * scripts/xdt-autogen.in: Add support for
+	  AC_CONFIG_SUBDIRS(), currently required by xfcalendar. Improve the
+	  clean logic.
 
 2005-02-19 10:42  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/m4macros/Makefile.am,
-	  xfce4-dev-tools/trunk/m4macros/xdt-python.m4: 2005-02-19 Benedikt
-	  Meurer <benny@xfce.org> * m4macros/xdt-python.m4,
-	  m4macros/Makefile.am: Add M4 file for Python related checks,
-	  currently contains an autoconf check to find header files required
-	  to build Python extensions on the target system.
+	* ChangeLog, m4macros/Makefile.am, m4macros/xdt-python.m4:
+	  2005-02-19 Benedikt Meurer <benny@xfce.org> *
+	  m4macros/xdt-python.m4, m4macros/Makefile.am: Add M4 file for
+	  Python related checks, currently contains an autoconf check to
+	  find header files required to build Python extensions on the
+	  target system.
 
 2005-01-31 19:38  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog, xfce4-dev-tools/trunk/m4macros,
-	  xfce4-dev-tools/trunk/m4macros/.cvsignore,
-	  xfce4-dev-tools/trunk/m4macros/xdt-depends.m4: 2005-01-31 Benedikt
-	  Meurer <benny@xfce.org> * m4macros/xdt-depends.m4:
-	  XDT_CHECK_OPTIONAL_PACKAGE() also sets an automake conditional for
-	  HAVE_VARNAME now.
+	* ChangeLog, m4macros, m4macros/.cvsignore, m4macros/xdt-depends.m4:
+	  2005-01-31 Benedikt Meurer <benny@xfce.org> *
+	  m4macros/xdt-depends.m4: XDT_CHECK_OPTIONAL_PACKAGE() also sets an
+	  automake conditional for HAVE_VARNAME now.
 
 2005-01-27 20:11  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/m4macros/xdt-depends.m4: 2005-01-27 Benedikt
-	  Meurer <benny@xfce.org> * m4macros/xdt-depends.m4: AC_REQUIRE()
-	  doesn't work properly with conditional shell code.
+	* ChangeLog, m4macros/xdt-depends.m4: 2005-01-27 Benedikt Meurer
+	  <benny@xfce.org> * m4macros/xdt-depends.m4: AC_REQUIRE() doesn't
+	  work properly with conditional shell code.
 
 2005-01-27 18:26  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/scripts/xdt-autogen.in: 2005-01-27 Benedikt
-	  Meurer <benny@xfce.org> * scripts/xdt-autogen.in: Fix typo in the
-	  error message of the gtk-doc check.
+	* ChangeLog, scripts/xdt-autogen.in: 2005-01-27 Benedikt Meurer
+	  <benny@xfce.org> * scripts/xdt-autogen.in: Fix typo in the error
+	  message of the gtk-doc check.
 
 2005-01-27 16:31  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/scripts/xdt-autogen.in: 2005-01-27 Benedikt
-	  Meurer <benny@xfce.org> * scripts/xdt-autogen.in: Remove
-	  gtk-doc.make as well when cleaning autogenerated files.
+	* ChangeLog, scripts/xdt-autogen.in: 2005-01-27 Benedikt Meurer
+	  <benny@xfce.org> * scripts/xdt-autogen.in: Remove gtk-doc.make as
+	  well when cleaning autogenerated files.
 
 2005-01-27 15:49  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/Makefile.am,
-	  xfce4-dev-tools/trunk/configure.ac: 2005-01-27 Benedikt Meurer
+	* ChangeLog, Makefile.am, configure.ac: 2005-01-27 Benedikt Meurer
 	  <benny@xfce.org> * configure.ac: Fix tag name. Fix order of
 	  autoconf macros. Use autoconf values to initialize automake. *
 	  Makefile.am: Fix distclean-local target. Strip down EXTRA_DIST
@@ -146,74 +129,57 @@
 
 2005-01-27 13:04  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/m4macros/xdt-i18n.m4,
-	  xfce4-dev-tools/trunk/scripts/xdt-autogen.in: 2005-01-27 Benedikt
-	  Meurer <benny@xfce.org> * scripts/xdt-autogen.in: Added commands
-	  to clean all autogenerated files from the current source
-	  directory. Just run "xdt-autogen clean". * m4macros/xdt-i18n.m4:
-	  Use the macros provided by glib-gettext.m4 instead of our own
-	  replacements, in order to make sure that they play well with the
-	  Makefile.in.in generated by glib-gettextize. *
-	  m4macros/xdt-i18n.m4: Fix typos in localedir substitution. *
-	  scripts/xdt-autogen.in: Added support for intltool.
+	* ChangeLog, m4macros/xdt-i18n.m4, scripts/xdt-autogen.in:
+	  2005-01-27 Benedikt Meurer <benny@xfce.org> *
+	  scripts/xdt-autogen.in: Added commands to clean all autogenerated
+	  files from the current source directory. Just run "xdt-autogen
+	  clean". * m4macros/xdt-i18n.m4: Use the macros provided by
+	  glib-gettext.m4 instead of our own replacements, in order to make
+	  sure that they play well with the Makefile.in.in generated by
+	  glib-gettextize. * m4macros/xdt-i18n.m4: Fix typos in localedir
+	  substitution. * scripts/xdt-autogen.in: Added support for
+	  intltool.
 
 2005-01-27 09:20  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog, xfce4-dev-tools/trunk/autogen.sh,
-	  xfce4-dev-tools/trunk/scripts/xdt-autogen.in: 2005-01-27 Benedikt
+	* ChangeLog, autogen.sh, scripts/xdt-autogen.in: 2005-01-27 Benedikt
 	  Meurer <benny@xfce.org> * autogen.sh, scripts/xdt-autogen.in:
 	  Don't run the configure script if the environment variable
 	  NOCONFIGURE is set.
 
 2005-01-26 22:47  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog,
-	  xfce4-dev-tools/trunk/m4macros/xdt-i18n.m4: 2005-01-26 Benedikt
-	  Meurer <benny@xfce.org> * m4macros/xdt-i18n.m4: Need to use
+	* ChangeLog, m4macros/xdt-i18n.m4: 2005-01-26 Benedikt Meurer
+	  <benny@xfce.org> * m4macros/xdt-i18n.m4: Need to use
 	  AC_DEFINE_UNQUOTED() when using shell variables.
 
 2005-01-26 22:14  benny
 
-	* xfce4-dev-tools/trunk, xfce4-dev-tools/trunk/.cvsignore,
-	  xfce4-dev-tools/trunk/ChangeLog, xfce4-dev-tools/trunk/autogen.sh,
-	  xfce4-dev-tools/trunk/m4macros,
-	  xfce4-dev-tools/trunk/m4macros/.cvsignore,
-	  xfce4-dev-tools/trunk/m4macros/xdt-i18n.m4,
-	  xfce4-dev-tools/trunk/scripts,
-	  xfce4-dev-tools/trunk/scripts/.cvsignore: 2005-01-26 Benedikt
-	  Meurer <benny@xfce.org> * autogen.sh: Be sure to pass command line
-	  parameters to xdt-autogen and configure. * m4macros/xdt-i18n.m4:
-	  Add missing fi, so now XDT_I18N() works properly. * .cvsignore,
-	  m4macros/.cvsignore, scripts/.cvsignore: Shut up CVS.
+	* ., .cvsignore, ChangeLog, autogen.sh, m4macros,
+	  m4macros/.cvsignore, m4macros/xdt-i18n.m4, scripts,
+	  scripts/.cvsignore: 2005-01-26 Benedikt Meurer <benny@xfce.org> *
+	  autogen.sh: Be sure to pass command line parameters to xdt-autogen
+	  and configure. * m4macros/xdt-i18n.m4: Add missing fi, so now
+	  XDT_I18N() works properly. * .cvsignore, m4macros/.cvsignore,
+	  scripts/.cvsignore: Shut up CVS.
 
 2005-01-26 21:42  benny
 
-	* xfce4-dev-tools/trunk/ChangeLog, xfce4-dev-tools/trunk/HACKING:
-	  2005-01-26 Benedikt Meurer <benny@xfce.org> * HACKING: Added notes
-	  for developers with write access to the Xfce CVS repository.
+	* ChangeLog, HACKING: 2005-01-26 Benedikt Meurer <benny@xfce.org> *
+	  HACKING: Added notes for developers with write access to the Xfce
+	  CVS repository.
 
 2005-01-26 21:34  benny
 
-	* xfce4-dev-tools/trunk/AUTHORS, xfce4-dev-tools/trunk/COPYING,
-	  xfce4-dev-tools/trunk/ChangeLog, xfce4-dev-tools/trunk/HACKING,
-	  xfce4-dev-tools/trunk/INSTALL, xfce4-dev-tools/trunk/Makefile.am,
-	  xfce4-dev-tools/trunk/NEWS, xfce4-dev-tools/trunk/README,
-	  xfce4-dev-tools/trunk/autogen.sh,
-	  xfce4-dev-tools/trunk/configure.ac,
-	  xfce4-dev-tools/trunk/m4macros,
-	  xfce4-dev-tools/trunk/m4macros/Makefile.am,
-	  xfce4-dev-tools/trunk/m4macros/xdt-depends.m4,
-	  xfce4-dev-tools/trunk/m4macros/xdt-features.m4,
-	  xfce4-dev-tools/trunk/m4macros/xdt-i18n.m4,
-	  xfce4-dev-tools/trunk/m4macros/xdt-xfce.m4,
-	  xfce4-dev-tools/trunk/scripts,
-	  xfce4-dev-tools/trunk/scripts/Makefile.am,
-	  xfce4-dev-tools/trunk/scripts/xdt-autogen.in,
-	  xfce4-dev-tools/trunk/xfce4-dev-tools.spec.in: Initial revision
+	* AUTHORS, COPYING, ChangeLog, HACKING, INSTALL, Makefile.am, NEWS,
+	  README, autogen.sh, configure.ac, m4macros, m4macros/Makefile.am,
+	  m4macros/xdt-depends.m4, m4macros/xdt-features.m4,
+	  m4macros/xdt-i18n.m4, m4macros/xdt-xfce.m4, scripts,
+	  scripts/Makefile.am, scripts/xdt-autogen.in,
+	  xfce4-dev-tools.spec.in: Initial revision
 
 2005-01-26 21:34  
 
-	* xfce4-dev-tools/branches, xfce4-dev-tools/tags,
-	  xfce4-dev-tools/trunk: New repository initialized by cvs2svn.
+	* xfce4-dev-tools/branches, xfce4-dev-tools/tags, .: New repository
+	  initialized by cvs2svn.
 
