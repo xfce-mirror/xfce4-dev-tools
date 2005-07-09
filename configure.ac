@@ -10,7 +10,7 @@ dnl Version information
 m4_define([xdt_version_major], [4])
 m4_define([xdt_version_minor], [3])
 m4_define([xdt_version_micro], [0])
-m4_define([xdt_version_tag], [cvs])
+m4_define([xdt_version_tag], [])
 m4_define([xdt_version], [xdt_version_major().xdt_version_minor().xdt_version_micro()xdt_version_tag()])
 
 

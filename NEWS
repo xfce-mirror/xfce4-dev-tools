@@ -1,4 +1,4 @@
-4.3.0cvs
-========
-- xfce4-dev-tools is a new module in CVS, which includes tools, macros and
+4.3.0
+=====
+- xfce4-dev-tools is a new module in SVN, which includes tools, macros and
   documentation for Xfce developers.

@@ -1,3 +1,9 @@
+2005-07-09      Benedikt Meurer <benny@xfce.org>
+
+	* Makefile.am: Set proper automake options.
+	* HACKING, README: CVS -> SVN.
+	* NEWS, configure.ac: Version 4.3.0.
+
 2005-04-20      Brian Tarricone <bjt23@cornell.edu>
 
 	* scripts/xdt-autogen.in: Modify checks for autoheader and autoconf
