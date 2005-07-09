@@ -1,5 +1,9 @@
 2005-07-09      Benedikt Meurer <benny@xfce.org>
 
+	* configure.ac, NEWS: Bump version after release (4.3.1svn).
+
+2005-07-09      Benedikt Meurer <benny@xfce.org>
+
 	* Makefile.am: Set proper automake options.
 	* HACKING, README: CVS -> SVN.
 	* NEWS, configure.ac: Version 4.3.0.
