@@ -6,19 +6,24 @@ dnl
 dnl Written for Xfce by Benedikt Meurer <benny@xfce.org>.
 dnl
 
-dnl Version information
+dnl ***************************
+dnl *** Version information ***
+dnl ***************************
 m4_define([xdt_version_major], [4])
 m4_define([xdt_version_minor], [3])
-m4_define([xdt_version_micro], [1])
+m4_define([xdt_version_micro], [3])
+m4_define([xdt_version_build], [r@REVISION@])
 m4_define([xdt_version_tag], [svn])
-m4_define([xdt_version], [xdt_version_major().xdt_version_minor().xdt_version_micro()xdt_version_tag()])
+m4_define([xdt_version], [xdt_version_major().xdt_version_minor().xdt_version_micro()ifelse(xdt_version_tag(), [], [], [xdt_version_tag()-xdt_version_build()])])
 
 
 dnl # DO NOT MODIFY ANYTHING BELOW THIS LINE, UNLESS YOU KNOW WHAT
 dnl # YOU ARE DOING.
 
 
-dnl Initialize autoconf
+dnl ***************************
+dnl *** Initialize autoconf ***
+dnl ***************************
 AC_INIT([xfce4-dev-tools], [xdt_version()], [xfce4-dev@xfce.org])
 AC_COPYRIGHT([Copyright (c) 2002-2005
         The Xfce development team. All rights reserved.
@@ -26,14 +31,20 @@ AC_COPYRIGHT([Copyright (c) 2002-2005
 Written for Xfce by Benedikt Meurer <benny@xfce.org>.])
 AC_REVISION([$Id$])
 
-dnl Initialize the other autotools
+dnl ***************************
+dnl *** Initialize automake ***
+dnl ***************************
 AM_INIT_AUTOMAKE([AC_PACKAGE_TARNAME()], [AC_PACKAGE_VERSION()])
 AM_MAINTAINER_MODE()
 
-dnl Check for basic programs
-AC_PROG_INSTALL
+dnl ********************************
+dnl *** Check for basic programs ***
+dnl ********************************
+AC_PROG_INSTALL()
 
-dnl Generate files
+dnl **********************
+dnl *** Generate files ***
+dnl **********************
 AC_OUTPUT([
 Makefile
 xfce4-dev-tools.spec

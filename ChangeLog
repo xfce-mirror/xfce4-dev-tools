@@ -1,3 +1,8 @@
+2005-08-31      Benedikt Meurer <benny@xfce.org>
+
+	* configure.in.in, autogen.sh: Merge build framework changes from
+	  libexo.
+
 2005-07-09      Benedikt Meurer <benny@xfce.org>
 
 	* configure.ac, NEWS: Bump version after release (4.3.1svn).
