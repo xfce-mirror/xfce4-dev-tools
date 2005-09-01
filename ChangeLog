@@ -1,3 +1,7 @@
+2005-09-01      Benedikt Meurer <benny@xfce.org>
+
+	* autogen.sh: Don't depend on xfce4-dev-tools in autogen.sh.
+
 2005-08-31      Benedikt Meurer <benny@xfce.org>
 
 	* configure.in.in, autogen.sh: Merge build framework changes from
