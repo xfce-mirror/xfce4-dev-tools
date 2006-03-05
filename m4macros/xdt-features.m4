@@ -32,7 +32,6 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support [default]]),
     AC_DEFINE([DEBUG], [1], [Define for debugging support])
     
     xdt_cv_additional_CFLAGS="-Wall"
-    xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -DG_DISABLE_DEPRECATED"
     xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -DXFCE_DISABLE_DEPRECATED"
     
     if test x"$enable_debug" = x"full"; then

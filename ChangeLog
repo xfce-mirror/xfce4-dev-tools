@@ -1,3 +1,8 @@
+2006-03-05      Benedikt Meurer <benny@xfce.org>
+
+	* m4macros/xdt-features.m4(XDT_FEATURE_DEBUG): Do not add
+	  G_DISABLE_DEPRECATED to CFLAGS.
+
 2005-09-01      Benedikt Meurer <benny@xfce.org>
 
 	* autogen.sh: Don't depend on xfce4-dev-tools in autogen.sh.
