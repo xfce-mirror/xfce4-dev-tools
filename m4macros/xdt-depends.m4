@@ -113,7 +113,7 @@ AC_DEFUN([XDT_CHECK_PACKAGE],
 
     ifelse([$4], , , [$4])
   elif $PKG_CONFIG --exists "$2" >/dev/null 2>&1; then
-    xdg_cv_version=`$PKG_CONFIG --modversion "$2"`
+    xdt_cv_version=`$PKG_CONFIG --modversion "$2"`
     AC_MSG_RESULT([found, but $xdt_cv_version])
 
     ifelse([$5], ,
