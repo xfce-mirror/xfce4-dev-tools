@@ -3,13 +3,13 @@ Name:			@PACKAGE_TARNAME@
 Version:		@PACKAGE_VERSION@
 Release:		1
 License:		GPL
-URL:			http://www.xfce.org/
+URL:			http://xfce.org/~benny/projects/xfce4-dev-tools/
 Source0:		Applications/X11
 BuildRoot:		%{_tmppath}/%{name}-root
 
 %description:
 This package contains common tools required by Xfce developers and people
-that want to build Xfce from CVS. In addition, this package contains the
+that want to build Xfce from SVN. In addition, this package contains the
 Xfce developer's handbook.
 
 %prep
