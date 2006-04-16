@@ -1,4 +1,4 @@
-4.3.3svn
+4.3.90.1
 ========
 - G_DISABLE_DEPRECATED is no longer automatically added to CFLAGS in
   XDT_FEATURE_DEBUG().

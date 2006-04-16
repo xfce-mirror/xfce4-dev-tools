@@ -1,5 +1,11 @@
 2006-04-16      Benedikt Meurer <benny@xfce.org>
 
+	* === Released 4.3.90.1 ===
+	* NEWS, configure.in.in: Bump version.
+	* xfce4-dev-tools.spec.in: Update RPM spec file.
+
+2006-04-16      Benedikt Meurer <benny@xfce.org>
+
 	* NEWS: Update NEWS.
 	* xfce4-dev-tools.spec.in: CVS -> SVN. Fix URL.
 

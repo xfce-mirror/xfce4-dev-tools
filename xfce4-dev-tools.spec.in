@@ -1,11 +1,12 @@
-Summary:		Xfce developer tools
-Name:			@PACKAGE_TARNAME@
-Version:		@PACKAGE_VERSION@
-Release:		1
-License:		GPL
-URL:			http://xfce.org/~benny/projects/xfce4-dev-tools/
-Source0:		Applications/X11
-BuildRoot:		%{_tmppath}/%{name}-root
+Summary:	Xfce developer tools
+Name:		@PACKAGE_TARNAME@
+Version:	@PACKAGE_VERSION@
+Release:	1
+License:	GPL
+URL:		http://xfce.org/~benny/projects/xfce4-dev-tools/
+Source0: 	%{name}-%{version}.tar.gz
+Group:		Development/Tools
+BuildRoot:	%{_tmppath}/%{name}-root
 
 %description:
 This package contains common tools required by Xfce developers and people
