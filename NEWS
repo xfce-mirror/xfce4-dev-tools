@@ -1,3 +1,7 @@
+4.3.90.2
+========
+- Add GPL boilerplate to the installed scripts and macros.
+
 4.3.90.1
 ========
 - G_DISABLE_DEPRECATED is no longer automatically added to CFLAGS in
