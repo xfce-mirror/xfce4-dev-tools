@@ -1,3 +1,7 @@
+4.3.99.1
+========
+- GCC specific compiler flags will not be used unless the compiler supports it.
+
 4.3.90.2
 ========
 - Add GPL boilerplate to the installed scripts and macros.

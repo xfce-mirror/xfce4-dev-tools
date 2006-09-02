@@ -1,5 +1,10 @@
 2006-09-02	Benedikt Meurer <benny@xfce.org>
 
+	* === Released 4.3.99.1 ===
+	* NEWS, configure.in.in: Bump version.
+
+2006-09-02	Benedikt Meurer <benny@xfce.org>
+
 	* m4macros/xdt-features.m4: Set gcc specific compiler flags only if
 	  gcc is being used. Bug #2251.
 
