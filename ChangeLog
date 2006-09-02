@@ -1,3 +1,8 @@
+2006-09-02	Benedikt Meurer <benny@xfce.org>
+
+	* m4macros/xdt-features.m4: Set gcc specific compiler flags only if
+	  gcc is being used. Bug #2251.
+
 2006-07-09      Benedikt Meurer <benny@xfce.org>
 
 	* === Released 4.3.90.2 ===

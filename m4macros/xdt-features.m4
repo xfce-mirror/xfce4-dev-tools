@@ -44,16 +44,22 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support [default]]),
   AC_MSG_CHECKING([whether to build with debugging support])
   if test x"$enable_debug" != x"no"; then
     AC_DEFINE([DEBUG], [1], [Define for debugging support])
-    
-    xdt_cv_additional_CFLAGS="-Wall"
+
+    if test x"$GCC" = x"yes"; then
+      xdt_cv_additional_CFLAGS="-Wall"
+    fi
     xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -DXFCE_DISABLE_DEPRECATED"
     
     if test x"$enable_debug" = x"full"; then
       AC_DEFINE([DEBUG_TRACE], [1], [Define for tracing support])
-      xdt_cv_additional_CFLAGS="-g3 -Werror $xdt_cv_additional_CFLAGS"
+      if test x"$GCC" = x"yes"; then
+        xdt_cv_additional_CFLAGS="-g3 -Werror $xdt_cv_additional_CFLAGS"
+      fi
       AC_MSG_RESULT([full])
     else
-      xdt_cv_additional_CFLAGS="-g $xdt_cv_additional_CFLAGS"
+      if test x"$GCC" = x"yes"; then
+        xdt_cv_additional_CFLAGS="-g $xdt_cv_additional_CFLAGS"
+      fi
       AC_MSG_RESULT([yes])
     fi
 
