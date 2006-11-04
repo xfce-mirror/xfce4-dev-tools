@@ -1,3 +1,7 @@
+4.3.99.2
+========
+- No changes for Xfce 4.4.0 RC2.
+
 4.3.99.1
 ========
 - GCC specific compiler flags will not be used unless the compiler supports it.
