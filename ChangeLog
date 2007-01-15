@@ -1,3 +1,11 @@
+2007-01-15	Benedikt Meurer <benny@xfce.org>
+
+	* scripts/xdt-autogen.in: Apply patch from Olivier Fourdan
+	  <fourdan@xfce.org> to update xdt-autogen to use the latest
+	  GNU autotools if available. Bug #2755.
+	* m4macros/xdt-i18n.m4(XDT_I18N): Make sure xgettext treats
+	  source code as UTF-8.
+
 2006-11-04	Benedikt Meurer <benny@xfce.org>
 
 	* configure.in.in: Post-release version bump.

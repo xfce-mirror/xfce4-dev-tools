@@ -141,7 +141,7 @@ fi
 ## autoconf-2.57, then autoconf-2.53, and finally simply autoconf.
 ##
 test -z "${XDT_PROG_AUTOCONF}" &&
-for i in autoconf-2.59 autoconf-2.58 autoconf-2.57 autoconf-2.53 autoconf; do
+for i in autoconf-2.61 autoconf-2.60 autoconf-2.59 autoconf-2.58 autoconf-2.57 autoconf-2.53 autoconf; do
   (${i} --version) </dev/null >/dev/null 2>&1 &&
   XDT_PROG_AUTOCONF=${i} && break
 done
@@ -236,7 +236,7 @@ done
 ## simply aclocal.
 ##
 test -z "${XDT_PROG_ACLOCAL}" &&
-for i in aclocal-1.9 aclocal-1.8 aclocal; do
+for i in aclocal-1.10 aclocal-1.9 aclocal-1.8 aclocal; do
   (${i} --version) </dev/null >/dev/null 2>&1 &&
   XDT_PROG_ACLOCAL=${i} && break
 done
@@ -258,7 +258,7 @@ EOF
 test -z "${XDT_PROG_AUTOHEADER}" &&
 for configure_file in $CONFIGURE_FILES; do
   if grep "^AM_CONFIG_HEADER" "${configure_file}" >/dev/null 2>&1; then
-    for i in autoheader-2.59 autoheader-2.58 autoheader-2.57 autoheader-2.53 autoheader; do
+    for i in autoheader-2.61 autoheader-2.60 autoheader-2.59 autoheader-2.58 autoheader-2.57 autoheader-2.53 autoheader; do
       (${i} --version) </dev/null >/dev/null 2>&1 &&
       XDT_PROG_AUTOHEADER=${i} && break
     done
@@ -280,7 +280,7 @@ done
 ## simply automake.
 ##
 test -z "${XDT_PROG_AUTOMAKE}" &&
-for i in automake-1.9 automake-1.8 automake; do
+for i in automake-1.10 automake-1.9 automake-1.8 automake; do
   (${i} --version) </dev/null >/dev/null 2>&1 &&
   XDT_PROG_AUTOMAKE=${i} && break
 done
@@ -395,9 +395,9 @@ XGETTEXT_ARGS = @XGETTEXT_ARGS@
      ${XDT_PROG_AUTOHEADER}) || exit 1
   fi
 
-  (echo "Running ${XDT_PROG_AUTOMAKE} --add-missing --copy --gnu..." &&
+  (echo "Running ${XDT_PROG_AUTOMAKE} --force-missing --add-missing --copy --gnu..." &&
    cd ${source_dir} &&
-   ${XDT_PROG_AUTOMAKE} --add-missing --copy --gnu) || exit 1
+   ${XDT_PROG_AUTOMAKE} --force-missing --add-missing --copy --gnu) || exit 1
 
   (echo "Running ${XDT_PROG_AUTOCONF}..." &&
    cd ${source_dir} &&
