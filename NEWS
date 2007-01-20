@@ -1,3 +1,8 @@
+4.4.0
+=====
+- Add support for the latest GNU autotools (Bug #2755).
+- Make sure xgettext uses UTF-8 encoding for source files.
+
 4.3.99.2
 ========
 - No changes for Xfce 4.4.0 RC2.

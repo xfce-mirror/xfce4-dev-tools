@@ -1,3 +1,8 @@
+2007-01-20	Benedikt Meurer <benny@xfce.org>
+
+	* === Released 4.4.0 ===
+	* NEWS, configure.in.in: Bump version.
+
 2007-01-15	Benedikt Meurer <benny@xfce.org>
 
 	* scripts/xdt-autogen.in: Apply patch from Olivier Fourdan
