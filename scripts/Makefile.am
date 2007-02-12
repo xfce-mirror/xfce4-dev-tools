@@ -7,7 +7,8 @@
 #
 
 bin_SCRIPTS =								\
-	xdt-autogen
+	xdt-autogen							\
+	xdt-commit							
 
 xdt-autogen: Makefile $(srcdir)/xdt-autogen.in
 	rm -f xdt-autogen xdt-autogen.gen
