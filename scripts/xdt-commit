@@ -28,7 +28,7 @@
 ##
 ## Check if SVN is installed
 ##
-if ! svn --version &> /dev/null; then
+if ! type svn &> /dev/null; then
   echo "Subversion needs to be installed."
   exit 1
 fi
@@ -63,13 +63,13 @@ for CHANGELOG in $CHANGELOGS; do
   # Make sure the file exists
   if [ -f "$CHANGELOG" ]; then
     # Determine SVN status 
-    STATUS=$(svn status ${CHANGELOG})
+    STATUS=$(svn status "${CHANGELOG}")
     STATUS=${STATUS:0:1}
 
     # Check if file is versioned
     if [ "$STATUS" != "?" ]; then
       # Parse output
-      MSG=$(svn diff ${CHANGELOG} | grep -P '^\+\t' | sed 's/^+//')
+      MSG=$(svn diff "${CHANGELOG}" | grep -P '^\+\t' | sed 's/^+//')
 
       # Append to commit message (and insert newline between ChangeLogs)
       if [ -z "$COMMIT_MSG" ]; then
@@ -87,7 +87,7 @@ done
 ## files is empty, ask the user to enter a commit message himself
 ##
 if [ -n "$COMMIT_MSG" ]; then
-  svn commit $FILES -m "$COMMIT_MSG"
+  svn commit "$FILES" -m "$COMMIT_MSG"
 else
-  svn commit $FILES
+  svn commit "$FILES"
 fi
