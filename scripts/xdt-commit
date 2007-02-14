@@ -46,7 +46,7 @@ fi
 ##
 ## Files to be committed
 ##
-FILES="$*"
+FILES=$*
 
 
 ##
@@ -87,7 +87,7 @@ done
 ## files is empty, ask the user to enter a commit message himself
 ##
 if [ -n "$COMMIT_MSG" ]; then
-  svn commit "$FILES" -m "$COMMIT_MSG"
+  svn commit $FILES -m "$COMMIT_MSG"
 else
-  svn commit "$FILES"
+  svn commit $FILES
 fi
