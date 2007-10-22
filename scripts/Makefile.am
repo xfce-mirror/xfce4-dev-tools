@@ -21,6 +21,7 @@ CLEANFILES =								\
 	xdt-autogen
 
 EXTRA_DIST =								\
-	xdt-autogen.in
+	xdt-autogen.in							\
+	xdt-commit
 
 # vi:set ts=8 sw=8 noet ai:

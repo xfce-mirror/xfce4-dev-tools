@@ -1,3 +1,8 @@
+2007-10-22      Brian Tarricone <kelnos@xfce.org>
+
+	* scripts/Makefile.am: fix 'make distcheck'; include
+	  xdt-commit in EXTRA_DIST
+
 2007-02-13	Jannis Pohlmann <jannis@xfce.org>
 
 	* scripts/xdt-commit: Too much quoting - all input files were
