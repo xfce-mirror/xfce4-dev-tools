@@ -1,8 +1,13 @@
-2007-11-17      Brian Tarricone <kelnos@xfce.org>
+2008-08-24	Brian Tarricone <kelnos@xfce.org>
 
-    * === Released 4.4.0.1 ===
+	* scripts/xdt-autogen.in: add intltool-merge.in patch to fix
+	  merging translations to .desktop keys that have dashes in them
 
-2007-10-22      Brian Tarricone <kelnos@xfce.org>
+2007-11-17	Brian Tarricone <kelnos@xfce.org>
+
+	* === Released 4.4.0.1 ===
+
+2007-10-22	Brian Tarricone <kelnos@xfce.org>
 
 	* scripts/Makefile.am: fix 'make distcheck'; include
 	  xdt-commit in EXTRA_DIST
