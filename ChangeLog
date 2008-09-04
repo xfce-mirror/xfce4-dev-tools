@@ -1,5 +1,9 @@
 2008-09-04	Jannis Pohlmann <jannis@xfce.org>
 
+	* autogen.sh: Fix typo.
+
+2008-09-04	Jannis Pohlmann <jannis@xfce.org>
+
 	* autogen.sh: Add support for git svn revision versioning.
 
 2008-08-24	Brian Tarricone <kelnos@xfce.org>
