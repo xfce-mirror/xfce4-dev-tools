@@ -11,7 +11,7 @@ dnl *** Version information ***
 dnl ***************************
 m4_define([xdt_version_major], [4])
 m4_define([xdt_version_minor], [5])
-m4_define([xdt_version_micro], [80])
+m4_define([xdt_version_micro], [90])
 m4_define([xdt_version_nano], [])
 m4_define([xdt_version_build], [r@REVISION@])
 m4_define([xdt_version_tag], [])
