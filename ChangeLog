@@ -1,8 +1,21 @@
-2007-11-17      Brian Tarricone <kelnos@xfce.org>
+2008-09-04	Jannis Pohlmann <jannis@xfce.org>
 
-    * === Released 4.4.0.1 ===
+	* autogen.sh: Fix typo.
 
-2007-10-22      Brian Tarricone <kelnos@xfce.org>
+2008-09-04	Jannis Pohlmann <jannis@xfce.org>
+
+	* autogen.sh: Add support for git svn revision versioning.
+
+2008-08-24	Brian Tarricone <kelnos@xfce.org>
+
+	* scripts/xdt-autogen.in: add intltool-merge.in patch to fix
+	  merging translations to .desktop keys that have dashes in them
+
+2007-11-17	Brian Tarricone <kelnos@xfce.org>
+
+	* === Released 4.4.0.1 ===
+
+2007-10-22	Brian Tarricone <kelnos@xfce.org>
 
 	* scripts/Makefile.am: fix 'make distcheck'; include
 	  xdt-commit in EXTRA_DIST

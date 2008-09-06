@@ -58,6 +58,30 @@ EOF
 
 
 ##
+## This fixes a bug in intltool-merge that fails to merge translations
+## for .desktop file keys that have a '-' or '_' char in them.
+##
+patch_intltool_merge() {
+  echo '--- intltool-merge.in.orig	2008-08-24 19:02:59.000000000 -0700
++++ intltool-merge.in	2008-08-24 19:03:12.000000000 -0700
+@@ -1182,9 +1182,9 @@
+ 
+     while (<INPUT>) 
+     {
+-        if (s/^(\s*)_(\w+=(.*))/$1$2/)  
++        if (s/^(\s*)_((\w|-|_)+=(.*))/$1$2/)  
+         {
+-	    my $string = $3;
++	    my $string = $4;
+ 
+             print OUTPUT;
+ ' | patch -p0 "$@" >/dev/null 2>&1
+
+  return $?
+}
+
+
+##
 ## Determine XDG data dirs
 ##
 test -z "${XDG_DATA_HOME}" && XDG_DATA_HOME="${HOME}/.local/share"
@@ -349,6 +373,13 @@ for configure_file in ${CONFIGURE_FILES}; do
     (echo "Running ${XDT_PROG_INTLTOOLIZE} --automake --copy --force" &&
      cd "${source_dir}" &&
      ${XDT_PROG_INTLTOOLIZE} --automake --copy --force) || exit 1
+    if patch_intltool_merge --dry-run; then
+      echo 'Patching intltool-merge.in ...'
+      patch_intltool_merge
+    else
+      echo 'WARNING: Failed to patch intltool-merge.in!'
+      echo 'WARNING: Generated .desktop files may be incorrect.'
+    fi
   fi
 
   # patch the po/Makefile.in.in to take into account the setting of
