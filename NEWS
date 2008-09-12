@@ -1,3 +1,8 @@
+4.5.90
+======
+- Add intltool-merge.in patch to xdt-autogen.in to fix merging translations
+  to .desktop keys that have dashes in them.
+
 4.4.2
 =====
 - Add script (xdt-commit) for generating commit messages from ChangeLogs
