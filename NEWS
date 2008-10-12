@@ -1,3 +1,10 @@
+4.5.91
+======
+
+- Don't try to patch intltool-merge.in for intltool 0.40.x: 0.40.4+ has
+  a fix for the bug, and 0.40.x earlier than that aren't patchable as they
+  run systemwide versions of the scripts.
+
 4.5.90
 ======
 - Add intltool-merge.in patch to xdt-autogen.in to fix merging translations

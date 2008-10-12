@@ -1,3 +1,10 @@
+2008-10-12	Brian Tarricone <bjt23@cornell.edu>
+
+	* scripts/xdt-autogen.in: Only attempt to patch intltool merge for
+	  versions of intltool < 0.40.0.  Versions starting from 0.40.4 are
+	  fixed, and earlier 0.40.x versions aren't patchable because they
+	  use a systemwide copy of intltool-merge.
+
 2008-09-12	Jannis Pohlmann <jannis@xfce.org>
 
 	* NEWS: Updated for the alpha release.

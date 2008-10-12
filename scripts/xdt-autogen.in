@@ -59,9 +59,28 @@ EOF
 
 ##
 ## This fixes a bug in intltool-merge that fails to merge translations
-## for .desktop file keys that have a '-' or '_' char in them.
+## for .desktop file keys that have a '-' or '_' char in them.  this
+## is fixed in intltool 0.40.4.
 ##
 patch_intltool_merge() {
+  verstring=`$XDT_PROG_INTLTOOLIZE --version | cut -d' ' -f4`
+  ver_major=`echo $verstring | cut -d. -f1`
+  ver_minor=`echo $verstring | cut -d. -f2`
+  ver_micro=`echo $verstring | cut -d. -f3`
+
+  if test "$ver_major" -a "$ver_minor" -a "$ver_micro"; then
+    test $ver_major -gt 0 && return 0
+    test $ver_minor -gt 40 && return 0
+    test $ver_minor -eq 40 -a $ver_micro -ge 4 && return 0
+    if test $ver_minor -eq 40 -a $ver_micro -lt 4; then
+      echo "WARNING: Unable to patch intltool-merge from versions 0.40.0 through 0.40.3."
+      echo "WARNING: Generated .desktop files may be invalid."
+      return 0  # already printed an error; just pretend success
+    fi
+  fi
+
+  # attempt to patch, and hope it works...
+  test -z "$@" && echo 'Patching intltool-merge.in ...'
   echo '--- intltool-merge.in.orig	2008-08-24 19:02:59.000000000 -0700
 +++ intltool-merge.in	2008-08-24 19:03:12.000000000 -0700
 @@ -1182,9 +1182,9 @@
@@ -374,7 +393,6 @@ for configure_file in ${CONFIGURE_FILES}; do
      cd "${source_dir}" &&
      ${XDT_PROG_INTLTOOLIZE} --automake --copy --force) || exit 1
     if patch_intltool_merge --dry-run; then
-      echo 'Patching intltool-merge.in ...'
       patch_intltool_merge
     else
       echo 'WARNING: Failed to patch intltool-merge.in!'
