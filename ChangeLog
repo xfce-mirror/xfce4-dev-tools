@@ -1,3 +1,8 @@
+2008-10-18	Brian Tarricone <bjt23@cornell.edu>
+
+	* scripts/xdt-commit: Support git/git-svn as well as svn (bug 4491).
+	* configure.in.in: Re-add 'svn' version tag.
+
 2008-10-12	Brian Tarricone <bjt23@cornell.edu>
 
 	* scripts/xdt-autogen.in: Only attempt to patch intltool merge for

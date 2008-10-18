@@ -1,3 +1,8 @@
+4.5.92
+======
+
+- Add support for git (and git-svn) to the xdt-commit script (bug 4491).
+
 4.5.91
 ======
 

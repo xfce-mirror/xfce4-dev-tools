@@ -26,20 +26,39 @@
 
 
 ##
-## Check if SVN is installed
+## Check what kind of repo we have
 ##
-if ! type svn &> /dev/null; then
-  echo "Subversion needs to be installed."
+if [ -d .git ]; then
+  repo_type=git
+elif [ -d .svn ]; then
+  repo_type=svn
+else
+  echo "This doesn't appear to be the root of a versioned source tree." >&2
   exit 1
 fi
 
 
 ##
-## Check if we are in a versioned directory 
+## Check if needed tools are installed
 ##
-if ! svn info &> /dev/null; then
-  echo "Current working directory is not versioned."
-  exit 1
+if [ "$repo_type" = "git" ]; then
+  if ! type git &>/dev/null; then
+    echo "Git needs to be installed." >&2
+    exit 1
+  fi
+elif [ "$repo_type" = "svn" ]; then
+  if ! type svn &> /dev/null; then
+    echo "Subversion needs to be installed." >&2
+    exit 1
+  fi
+
+  ##
+  ## Check if we are in a versioned directory
+  ##
+  if ! svn info &> /dev/null; then
+    echo "Current working directory is not versioned." >&2
+    exit 1
+  fi
 fi
 
 
@@ -53,7 +72,7 @@ FILES=$*
 ## Detect all ChangeLog's inside this directory by scanning it 
 ## recursively
 ##
-CHANGELOGS=$(find . -type f -iname ChangeLog)
+CHANGELOGS=$(find . -type f -iname ChangeLog | sed 's:^\./::')
 
 
 ##
@@ -62,14 +81,25 @@ CHANGELOGS=$(find . -type f -iname ChangeLog)
 for CHANGELOG in $CHANGELOGS; do
   # Make sure the file exists
   if [ -f "$CHANGELOG" ]; then
-    # Determine SVN status 
-    STATUS=$(svn status "${CHANGELOG}")
-    STATUS=${STATUS:0:1}
+    if [ "$repo_type" = "svn" ]; then
+      # Determine SVN status
+      STATUS=$(svn status "${CHANGELOG}")
+      STATUS=${STATUS:0:1}
+    elif [ "$repo_type" = "git" ]; then
+      # Determine git status, and fake it into svn-style status
+      STATUS=$(git status | grep -E "(modified|new file):[[:space:]]+${CHANGELOG}")
+      [ "$STATUS" ] || STATUS='?'  # signal no changes or not versioned
+    fi
 
     # Check if file is versioned
     if [ "$STATUS" != "?" ]; then
       # Parse output
-      MSG=$(svn diff "${CHANGELOG}" | grep -P '^\+\t' | sed 's/^+//')
+      if [ "$repo_type" = "svn" ]; then
+        MSG=$(svn diff "${CHANGELOG}")
+      elif [ "$repo_type" = "git" ]; then
+        MSG=$(git diff HEAD "${CHANGELOG}")
+      fi
+      MSG=$(echo "$MSG" | grep -P '^\+\t' | sed 's/^+//')
 
       # Append to commit message (and insert newline between ChangeLogs)
       if [ -z "$COMMIT_MSG" ]; then
@@ -87,7 +117,15 @@ done
 ## files is empty, ask the user to enter a commit message himself
 ##
 if [ -n "$COMMIT_MSG" ]; then
-  svn commit $FILES -m "$COMMIT_MSG"
+  if [ "$repo_type" = "svn" ]; then
+    svn commit $FILES -m "$COMMIT_MSG"
+  elif [ "$repo_type" = "git" ]; then
+    git commit $FILES -m "$COMMIT_MSG"
+  fi
 else
-  svn commit $FILES
+  if [ "$repo_type" = "svn" ]; then
+    svn commit $FILES
+  elif [ "$repo_type" = "git" ]; then
+    git commit $FILES
+  fi
 fi
