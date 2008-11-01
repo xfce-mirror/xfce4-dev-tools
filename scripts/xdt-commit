@@ -2,7 +2,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2007 
+# Copyright (c) 2007-2008
 #         The Xfce development team. All rights reserved.
 #
 # Written for Xfce by Jannis Pohlmann <jannis@xfce.org>.
@@ -93,11 +93,16 @@ for CHANGELOG in $CHANGELOGS; do
 
     # Check if file is versioned
     if [ "$STATUS" != "?" ]; then
+      # Add changelog to the commit
+      if [ "$repo_type" = "git" ]; then
+        git add "${CHANGELOG}"
+      fi
+
       # Parse output
       if [ "$repo_type" = "svn" ]; then
         MSG=$(svn diff "${CHANGELOG}")
       elif [ "$repo_type" = "git" ]; then
-        MSG=$(git diff HEAD "${CHANGELOG}")
+        MSG=$(git diff --cached "${CHANGELOG}")
       fi
       MSG=$(echo "$MSG" | grep -P '^\+\t' | sed 's/^+//')
 

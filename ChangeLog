@@ -1,3 +1,9 @@
+2008-11-01	Jannis Pohlmann <jannis@xfce.org>
+
+	* scripts/xdt-commit: Automatically add ChangeLog files of git
+	  repositories to the commit with "git add ${CHANGELOG}". Use "git
+	  diff --cached" instead of "git diff HEAD" for the commit messages.
+
 2008-10-18	Brian Tarricone <bjt23@cornell.edu>
 
 	* scripts/xdt-commit: Support git/git-svn as well as svn (bug 4491).
