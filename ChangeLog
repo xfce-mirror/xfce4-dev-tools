@@ -1,3 +1,8 @@
+2008-11-11	Jannis Pohlmann <jannis@xfce.org>
+
+	* scripts/xdt-commit: Use !/bin/bash instead of !/bin/sh in the
+	  script header just to make sure everything works as it should.
+
 2008-11-01	Jannis Pohlmann <jannis@xfce.org>
 
 	* scripts/xdt-commit: Automatically add ChangeLog files of git
