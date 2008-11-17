@@ -1,3 +1,8 @@
+2008-11-16	Brian Tarricone <bjt23@cornell.edu>
+
+	* scripts/xdt-autogen.in: Remove intltool auto-patch: it wasn't
+	  terribly reliable, and Xfce doesn't need it anymore anyway.
+
 2008-11-11	Jannis Pohlmann <jannis@xfce.org>
 
 	* scripts/xdt-commit: Use !/bin/bash instead of !/bin/sh in the
