@@ -1,3 +1,7 @@
+2009-01-11	Jannis Pohlmann <jannis@xfce.org>
+
+	* NEWS: Update NEWS for the upcoming 4.5.93 release.
+
 2008-11-16	Brian Tarricone <bjt23@cornell.edu>
 
 	* scripts/xdt-autogen.in: Remove intltool auto-patch: it wasn't
