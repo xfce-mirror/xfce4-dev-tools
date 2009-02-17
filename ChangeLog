@@ -1,3 +1,11 @@
+2009-02-17	Jannis Pohlmann <jannis@xfce.org>
+
+	* scripts/xdt-commit: Replace grep -P with awk and thus make the
+	  script more portable. Properly detect changed ChangeLogs in SVN.
+	  This should get rid the empty lines when committing several
+	  changed ChangeLogs (bug #4716). Patch provided by Alexander 
+	  Toresson.
+
 2009-01-25	Jannis Pohlmann <jannis@xfce.org>
 
 	* == 4.5.99.1 released! ==

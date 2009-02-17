@@ -84,7 +84,9 @@ for CHANGELOG in $CHANGELOGS; do
     if [ "$repo_type" = "svn" ]; then
       # Determine SVN status
       STATUS=$(svn status "${CHANGELOG}")
-      STATUS=${STATUS:0:1}
+      if [ -z "$STATUS" ]; then
+        STATUS='?'
+      fi
     elif [ "$repo_type" = "git" ]; then
       # Determine git status, and fake it into svn-style status
       STATUS=$(git status | grep -E "(modified|new file):[[:space:]]+${CHANGELOG}")
@@ -104,13 +106,13 @@ for CHANGELOG in $CHANGELOGS; do
       elif [ "$repo_type" = "git" ]; then
         MSG=$(git diff --cached "${CHANGELOG}")
       fi
-      MSG=$(echo "$MSG" | grep -P '^\+\t' | sed 's/^+//')
+      MSG=$(echo "$MSG" | awk '/^+\t/' | sed 's/^+//')
 
       # Append to commit message (and insert newline between ChangeLogs)
       if [ -z "$COMMIT_MSG" ]; then
         COMMIT_MSG="$MSG"
       else
-        COMMIT_MSG=$(echo "$COMMIT_MSG" $'\n' "$MSG")
+        COMMIT_MSG=$(echo "$COMMIT_MSG"$'\n'"$MSG")
       fi
     fi
   fi
