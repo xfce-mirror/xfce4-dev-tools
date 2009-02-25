@@ -1,3 +1,9 @@
+2009-02-25  Stephan Arts <stephan@xfce.org>
+
+	* == 4.6.0 Released! ==
+	* configure.in.in: Bump version
+	* NEWS: Update NEWS
+
 2009-02-17	Jannis Pohlmann <jannis@xfce.org>
 
 	* scripts/xdt-commit: Replace grep -P with awk and thus make the
