@@ -31,6 +31,28 @@ dnl We need recent a autoconf version
 AC_PREREQ([2.53])
 
 
+dnl XDT_SUPPORTED_FLAGS(VAR, FLAGS)
+dnl
+dnl For each token in FLAGS, checks to be sure the compiler supports
+dnl the flag, and if so, adds each one to VAR.
+dnl
+AC_DEFUN([XDT_SUPPORTED_FLAGS],
+[
+  for flag in $2; do
+    AC_MSG_CHECKING([if $CC supports $flag])
+    saved_CFLAGS="$CFLAGS"
+    CFLAGS="$CFLAGS $flag"
+    AC_COMPILE_IFELSE([ ], [flag_supported=yes], [flag_supported=no])
+    CFLAGS="$saved_CFLAGS"
+    AC_MSG_RESULT([$flag_supported])
+
+    if test "x$flag_supported" = "xyes"; then
+      $1="$$1 $flag"
+    fi
+  done
+])
+
+
 
 dnl XDT_FEATURE_DEBUG()
 dnl
@@ -45,26 +67,42 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support [default]]),
   if test x"$enable_debug" != x"no"; then
     AC_DEFINE([DEBUG], [1], [Define for debugging support])
 
-    if test x"$GCC" = x"yes"; then
-      xdt_cv_additional_CFLAGS="-Wall"
-    fi
-    xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -DXFCE_DISABLE_DEPRECATED"
+    xdt_cv_additional_CFLAGS="-DXFCE_DISABLE_DEPRECATED \
+                              -Wall -Wextra \
+                              -Wno-missing-field-initializers \
+                              -Wno-unused-parameter -Wold-style-definition \
+                              -Wdeclaration-after-statement \
+                              -Wmissing-declarations -Wredundant-decls \
+                              -Wmissing-noreturn -Wshadow -Wpointer-arith \
+                              -Wcast-align -Wformat-security \
+                              -Winit-self -Wmissing-include-dirs -Wundef \
+                              -Wmissing-format-attribute -Wnested-externs \
+                              -fstack-protector -D_FORTIFY_SOURCE=2"
     
     if test x"$enable_debug" = x"full"; then
       AC_DEFINE([DEBUG_TRACE], [1], [Define for tracing support])
-      if test x"$GCC" = x"yes"; then
-        xdt_cv_additional_CFLAGS="-g3 -Werror $xdt_cv_additional_CFLAGS"
-      fi
+      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -g3 -Werror"
       AC_MSG_RESULT([full])
     else
-      if test x"$GCC" = x"yes"; then
-        xdt_cv_additional_CFLAGS="-g $xdt_cv_additional_CFLAGS"
-      fi
+      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -g"
       AC_MSG_RESULT([yes])
     fi
 
-    CFLAGS="$CFLAGS $xdt_cv_additional_CFLAGS"
-    CXXFLAGS="$CXXFLAGS $xdt_cv_additional_CFLAGS"
+    XDT_SUPPORTED_FLAGS([supported_CFLAGS], [$xdt_cv_additional_CFLAGS])
+
+    ifelse([$CXX], , , [
+      dnl FIXME: should test on c++ compiler, but the following line causes
+      dnl        autoconf errors for projects that don't check for a
+      dnl        c++ compiler at all.
+      dnl AC_LANG_PUSH([C++])
+      dnl XDT_SUPPORTED_FLAGS([supported_CXXFLAGS], [$xdt_cv_additional_CFLAGS])
+      dnl AC_LANG_POP()
+      dnl        instead, just use supported_CFLAGS...
+      supported_CXXFLAGS="$supported_CFLAGS"
+    ])
+
+    CFLAGS="$CFLAGS $supported_CFLAGS"
+    CXXFLAGS="$CXXFLAGS $supported_CXXFLAGS"
   else
     AC_MSG_RESULT([no])
   fi
