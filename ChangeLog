@@ -1,3 +1,8 @@
+2009-07-27	Brian Tarricone <brian@tarricone.org>
+
+	* scripts/xdt-autogen.in: Also support newer IT_PROG_INTLTOOL
+	  macro.
+
 2009-05-04	Brian Tarricone <bjt23@cornell.edu>
 
 	* m4macros/xdt-features.m4: Add a bunch more compiler warning

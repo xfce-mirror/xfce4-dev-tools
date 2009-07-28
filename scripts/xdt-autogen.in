@@ -161,7 +161,7 @@ EOF
 ##
 test -z "${XDT_PROG_INTLTOOLIZE}" && XDT_PROG_INTLTOOLIZE="intltoolize"
 for configure_file in $CONFIGURE_FILES; do
-  if grep "^AC_PROG_INTLTOOL" "${configure_file}" >/dev/null 2>&1; then
+  if grep -E "^(AC|IT)_PROG_INTLTOOL" "${configure_file}" >/dev/null 2>&1; then
     (${XDT_PROG_INTLTOOLIZE} --version) </dev/null >/dev/null 2>&1 || {
       cat >&2 <<EOF
 xdt-autogen: You must have "intltool" installed on your system.
@@ -345,7 +345,7 @@ for configure_file in ${CONFIGURE_FILES}; do
     fi
   fi
 
-  if grep "^AC_PROG_INTLTOOL" "${configure_file}" >/dev/null 2>&1; then
+  if grep -E "^(AC|IT)_PROG_INTLTOOL" "${configure_file}" >/dev/null 2>&1; then
     (echo "Running ${XDT_PROG_INTLTOOLIZE} --automake --copy --force" &&
      cd "${source_dir}" &&
      ${XDT_PROG_INTLTOOLIZE} --automake --copy --force) || exit 1

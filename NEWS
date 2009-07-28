@@ -1,9 +1,12 @@
+4.6.2
+=====
+- Also support the newer IT_PROG_INTLTOOL macro
+
 4.6.0
 =====
 - Replace grep -P with awk and thus make the script more portable. Properly 
   detect changed ChangeLogs in SVN. This should get rid the empty lines when 
   committing several changed ChangeLogs (bug #4716). 
-
 
 4.5.93
 ======
