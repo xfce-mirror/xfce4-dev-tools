@@ -20,8 +20,10 @@ xdt-autogen: Makefile $(srcdir)/xdt-autogen.in
 CLEANFILES =								\
 	xdt-autogen
 
+DISTCLEANFILES = 							\
+	xdt-autogen.in
+
 EXTRA_DIST =								\
-	xdt-autogen.in							\
 	xdt-commit
 
 # vi:set ts=8 sw=8 noet ai:

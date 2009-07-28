@@ -24,6 +24,13 @@
 # xdt-autogen - Part of the Xfce developer tools.
 #
 
+VERSION="@VERSION@"
+
+XDT_AUTOGEN_VERSION_MAJOR="@VERSION_MAJOR@"
+XDT_AUTOGEN_VERSION_MINOR="@VERSION_MINOR@"
+XDT_AUTOGEN_VERSION_MICRO="@VERSION_MICRO@"
+XDT_AUTOGEN_VERSION_NANO="@VERSION_NANO@"
+XDT_AUTOGEN_VERSION_REVISION="@VERSION_REVISION@"
 
 ##
 ## Helper function to lookup configure.{in,ac} files recursively.
@@ -56,6 +63,82 @@ EOF
   done
 }
 
+##
+## check command-line args
+##
+if test "x$1" = "x--version" -o "x$1" = "x-V"; then
+  echo "`basename $0` $VERSION"
+  exit 0
+fi
+
+##
+## see if the caller is requesting a minimum version
+##
+do_version_check() {
+  test -z "$XDT_AUTOGEN_REQUIRED_VERSION" && return 0
+
+  major=`echo $XDT_AUTOGEN_REQUIRED_VERSION | cut -d. -f1`
+  test "$major" || return 1
+  test $major -le $XDT_AUTOGEN_VERSION_MAJOR || return 1
+  test $XDT_AUTOGEN_VERSION_MAJOR -gt $major && return 0
+
+  minor=`echo $XDT_AUTOGEN_REQUIRED_VERSION | cut -d. -f2`
+  test "$minor" || return 1
+  test $minor -le $XDT_AUTOGEN_VERSION_MINOR || return 1
+  test $XDT_AUTOGEN_VERSION_MINOR -gt $minor && return 0
+
+  micro=`echo $XDT_AUTOGEN_REQUIRED_VERSION | cut -d. -f3`
+  if echo "$micro" | grep -E -q "svn|git"; then
+    revision=`echo "$micro" | sed -e 's/[[:digit:].]\+\(.*\)/\1/'`
+    micro=`echo "$micro" | sed -e 's/\([[:digit:].]\+\).*/\1/'`
+  fi
+  if echo "$micro" | grep -q '\.'; then
+    nano=`echo "$micro" | cut -d. -f2`
+    micro=`echo "$micro" | cut -d. -f1`
+  fi
+
+  test "$micro" || return 1
+  test $micro -le $XDT_AUTOGEN_VERSION_MICRO || return 1
+  test $XDT_AUTOGEN_VERSION_MICRO -gt $micro && return 0
+
+  # the caller may or may not have specified a nano
+  if test "$nano"; then
+    # and we may or may not have a nano
+    test "$XDT_AUTOGEN_VERSION_NANO" || XDT_AUTOGEN_VERSION_NANO="0"
+
+    test $nano -le $XDT_AUTOGEN_VERSION_NANO || return 1
+    test $XDT_AUTOGEN_VERSION_NANO -gt $nano && return 0
+  fi
+
+  # the caller may or may not have specified a revision
+  if test "$revision"; then
+    # if we don't have a revision, then the check fails
+    test "$XDT_AUTOGEN_VERSION_REVISION" || return 1
+    
+    # version compares are handled differently between svn and git.
+    if echo "$revision" | grep -q "svn"; then
+      # if our revision includes "git", then we must be newer
+      echo "$XDT_AUTOGEN_VERSION_REVISION" | grep -q "git" && return 0
+
+      # figure out the revision numbers
+      rev_num=`echo "$revision" | sed -e 's/svn-r\([[:digit:]]\+\)/\1/'`
+      XDT_AUTOGEN_VERSION_REV_NUM=`echo "$XDT_AUTOGEN_VERSION_REVISION" | sed -e 's/svn-r\([[:digit:]]\+\)/\1/'`
+      test $rev_num -le $XDT_AUTOGEN_VERSION_REV_NUM || return 1
+    elif echo "$revision" | grep -q "git"; then
+      echo "Error: git revision comparison not yet implemented.  Please file a bug:"
+      echo "@PACKAGE_BUGREPORT@"
+      exit 1
+    fi
+  fi
+
+  return 0
+}
+
+if ! do_version_check; then
+  echo "This version of xdt-autogen ($VERSION) is too old.  Version" >&2
+  echo "$XDT_AUTOGEN_REQUIRED_VERSION or greater is required." >&2
+  exit 1
+fi
 
 ##
 ## Determine XDG data dirs

@@ -1,6 +1,10 @@
 4.6.2
 =====
 - Also support the newer IT_PROG_INTLTOOL macro
+- Added --version and -V options to display the xdt-autogen version
+- Added ability for autogen.sh scripts to set an environment
+  variable XDT_AUTOGEN_REQUIRED_VERSION to depend on a particular version
+  of xdt-autogen.
 
 4.6.0
 =====
