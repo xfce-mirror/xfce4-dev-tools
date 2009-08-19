@@ -1,342 +1,400 @@
-2009-07-28	Brian Tarricone <brian@tarricone.org>
+2009-08-18  Brian J. Tarricone <brian@tarricone.org>
 
-	* scripts/xdt-autogen.in: Renamed to xdt-autogen.in.in.
-	* scripts/xdt-autogen.in.in: Add --version and -V options.  Add a
-	  minimum required version check via the XDT_AUTOGEN_REQUIRED_VERSION
-	  env var.
+  * scripts/Makefile.am: fix distcheck (output is in builddir, not srcdir)
 
-2009-07-27	Brian Tarricone <brian@tarricone.org>
+  * autogen.sh, configure.in.in: use git for revision substitution
 
-	* scripts/xdt-autogen.in: Also support newer IT_PROG_INTLTOOL
-	  macro.
+  * NEWS, scripts/xdt-autogen.in.in: do @REVISION@ and @LINGUAS@ substitution
+  in xdt-autogen
 
-2009-05-04	Brian Tarricone <bjt23@cornell.edu>
+2009-08-12  Brian J. Tarricone <brian@tarricone.org>
 
-	* m4macros/xdt-features.m4: Add a bunch more compiler warning
-	  options when --enable-debug={yes,full} is specified.
+  * module.xml: add module description file
+
+2009-07-28  Brian Tarricone <brian@tarricone.org>
+
+  * ChangeLog, NEWS, configure.in.in, scripts/Makefile.am,
+  scripts/xdt-autogen.in, scripts/xdt-autogen.in.in: add --version and -V
+  options, add required minimum version check.  users who wish to require a
+  minimum version of xdt-autogen should export XDT_AUTOGEN_REQUIRED_VERSION,
+  set to the minimum required version that is supported.  (Old svn revision:
+  30414)
+
+  * ChangeLog, NEWS, scripts/xdt-autogen.in: also support the newer
+  IT_PROG_INTLTOOL macro  (Old svn revision: 30408)
+
+2009-05-04  Brian Tarricone <brian@tarricone.org>
+
+  * ChangeLog, m4macros/xdt-features.m4: * m4macros/xdt-features.m4: Add a
+  bunch more compiler warning options when --enable-debug={yes,full} is
+  specified.  (Old svn revision: 29924)
 
 2009-02-25  Stephan Arts <stephan@xfce.org>
 
-	* == 4.6.0 Released! ==
-	* configure.in.in: Bump version
-	* NEWS: Update NEWS
+  * ChangeLog, NEWS, configure.in.in: Update Changelog, NEWS and version-info  
+   (Old svn revision: 29589)
 
-2009-02-17	Jannis Pohlmann <jannis@xfce.org>
+2009-01-25  Jannis Pohlmann <jannis@xfce.org>
 
-	* scripts/xdt-commit: Replace grep -P with awk and thus make the
-	  script more portable. Properly detect changed ChangeLogs in SVN.
-	  This should get rid the empty lines when committing several
-	  changed ChangeLogs (bug #4716). Patch provided by Alexander 
-	  Toresson.
+  * ChangeLog, configure.in.in: * == 4.5.99.1 released! == * configure.in.in:
+  Bump version.  (Old svn revision: 29313)
 
-2009-01-25	Jannis Pohlmann <jannis@xfce.org>
+2009-01-14  Jannis Pohlmann <jannis@xfce.org>
 
-	* == 4.5.99.1 released! ==
-	* configure.in.in: Bump version.
+  * ChangeLog, configure.in.in: * configure.in.in: Post-release version bump. 
+  (Old svn revision: 29243)
 
-2009-01-14	Jannis Pohlmann <jannis@xfce.org>
+2009-01-12  Jannis Pohlmann <jannis@xfce.org>
 
-	* configure.in.in: Post-release version bump.
+  * ChangeLog, configure.in.in: * == 4.5.93 released! == * configure.in.in:
+  Bump version.  (Old svn revision: 29189)
 
-2009-01-11	Jannis Pohlmann <jannis@xfce.org>
+2009-01-10  Jannis Pohlmann <jannis@xfce.org>
 
-	* == 4.5.93 released! ==
-	* configure.in.in: Bump version.
+  * ChangeLog, NEWS: * NEWS: Update NEWS for the upcoming 4.5.93 release.  (Old
+  svn revision: 29128)
 
-2009-01-11	Jannis Pohlmann <jannis@xfce.org>
+2008-11-17  Brian Tarricone <brian@tarricone.org>
 
-	* NEWS: Update NEWS for the upcoming 4.5.93 release.
+  * ChangeLog, scripts/xdt-autogen.in: * scripts/xdt-autogen.in: Remove
+  intltool auto-patch: it wasn't terribly reliable, and Xfce doesn't need it
+  anymore anyway.  (Old svn revision: 28835)
 
-2008-11-16	Brian Tarricone <bjt23@cornell.edu>
+2008-11-14  Stephan Arts <stephan@xfce.org>
 
-	* scripts/xdt-autogen.in: Remove intltool auto-patch: it wasn't
-	  terribly reliable, and Xfce doesn't need it anymore anyway.
+  * configure.in.in: Bump version number    (Old svn revision: 28799)
 
-2008-11-11	Jannis Pohlmann <jannis@xfce.org>
+2008-10-13  Stephan Arts <stephan@xfce.org>
 
-	* scripts/xdt-commit: Use !/bin/bash instead of !/bin/sh in the
-	  script header just to make sure everything works as it should.
+  * configure.in.in: Bump version number    (Old svn revision: 28218)
 
-2008-11-01	Jannis Pohlmann <jannis@xfce.org>
+2008-10-12  Brian Tarricone <brian@tarricone.org>
 
-	* scripts/xdt-commit: Automatically add ChangeLog files of git
-	  repositories to the commit with "git add ${CHANGELOG}". Use "git
-	  diff --cached" instead of "git diff HEAD" for the commit messages.
+  * ChangeLog, NEWS, scripts/xdt-autogen.in: * scripts/xdt-autogen.in: Only
+  attempt to patch intltool merge for versions of intltool < 0.40.0.  Versions
+  starting from 0.40.4 are fixed, and earlier 0.40.x versions aren't patchable
+  because they use a systemwide copy of intltool-merge.  (Old svn revision:
+  28165)
 
-2008-10-18	Brian Tarricone <bjt23@cornell.edu>
+2008-09-12  Jannis Pohlmann <jannis@xfce.org>
 
-	* scripts/xdt-commit: Support git/git-svn as well as svn (bug 4491).
-	* configure.in.in: Re-add 'svn' version tag.
+  * ChangeLog, NEWS: * NEWS: Updated for the alpha release. * configure.in.in:
+  Bump version number. * INSTALL: Remove INSTALL, this is auto-generated by
+  autotools these days anyways. * Remove xfce 4.6 alpha tag.  (Old svn
+  revision: 27848)
 
-2008-10-12	Brian Tarricone <bjt23@cornell.edu>
+2008-09-06  Stephan Arts <stephan@xfce.org>
 
-	* scripts/xdt-autogen.in: Only attempt to patch intltool merge for
-	  versions of intltool < 0.40.0.  Versions starting from 0.40.4 are
-	  fixed, and earlier 0.40.x versions aren't patchable because they
-	  use a systemwide copy of intltool-merge.
+  * INSTALL, configure.in.in: Bump version number remove INSTALL, this is
+  auto-generated by autotools these days anyways. Remove xfce 4.6 alpha tag   
+  (Old svn revision: 27681)
 
-2008-09-12	Jannis Pohlmann <jannis@xfce.org>
+2008-09-04  Jannis Pohlmann <jannis@xfce.org>
 
-	* NEWS: Updated for the alpha release.
+  * ChangeLog, autogen.sh: * autogen.sh: Fix typo.  (Old svn revision: 27650)
 
-2008-09-06	Stephan Arts <stephan@xfce.org>
+  * ChangeLog, autogen.sh: * autogen.sh: Add support for git svn revision
+  versioning.  (Old svn revision: 27649)
 
-	* configure.in.in: Bump version number.
-	* INSTALL: Remove INSTALL, this is auto-generated by autotools 
-	  these days anyways.
-	* Remove xfce 4.6 alpha tag.
+2008-08-25  Brian Tarricone <brian@tarricone.org>
 
-2008-09-04	Jannis Pohlmann <jannis@xfce.org>
+  * ChangeLog, scripts/xdt-autogen.in: 2008-08-24  Brian Tarricone
+  <kelnos@xfce.org>  * scripts/xdt-autogen.in: add intltool-merge.in patch to
+  fix merging translations to .desktop keys that have dashes in them  (Old svn
+  revision: 27551)
 
-	* autogen.sh: Fix typo.
+2008-08-17  Stephan Arts <stephan@xfce.org>
 
-2008-09-04	Jannis Pohlmann <jannis@xfce.org>
+  * configure.in.in: Bump version number    (Old svn revision: 27496)
 
-	* autogen.sh: Add support for git svn revision versioning.
+2007-11-17  Brian Tarricone <brian@tarricone.org>
 
-2008-08-24	Brian Tarricone <kelnos@xfce.org>
+  * configure.in.in: post-release version bump, add back svn release tag   (Old
+  svn revision: 26361)
 
-	* scripts/xdt-autogen.in: add intltool-merge.in patch to fix
-	  merging translations to .desktop keys that have dashes in them
+  * ChangeLog: update changelogs; ready to tag 4.4.2   (Old svn revision:
+  26341)
 
-2007-11-17	Brian Tarricone <kelnos@xfce.org>
+  * configure.in.in: remove svn version tag for release   (Old svn revision:
+  26339)
 
-	* === Released 4.4.0.1 ===
+  * INSTALL: various pre-release updates - po files, docs, etc.  mainly
+  autogenerated stuff   (Old svn revision: 26337)
 
-2007-10-22	Brian Tarricone <kelnos@xfce.org>
+2007-11-16  Nick Schermer <nick@xfce.org>
 
-	* scripts/Makefile.am: fix 'make distcheck'; include
-	  xdt-commit in EXTRA_DIST
+  * NEWS: Update NEWS, not really sure if trunk will be released as 4.4.1
+  tho...  (Old svn revision: 26312)
 
-2007-02-13	Jannis Pohlmann <jannis@xfce.org>
+2007-10-24  Brian Tarricone <brian@tarricone.org>
 
-	* scripts/xdt-commit: Too much quoting - all input files were
-	  treated as one string.
+  * configure.in.in: remove trailing parens on AC_INIT version info to work
+  around bug in intltool 0.35.x and 0.36.x   (Old svn revision: 26180)
 
-2007-02-13	Jannis Pohlmann <jannis@xfce.org>
+2007-01-20  Benedikt Meurer <benny@xfce.org>
 
-	* scripts/xdt-commit: Add more quotes around variables. Use
-	  "type svn" to check whether Subversion is installed.
+  * ChangeLog, configure.in.in: 2007-01-20	Benedikt Meurer <benny@xfce.org>  *
+  configure.in.in: Post-release version bump.     (Old svn revision: 24610)
 
-2007-02-12	Jannis Pohlmann <jannis@xfce.org>
+  * ChangeLog, NEWS, configure.in.in: 2007-01-20	Benedikt Meurer
+  <benny@xfce.org>  * === Released 4.4.0 === * NEWS, configure.in.in: Bump
+  version.     (Old svn revision: 24608)
 
-	* scripts/Makefile.am, scripts/xdt-commit: Add script for 
-	  generating commit messages from ChangeLogs on the fly.
+2007-01-15  Benedikt Meurer <benny@xfce.org>
 
-2007-01-20	Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, m4macros/xdt-i18n.m4, scripts/xdt-autogen.in:
+  2007-01-15	Benedikt Meurer <benny@xfce.org>  * scripts/xdt-autogen.in: Apply
+  patch from Olivier Fourdan <fourdan@xfce.org> to update xdt-autogen to use
+  the latest GNU autotools if available. Bug #2755. *
+  m4macros/xdt-i18n.m4(XDT_I18N): Make sure xgettext treats source code as
+  UTF-8.     (Old svn revision: 24486)
 
-	* configure.in.in: Post-release version bump.
+2006-11-04  Benedikt Meurer <benny@xfce.org>
 
-2007-01-20	Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, configure.in.in: 2006-11-04	Benedikt Meurer <benny@xfce.org>  *
+  configure.in.in: Post-release version bump.     (Old svn revision: 23638)
 
-	* === Released 4.4.0 ===
-	* NEWS, configure.in.in: Bump version.
+  * ChangeLog, NEWS, configure.in.in: 2006-11-04	Benedikt Meurer
+  <benny@xfce.org>  * === Released 4.3.99.2 === * NEWS, configure.in.in: Bump
+  version.     (Old svn revision: 23636)
 
-2007-01-15	Benedikt Meurer <benny@xfce.org>
+2006-09-02  Benedikt Meurer <benny@xfce.org>
 
-	* scripts/xdt-autogen.in: Apply patch from Olivier Fourdan
-	  <fourdan@xfce.org> to update xdt-autogen to use the latest
-	  GNU autotools if available. Bug #2755.
-	* m4macros/xdt-i18n.m4(XDT_I18N): Make sure xgettext treats
-	  source code as UTF-8.
+  * ChangeLog, configure.in.in: 2006-09-02	Benedikt Meurer <benny@xfce.org>  *
+  configure.in.in: Post-release version bump.     (Old svn revision: 23007)
 
-2006-11-04	Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, NEWS, configure.in.in: 2006-09-02	Benedikt Meurer
+  <benny@xfce.org>  * === Released 4.3.99.1 === * NEWS, configure.in.in: Bump
+  version.     (Old svn revision: 23005)
 
-	* configure.in.in: Post-release version bump.
+  * ChangeLog, m4macros/xdt-features.m4: 2006-09-02	Benedikt Meurer
+  <benny@xfce.org>  * m4macros/xdt-features.m4: Set gcc specific compiler flags
+  only if gcc is being used. Bug #2251.     (Old svn revision: 22990)
 
-2006-11-04	Benedikt Meurer <benny@xfce.org>
+2006-07-09  Benedikt Meurer <benny@xfce.org>
 
-	* === Released 4.3.99.2 ===
-	* NEWS, configure.in.in: Bump version.
+  * ChangeLog, NEWS, configure.in.in: 2006-07-09      Benedikt Meurer
+  <benny@xfce.org>  * === Released 4.3.90.2 === * NEWS, configure.in.in: Bump
+  version.     (Old svn revision: 22332)
 
-2006-09-02	Benedikt Meurer <benny@xfce.org>
+2006-05-08  Benedikt Meurer <benny@xfce.org>
 
-	* configure.in.in: Post-release version bump.
+  * ChangeLog, m4macros/xdt-depends.m4, m4macros/xdt-features.m4,
+  m4macros/xdt-i18n.m4, m4macros/xdt-python.m4, m4macros/xdt-xfce.m4,
+  scripts/xdt-autogen.in: 2006-05-08	Benedikt Meurer <benny@xfce.org>  *
+  m4macros/, scripts/: Add GPL boilerplate. Bug #1786.     (Old svn revision:
+  21591)
 
-2006-09-02	Benedikt Meurer <benny@xfce.org>
+2006-04-16  Benedikt Meurer <benny@xfce.org>
 
-	* === Released 4.3.99.1 ===
-	* NEWS, configure.in.in: Bump version.
+  * ChangeLog, configure.in.in: 2006-04-16	Benedikt Meurer <benny@xfce.org>  *
+  configure.in.in: Post-release version bump.     (Old svn revision: 20980)
 
-2006-09-02	Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, NEWS, configure.in.in, xfce4-dev-tools.spec.in: 2006-04-16     
+  Benedikt Meurer <benny@xfce.org>  * === Released 4.3.90.1 === * NEWS,
+  configure.in.in: Bump version. * xfce4-dev-tools.spec.in: Update RPM spec
+  file.     (Old svn revision: 20978)
 
-	* m4macros/xdt-features.m4: Set gcc specific compiler flags only if
-	  gcc is being used. Bug #2251.
+2006-04-15  Benedikt Meurer <benny@xfce.org>
 
-2006-07-09      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, NEWS, xfce4-dev-tools.spec.in: 2006-04-16      Benedikt Meurer
+  <benny@xfce.org>  * NEWS: Update NEWS. * xfce4-dev-tools.spec.in: CVS -> SVN.
+  Fix URL.     (Old svn revision: 20957)
 
-	* === Released 4.3.90.2 ===
-	* NEWS, configure.in.in: Bump version.
+2006-03-09  Benedikt Meurer <benny@xfce.org>
 
-2006-05-08	Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, m4macros/xdt-depends.m4: 2006-03-09      Benedikt Meurer
+  <benny@xfce.org>  * m4macros/xdt-depends.m4: Apply Brian's patch to fix
+  stupid typo in a variable name. Bug #1558.     (Old svn revision: 20306)
 
-	* m4macros/, scripts/: Add GPL boilerplate. Bug #1786.
+2006-03-05  Benedikt Meurer <benny@xfce.org>
 
-2006-04-16	Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, m4macros/xdt-features.m4: 2006-03-05      Benedikt Meurer
+  <benny@xfce.org>  * m4macros/xdt-features.m4(XDT_FEATURE_DEBUG): Do not add
+  G_DISABLE_DEPRECATED to CFLAGS.     (Old svn revision: 20238)
 
-	* configure.in.in: Post-release version bump.
+2006-02-25  Daichi Kawahata <daichi.k@aioros.ocn.ne.jp>
 
-2006-04-16      Benedikt Meurer <benny@xfce.org>
+  * autogen.sh: Fixed NULL revision string for certain locales.   (Old svn
+  revision: 20044)
 
-	* === Released 4.3.90.1 ===
-	* NEWS, configure.in.in: Bump version.
-	* xfce4-dev-tools.spec.in: Update RPM spec file.
+2005-09-01  Benedikt Meurer <benny@xfce.org>
 
-2006-04-16      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, autogen.sh: 2005-09-01      Benedikt Meurer <benny@xfce.org>  *
+  autogen.sh: Don't depend on xfce4-dev-tools in autogen.sh.     (Old svn
+  revision: 17247)
 
-	* NEWS: Update NEWS.
-	* xfce4-dev-tools.spec.in: CVS -> SVN. Fix URL.
+2005-08-31  Benedikt Meurer <benny@xfce.org>
 
-2006-03-09      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, autogen.sh, configure.ac, configure.in.in: 2005-08-31     
+  Benedikt Meurer <benny@xfce.org>  * configure.in.in, autogen.sh: Merge build
+  framework changes from libexo.     (Old svn revision: 17214)
 
-	* m4macros/xdt-depends.m4: Apply Brian's patch to fix stupid typo in a
-	  variable name. Bug #1558.
+2005-07-09  Benedikt Meurer <benny@xfce.org>
 
-2006-03-05      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, NEWS, configure.ac: 2005-07-09      Benedikt Meurer
+  <benny@xfce.org>  * configure.ac, NEWS: Bump version after release
+  (4.3.1svn).     (Old svn revision: 16202)
 
-	* m4macros/xdt-features.m4(XDT_FEATURE_DEBUG): Do not add
-	  G_DISABLE_DEPRECATED to CFLAGS.
+  * ChangeLog, HACKING, Makefile.am, NEWS, README, configure.ac: 2005-07-09    
+   Benedikt Meurer <benny@xfce.org>  * Makefile.am: Set proper automake
+  options. * HACKING, README: CVS -> SVN. * NEWS, configure.ac: Version 4.3.0. 
+     (Old svn revision: 16200)
 
-2005-09-01      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog: Revert the b0rkage to ChangeLog!    (Old svn revision: 16199)
 
-	* autogen.sh: Don't depend on xfce4-dev-tools in autogen.sh.
+2005-05-14  Olivier Fourdan <fourdan.olivier@wanadoo.fr>
 
-2005-08-31      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog: Update ChangeLog  (Old svn revision: 14410)
 
-	* configure.in.in, autogen.sh: Merge build framework changes from
-	  libexo.
+2005-05-04  Olivier Fourdan <fourdan.olivier@wanadoo.fr>
 
-2005-07-09      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog: Update ChangeLog  (Old svn revision: 14001)
 
-	* configure.ac, NEWS: Bump version after release (4.3.1svn).
+2005-04-21  Brian Tarricone <brian@tarricone.org>
 
-2005-07-09      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, scripts/xdt-autogen.in: * Modify checks for autoheader and
+  autoconf so they first check for versioned binaries (-2.59, -2.58, -2.57,
+  -2.53) before falling back to a non-versioned binary. * Modify checks for
+  automake and aclocal so they first check for versioned binaries (-1.9, -1.8)
+  before falling back to a non- versioned binary. * Fix two typos; 2>&0 ->
+  2>&1, autoconf -> automake.   (Old svn revision: 13702)
 
-	* Makefile.am: Set proper automake options.
-	* HACKING, README: CVS -> SVN.
-	* NEWS, configure.ac: Version 4.3.0.
+2005-04-17  Olivier Fourdan <fourdan.olivier@wanadoo.fr>
 
-2005-04-20      Brian Tarricone <bjt23@cornell.edu>
+  * configure.ac: REverting my last change, it's my Ubuntu install that is
+  broken, not that script.   (Old svn revision: 13650)
 
-	* scripts/xdt-autogen.in: Modify checks for autoheader and autoconf
-	  so they first check for versioned binaries (-2.59, -2.58, -2.57,
-	  -2.53) before falling back to a non-versioned binary.
-	* scripts/xdt-autogen.in: Modify checks for automake and aclocal so
-	  they first check for versioned binaries (-1.9, -1.8) before falling
-	  back to a non-versioned binary.
-	* scripts/xdt-autogen.in: Fix two typos; 2>&0 -> 2>&1,
-	  autoconf -> automake.
+2005-04-16  Olivier Fourdan <fourdan.olivier@wanadoo.fr>
 
-2005-03-19      Benedikt Meurer <benny@xfce.org>
+  * configure.ac: The package did not build for me   (Old svn revision: 13633)
 
-	* m4macros/xdt-features.m4: Fix typo.
+2005-04-12  Jasper Huijsmans <jbhuijsmans@home.nl>
 
-2005-03-19      Benedikt Meurer <benny@xfce.org>
+  * scripts/xdt-autogen.in: Not all gmo files were removed; this at least
+  works.  (Old svn revision: 13539)
 
-	* m4macros/xdt-features.m4: --enable-final is now on by default again.
-	  The glib assertions are now toggled by --disable-asserts, as suggested
-	  by Olivier.
+2005-04-06  Jens Luedicke <jens.luedicke@gmail.com>
 
-2005-03-17      Benedikt Meurer <benny@xfce.org>
+  * .cvsignore, m4macros/.cvsignore, scripts/.cvsignore: remove .cvsignore
+  cruft  (Old svn revision: 13312)
 
-	* m4macros/xdt-features.m4: --enable-final is now disabled by default
-	  and glib assertions will only be disabled if --enable-final is
-	  specified and debugging is disabled.
+2005-03-19  Benedikt Meurer <benny@xfce.org>
 
-2005-03-17      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, m4macros/xdt-features.m4: 2005-03-19      Benedikt Meurer
+  <benny@xfce.org>  * m4macros/xdt-features.m4: Fix typo.   (Old svn revision:
+  2282)
 
-	* scripts/xdt-autogen.in: Escape the special characters in the tr sets
-	  twice as they are also expanded by the shell.
+  * ChangeLog, m4macros/xdt-features.m4: 2005-03-19      Benedikt Meurer
+  <benny@xfce.org>  * m4macros/xdt-features.m4: --enable-final is now on by
+  default again. The glib assertions are now toggled by --disable-asserts, as
+  suggested by Olivier.   (Old svn revision: 2281)
 
-2005-03-08      Benedikt Meurer <benny@xfce.org>
+2005-03-17  Benedikt Meurer <benny@xfce.org>
 
-	* m4macros/xdt-i18n.m4: Fix typo, its Q_() not O_().
+  * ChangeLog, m4macros/xdt-features.m4: 2005-03-17      Benedikt Meurer
+  <benny@xfce.org>  * m4macros/xdt-features.m4: --enable-final is now disabled
+  by default and glib assertions will only be disabled if --enable-final is
+  specified and debugging is disabled.   (Old svn revision: 2280)
 
-2005-03-08      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, scripts/xdt-autogen.in: 2005-03-17      Benedikt Meurer
+  <benny@xfce.org>  * scripts/xdt-autogen.in: Escape the special characters in
+  the tr sets twice as they are also expanded by the shell.   (Old svn
+  revision: 2279)
 
-	* scripts/xdt-autogen.in, m4macros/xdt-i18n.m4: Add better handling
-	  of XGETTEXT_ARGS to automatically support the O_() translation
-	  keyword.
+2005-03-08  Benedikt Meurer <benny@xfce.org>
 
-2005-03-05      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, m4macros/xdt-i18n.m4: 2005-03-08      Benedikt Meurer
+  <benny@xfce.org>  * m4macros/xdt-i18n.m4: Fix typo, its Q_() not O_().   (Old
+  svn revision: 2278)
 
-	* scripts/xdt-autogen.in: Fix a type where configure.ac was still
-	  hardcoded into the script.
+  * ChangeLog, m4macros/xdt-i18n.m4, scripts/xdt-autogen.in: 2005-03-08     
+  Benedikt Meurer <benny@xfce.org>  * scripts/xdt-autogen.in,
+  m4macros/xdt-i18n.m4: Add better handling of XGETTEXT_ARGS to automatically
+  support the O_() translation keyword.   (Old svn revision: 2277)
 
-2005-03-04      Benedikt Meurer <benny@xfce.org>
+2005-03-05  Benedikt Meurer <benny@xfce.org>
 
-	* scripts/.cvsignore: Add vim swap files.
-	* scripts/xdt-autogen.in: Add support for AC_CONFIG_SUBDIRS(), currently
-	  required by xfcalendar. Improve the clean logic.
+  * ChangeLog, scripts/xdt-autogen.in: 2005-03-05      Benedikt Meurer
+  <benny@xfce.org>  * scripts/xdt-autogen.in: Fix a type where configure.ac was
+  still hardcoded into the script.   (Old svn revision: 2276)
 
-2005-02-19      Benedikt Meurer <benny@xfce.org>
+2005-03-04  Benedikt Meurer <benny@xfce.org>
 
-	* m4macros/xdt-python.m4, m4macros/Makefile.am: Add M4 file for Python
-	  related checks, currently contains an autoconf check to find header
-	  files required to build Python extensions on the target system.
+  * ChangeLog, scripts/.cvsignore, scripts/xdt-autogen.in: 2005-03-04     
+  Benedikt Meurer <benny@xfce.org>  * scripts/.cvsignore: Add vim swap files. *
+  scripts/xdt-autogen.in: Add support for AC_CONFIG_SUBDIRS(), currently
+  required by xfcalendar. Improve the clean logic.   (Old svn revision: 2275)
 
-2005-01-31      Benedikt Meurer <benny@xfce.org>
+2005-02-19  Benedikt Meurer <benny@xfce.org>
 
-	* m4macros/xdt-depends.m4: XDT_CHECK_OPTIONAL_PACKAGE() also
-	  sets an automake conditional for HAVE_VARNAME now.
+  * ChangeLog, m4macros/Makefile.am, m4macros/xdt-python.m4: 2005-02-19     
+  Benedikt Meurer <benny@xfce.org>  * m4macros/xdt-python.m4,
+  m4macros/Makefile.am: Add M4 file for Python related checks, currently
+  contains an autoconf check to find header files required to build Python
+  extensions on the target system.   (Old svn revision: 2274)
 
-2005-01-27      Benedikt Meurer <benny@xfce.org>
+2005-01-31  Benedikt Meurer <benny@xfce.org>
 
-	* m4macros/xdt-depends.m4: AC_REQUIRE() doesn't work properly with
-	  conditional shell code.
+  * ChangeLog, m4macros/.cvsignore, m4macros/xdt-depends.m4: 2005-01-31     
+  Benedikt Meurer <benny@xfce.org>  * m4macros/xdt-depends.m4:
+  XDT_CHECK_OPTIONAL_PACKAGE() also sets an automake conditional for
+  HAVE_VARNAME now.   (Old svn revision: 2273)
 
-2005-01-27      Benedikt Meurer <benny@xfce.org>
+2005-01-27  Benedikt Meurer <benny@xfce.org>
 
-	* scripts/xdt-autogen.in: Fix typo in the error message of the
-	  gtk-doc check.
+  * ChangeLog, m4macros/xdt-depends.m4: 2005-01-27      Benedikt Meurer
+  <benny@xfce.org>  * m4macros/xdt-depends.m4: AC_REQUIRE() doesn't work
+  properly with conditional shell code.   (Old svn revision: 2272)
 
-2005-01-27      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, scripts/xdt-autogen.in: 2005-01-27      Benedikt Meurer
+  <benny@xfce.org>  * scripts/xdt-autogen.in: Fix typo in the error message of
+  the gtk-doc check.   (Old svn revision: 2271)
 
-	* scripts/xdt-autogen.in: Remove gtk-doc.make as well when cleaning
-	  autogenerated files.
+  * ChangeLog, scripts/xdt-autogen.in: 2005-01-27      Benedikt Meurer
+  <benny@xfce.org>  * scripts/xdt-autogen.in: Remove gtk-doc.make as well when
+  cleaning autogenerated files.   (Old svn revision: 2270)
 
-2005-01-27      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, Makefile.am, configure.ac: 2005-01-27      Benedikt Meurer
+  <benny@xfce.org>  * configure.ac: Fix tag name. Fix order of autoconf macros.
+  Use autoconf values to initialize automake. * Makefile.am: Fix
+  distclean-local target. Strip down EXTRA_DIST list.   (Old svn revision:
+  2269)
 
-	* configure.ac: Fix tag name. Fix order of autoconf macros. Use
-	  autoconf values to initialize automake.
-	* Makefile.am: Fix distclean-local target. Strip down EXTRA_DIST
-	  list.
+  * ChangeLog, m4macros/xdt-i18n.m4, scripts/xdt-autogen.in: 2005-01-27     
+  Benedikt Meurer <benny@xfce.org>  * scripts/xdt-autogen.in: Added commands to
+  clean all autogenerated files from the current source directory. Just run
+  "xdt-autogen clean". * m4macros/xdt-i18n.m4: Use the macros provided by
+  glib-gettext.m4 instead of our own replacements, in order to make sure that
+  they play well with the Makefile.in.in generated by glib-gettextize. *
+  m4macros/xdt-i18n.m4: Fix typos in localedir substitution. *
+  scripts/xdt-autogen.in: Added support for intltool.   (Old svn revision:
+  2268)
 
-2005-01-27      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, autogen.sh, scripts/xdt-autogen.in: 2005-01-27      Benedikt
+  Meurer <benny@xfce.org>  * autogen.sh, scripts/xdt-autogen.in: Don't run the
+  configure script if the environment variable NOCONFIGURE is set.   (Old svn
+  revision: 2267)
 
-	* scripts/xdt-autogen.in: Added commands to clean all autogenerated
-	  files from the current source directory. Just run "xdt-autogen clean".
-	* m4macros/xdt-i18n.m4: Use the macros provided by glib-gettext.m4
-	  instead of our own replacements, in order to make sure that they
-	  play well with the Makefile.in.in generated by glib-gettextize.
-	* m4macros/xdt-i18n.m4: Fix typos in localedir substitution.
-	* scripts/xdt-autogen.in: Added support for intltool.
+2005-01-26  Benedikt Meurer <benny@xfce.org>
 
-2005-01-27      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, m4macros/xdt-i18n.m4: 2005-01-26      Benedikt Meurer
+  <benny@xfce.org>  * m4macros/xdt-i18n.m4: Need to use AC_DEFINE_UNQUOTED()
+  when using shell variables.   (Old svn revision: 2266)
 
-	* autogen.sh, scripts/xdt-autogen.in: Don't run the configure script
-	  if the environment variable NOCONFIGURE is set.
+  * .cvsignore, ChangeLog, autogen.sh, m4macros/.cvsignore,
+  m4macros/xdt-i18n.m4, scripts/.cvsignore: 2005-01-26      Benedikt Meurer
+  <benny@xfce.org>  * autogen.sh: Be sure to pass command line parameters to
+  xdt-autogen and configure. * m4macros/xdt-i18n.m4: Add missing fi, so now
+  XDT_I18N() works properly. * .cvsignore, m4macros/.cvsignore,
+  scripts/.cvsignore: Shut up CVS.   (Old svn revision: 2265)
 
-2005-01-26      Benedikt Meurer <benny@xfce.org>
+  * ChangeLog, HACKING: 2005-01-26      Benedikt Meurer <benny@xfce.org>  *
+  HACKING: Added notes for developers with write access to the Xfce CVS
+  repository.   (Old svn revision: 2264)
 
-	* m4macros/xdt-i18n.m4: Need to use AC_DEFINE_UNQUOTED() when
-	  using shell variables.
-
-2005-01-26      Benedikt Meurer <benny@xfce.org>
-
-	* autogen.sh: Be sure to pass command line parameters to xdt-autogen
-	  and configure.
-	* m4macros/xdt-i18n.m4: Add missing fi, so now XDT_I18N() works
-	  properly.
-	* .cvsignore, m4macros/.cvsignore, scripts/.cvsignore: Shut up CVS.
-
-2005-01-26      Benedikt Meurer <benny@xfce.org>
-
-	* HACKING: Added notes for developers with write access to the
-	  Xfce CVS repository.
-
-2005-01-26      Benedikt Meurer <benny@xfce.org>
-
-	* Initial import.
-
-# vi:set ts=8 sw=8 noet ai nocindent:
+  * AUTHORS, COPYING, ChangeLog, HACKING, INSTALL, Makefile.am, NEWS, README,
+  autogen.sh, configure.ac, m4macros/Makefile.am, m4macros/xdt-depends.m4,
+  m4macros/xdt-features.m4, m4macros/xdt-i18n.m4, m4macros/xdt-xfce.m4,
+  scripts/Makefile.am, scripts/xdt-autogen.in, xfce4-dev-tools.spec.in: Initial
+  revision   (Old svn revision: 2260)
