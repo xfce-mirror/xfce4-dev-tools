@@ -32,6 +32,12 @@ XDT_AUTOGEN_VERSION_MICRO="@VERSION_MICRO@"
 XDT_AUTOGEN_VERSION_NANO="@VERSION_NANO@"
 XDT_AUTOGEN_VERSION_REVISION="@VERSION_REVISION@"
 
+
+parse_configure_subdirs()
+{
+  cat "$1" | tr '\\n\\t\\\\' '   ' | sed -ne 's|.*AC_CONFIG_SUBDIRS(\[\{0,1\}\([[:alnum:]_ @/-]\{1,\}\).*|\1|p'
+}
+
 ##
 ## Helper function to lookup configure.{in,ac} files recursively.
 ## Sets $CONFIGURE_FILES to the list of configure files found.
@@ -57,11 +63,31 @@ EOF
     CONFIGURE_FILES="$CONFIGURE_FILES $configure_file";
   fi
 
-  subdirs=`cat ${configure_file} | tr '\\n\\t\\\\' '   ' | sed -ne 's|.*AC_CONFIG_SUBDIRS(\[\{0,1\}\([[:alnum:]_ @/-]\{1,\}\).*|\1|p'`
+  subdirs=`parse_configure_subdirs ${configure_file}`
   for subdir in $subdirs; do
     lookup_configure_files "$1/$subdir";
   done
 }
+
+lookup_configure_ac_in_files()
+{
+  configure_file=""
+
+  if test -f "$1/configure.ac.in"; then
+    configure_file="$1/configure.ac.in";
+  elif test -f "$1/configure.in.in"; then
+    configure_file="$1/configure.in.in";
+  fi
+
+  test "x$configure_file" != "x" && echo -n "$configure_file "
+
+  subdirs=`parse_configure_subdirs ${configure_file}`
+  for subdir in $subdirs; do
+    lookup_configure_ac_in_files "$1/$subdir";
+  done
+}
+
+
 
 ##
 ## check command-line args
@@ -150,11 +176,47 @@ XDG_DATA_DIRS="${XDG_DATA_HOME}:${XDG_DATA_DIRS}"
 export XDG_DATA_DIRS XDG_DATA_HOME
 
 
+MASTER_DIR=`pwd`; test -z "${MASTER_DIR}" && MASTER_DIR="."
+
+##
+## First we do some substitutions to generate configure.{ac,in} if necessary
+##
+CONFIGURE_AC_IN_FILES=`lookup_configure_ac_in_files "$MASTER_DIR"`
+for conf_ac_in in $CONFIGURE_AC_IN_FILES; do
+  conf_ac="`echo $conf_ac_in | sed -e 's:\.in$::'`"
+
+  # first generate a revision id
+  if test -d .git/svn; then
+    revision=`git svn find-rev trunk 2>/dev/null ||
+              git svn find-rev origin/trunk 2>/dev/null ||
+              git svn find-rev HEAD 2>/dev/null ||
+              git svn find-rev master 2>/dev/null`
+  elif test -d .git; then
+    revision=`git rev-parse --short HEAD`
+  elif test -d .svn; then
+    revision=`LC_ALL=C svn info $0 | awk '/^Revision: / {printf "%05d\n", $2}'`
+  fi
+
+  if test "x$revision" = "x"; then
+    revision="UNKNOWN"
+  fi
+
+  # find out what languages we support
+  conf_dir=`dirname $conf_ac`
+  linguas=`cd "$conf_dir/po" 2>/dev/null && ls *.po 2>/dev/null | awk 'BEGIN { FS="."; ORS=" " } { print $1 }'`
+
+  # and do the substitution
+  sed -e "s/@REVISION@/${revision}/g" \
+      -e "s/@LINGUAS@/${linguas}/g" \
+      < "$conf_ac_in" > "$conf_ac"
+
+done
+
+
 ##
 ## Search for the configure.{ac,in} files
 ##
 CONFIGURE_FILES=""
-MASTER_DIR=`pwd`; test -z "${MASTER_DIR}" && MASTER_DIR="."
 lookup_configure_files "$MASTER_DIR"
 
 

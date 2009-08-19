@@ -1,10 +1,15 @@
-4.6.2
+4.7.0
 =====
+- Do @REVISION@ and @LINGUAS@ substitutions in xdt-autogen instead of
+  requiring people to put it in their autogen.sh files.
 - Also support the newer IT_PROG_INTLTOOL macro
 - Added --version and -V options to display the xdt-autogen version
 - Added ability for autogen.sh scripts to set an environment
   variable XDT_AUTOGEN_REQUIRED_VERSION to depend on a particular version
   of xdt-autogen.
+- Add a bunch more compiler warnings for --enable-debug, and a new macro
+  XDT_SUPPORTED_FLAGS() that tests whether the compiler supports particular
+  option flags.
 
 4.6.0
 =====
