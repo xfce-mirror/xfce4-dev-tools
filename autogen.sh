@@ -9,26 +9,23 @@
 #
 
 # substitute revision and date
-if test -d .git/svn; then
-  revision=$(git svn find-rev trunk 2>/dev/null ||
-             git svn find-rev origin/trunk 2>/dev/null ||
-             git svn find-rev HEAD 2>/dev/null ||
-             git svn find-rev master 2>/dev/null)
-else
-  revision=`LC_ALL=C svn info $0 | awk '/^Revision: / {printf "%05d\n", $2}'`
+if test -d .git; then
+  revision=$(git rev-parse --short HEAD)
 fi
-sed -e "s/@DATE@/`date +%Y%m%d`/g" -e "s/@REVISION@/${revision}/g" \
-  < "configure.in.in" > "configure.in"
+if test "x$revision" = "x"; then
+  revision=UNKNOWN
+fi
+sed -e "s/@REVISION@/${revision}/g" < "configure.in.in" > "configure.in"
 
 if (type xdt-autogen) >/dev/null 2>&1; then
-  exec xdt-autogen $@
+  exec xdt-autogen "$@"
 else
   (aclocal &&
    automake --add-missing --copy --gnu &&
    autoconf) || exit 1
 
   if test x"${NOCONFIGURE}" = x""; then
-    (./configure --enable-maintainer-mode $@ &&
+    (./configure --enable-maintainer-mode "$@" &&
      echo "Now type \"make\" to build.") || exit 1
   else
     echo "Skipping configure process."
