@@ -13,7 +13,7 @@ bin_SCRIPTS =								\
 xdt-autogen: Makefile $(srcdir)/xdt-autogen.in
 	rm -f xdt-autogen xdt-autogen.gen
 	sed -e 's,\@DATADIR\@,$(datadir),g' \
-		$(srcdir)/xdt-autogen.in \
+		xdt-autogen.in \
 		> xdt-autogen.gen
 	mv xdt-autogen.gen xdt-autogen
 
