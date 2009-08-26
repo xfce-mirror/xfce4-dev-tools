@@ -1,0 +1,16 @@
+*.bak
+.*.swp
+INSTALL
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache
+config.log
+config.status
+configure
+configure.in
+install-sh
+missing
+xfce4-dev-tools.spec
+scripts/xdt-autogen
+scripts/xdt-autogen.in
