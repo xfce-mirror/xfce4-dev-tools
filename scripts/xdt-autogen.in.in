@@ -33,6 +33,41 @@ XDT_AUTOGEN_VERSION_NANO="@VERSION_NANO@"
 XDT_AUTOGEN_VERSION_REVISION="@VERSION_REVISION@"
 
 
+##
+## a few portability tests
+##
+
+if test -z "$EGREP"; then
+  if type egrep >/dev/null 2>&1; then
+    EGREP=egrep
+  else
+    EGREP="grep -E"
+  fi
+fi
+
+awk_tests="gawk mawk nawk awk"
+if test -z "$AWK"; then
+  for a in $awk_tests; do
+    if type $a >/dev/null 2>&1; then
+      AWK=$a
+      break
+    fi
+  done
+else
+  if ! type $AWK >/dev/null 2>/dev/null; then
+    unset AWK
+  fi
+fi
+if test -z "$AWK"; then
+  echo "xdt-autogen: The 'awk' program (one of $awk_tests) is" >&2
+  echo "             required, but cannot be found." >&2
+  exit 1
+fi
+
+##
+## figures out any subdirs that should be configured as a part
+## of recursive configure.
+##
 parse_configure_subdirs()
 {
   cat "$1" | tr '\\n\\t\\\\' '   ' | sed -ne 's|.*AC_CONFIG_SUBDIRS(\[\{0,1\}\([[:alnum:]_ @/-]\{1,\}\).*|\1|p'
@@ -114,7 +149,7 @@ do_version_check() {
   test $XDT_AUTOGEN_VERSION_MINOR -gt $minor && return 0
 
   micro=`echo $XDT_AUTOGEN_REQUIRED_VERSION | cut -d. -f3`
-  if echo "$micro" | grep -E -q "svn|git"; then
+  if echo "$micro" | $EGREP -q "svn|git"; then
     revision=`echo "$micro" | sed -e 's/[[:digit:].]\+\(.*\)/\1/'`
     micro=`echo "$micro" | sed -e 's/\([[:digit:].]\+\).*/\1/'`
   fi
@@ -194,7 +229,7 @@ for conf_ac_in in $CONFIGURE_AC_IN_FILES; do
   elif test -d .git; then
     revision=`git rev-parse --short HEAD`
   elif test -d .svn; then
-    revision=`LC_ALL=C svn info $0 | awk '/^Revision: / {printf "%05d\n", $2}'`
+    revision=`LC_ALL=C svn info $0 | $AWK '/^Revision: / {printf "%05d\n", $2}'`
   fi
 
   if test "x$revision" = "x"; then
@@ -203,7 +238,7 @@ for conf_ac_in in $CONFIGURE_AC_IN_FILES; do
 
   # find out what languages we support
   conf_dir=`dirname $conf_ac`
-  linguas=`cd "$conf_dir/po" 2>/dev/null && ls *.po 2>/dev/null | awk 'BEGIN { FS="."; ORS=" " } { print $1 }'`
+  linguas=`cd "$conf_dir/po" 2>/dev/null && ls *.po 2>/dev/null | $AWK 'BEGIN { FS="."; ORS=" " } { print $1 }'`
 
   # and do the substitution
   sed -e "s/@REVISION@/${revision}/g" \
@@ -306,7 +341,7 @@ EOF
 ##
 test -z "${XDT_PROG_INTLTOOLIZE}" && XDT_PROG_INTLTOOLIZE="intltoolize"
 for configure_file in $CONFIGURE_FILES; do
-  if grep -q -E "^(AC|IT)_PROG_INTLTOOL" "${configure_file}"; then
+  if $EGREP -q "^(AC|IT)_PROG_INTLTOOL" "${configure_file}"; then
     (${XDT_PROG_INTLTOOLIZE} --version) </dev/null >/dev/null 2>&1 || {
       cat >&2 <<EOF
 xdt-autogen: You must have "intltool" installed on your system.
@@ -402,7 +437,7 @@ EOF
 ##
 test -z "${XDT_PROG_AUTOHEADER}" &&
 for configure_file in $CONFIGURE_FILES; do
-  if grep -q -E "^A(M|C)_CONFIG_HEADER" "${configure_file}"; then
+  if $EGREP -q "^A(M|C)_CONFIG_HEADER" "${configure_file}"; then
     for i in autoheader-2.61 autoheader-2.60 autoheader-2.59 autoheader-2.58 autoheader-2.57 autoheader-2.53 autoheader; do
       (${i} --version) </dev/null >/dev/null 2>&1 &&
       XDT_PROG_AUTOHEADER=${i} && break
@@ -490,7 +525,7 @@ for configure_file in ${CONFIGURE_FILES}; do
     fi
   fi
 
-  if grep -q -E "^(AC|IT)_PROG_INTLTOOL" "${configure_file}"; then
+  if $EGREP -q "^(AC|IT)_PROG_INTLTOOL" "${configure_file}"; then
     (echo "Running ${XDT_PROG_INTLTOOLIZE} --automake --copy --force" &&
      cd "${source_dir}" &&
      ${XDT_PROG_INTLTOOLIZE} --automake --copy --force) || exit 1
@@ -534,7 +569,7 @@ XGETTEXT_ARGS = @XGETTEXT_ARGS@
    cd ${source_dir} &&
    ${XDT_PROG_ACLOCAL} ${ACLOCAL_FLAGS}) || exit 1
 
-  if grep -q -E "^A(M|C)_CONFIG_HEADER" "${configure_file}"; then
+  if $EGREP -q "^A(M|C)_CONFIG_HEADER" "${configure_file}"; then
     (echo "Running ${XDT_PROG_AUTOHEADER}..." &&
      cd ${source_dir} &&
      ${XDT_PROG_AUTOHEADER}) || exit 1
