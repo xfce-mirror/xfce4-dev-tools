@@ -285,15 +285,6 @@ if test x"$1" = x"clean"; then
 
     echo "Cleaning generated files in ${directory}..."
 
-    (cd ${directory} ;
-     rm -f config.* configure configure.lineno aclocal.m4 ;
-     rm -f compile depcomp ltmain.sh missing install-sh ;
-     rm -f po/Makefile.in.in ;
-     rm -f stamp-h1 *.spec ;
-     rm -f mkinstalldirs libtool ;
-     rm -rf autom4te.cache ;
-     rm -f intltool-* gtk-doc.make)
-
     # determine the output files used in this package directory
     output_files=`tr '\\n\\t\\\\' '   ' < ${configure_ac_file} | sed -ne 's|.*AC_OUTPUT(\[\{0,1\}\([[:alnum:]_@/\. -]\{1,\}\).*|\1|p'`;
     for output_file in $output_files; do
@@ -303,6 +294,20 @@ if test x"$1" = x"clean"; then
       fi
       rm -f "${directory}/${output_file}";
     done
+
+    (cd ${directory} ;
+     rm -f config.* configure configure.lineno aclocal.m4 ;
+     rm -f compile depcomp ltmain.sh missing install-sh ;
+     rm -f po/Makefile.in.in ;
+     rm -f stamp-h1 *.spec ;
+     rm -f mkinstalldirs libtool ;
+     rm -rf autom4te.cache ;
+     rm -f intltool-* gtk-doc.make ;
+     if test -f configure.ac.in -a -f configure.ac; then
+       rm -f configure.ac
+     elif test -f configure.in.in -a -f configure.in; then
+       rm -f configure.in
+     fi)
 
     # determine translations used in this package directory
 #    translations=`tr '\\n\\\\' '  ' < ${configure_ac_file} | sed -ne 's/.*XDT_I18N(\[\{0,1\}\([a-zA-Z_@ ]\{1,\}\).*/\1/p'`;
