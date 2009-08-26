@@ -186,9 +186,10 @@ do_version_check() {
       XDT_AUTOGEN_VERSION_REV_NUM=`echo "$XDT_AUTOGEN_VERSION_REVISION" | sed -e 's/svn-r\([[:digit:]]\+\)/\1/'`
       test $rev_num -le $XDT_AUTOGEN_VERSION_REV_NUM || return 1
     elif echo "$revision" | grep -q "git"; then
-      echo "Error: git revision comparison not yet implemented.  Please file a bug:"
-      echo "@PACKAGE_BUGREPORT@"
-      exit 1
+      # since git rev info is of the form "git-$SHORT_SHA1", they cannot
+      # be ordered without knowing the full git history.
+      echo "xdt-autogen: Git revision comparison is not reliable.  Continuing anyway." >&2
+      echo "             If you experience problems, upgrade xfce4-dev-tools." >&2
     fi
   fi
 
