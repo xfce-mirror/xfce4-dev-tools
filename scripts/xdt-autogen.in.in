@@ -74,11 +74,12 @@ parse_configure_subdirs()
 }
 
 ##
-## Helper function to lookup configure.{in,ac} files recursively.
-## Sets $CONFIGURE_AC_FILES to the list of files found.
+## Helper function to look up configure.{in,ac} files recursively.
 ##
 lookup_configure_ac_files()
 {
+  configure_ac_file=""
+
   if test -f "$1/configure.ac"; then
     configure_ac_file="$1/configure.ac";
   elif test -f "$1/configure.in"; then
@@ -92,11 +93,7 @@ EOF
     exit 1
   fi
 
-  if test x"$CONFIGURE_AC_FILES" = x""; then
-    CONFIGURE_AC_FILES="$configure_ac_file";
-  else
-    CONFIGURE_AC_FILES="$CONFIGURE_AC_FILES $configure_ac_file";
-  fi
+  test "x$configure_ac_file" != "x" && echo -n "$configure_ac_file "
 
   subdirs=`parse_configure_subdirs ${configure_ac_file}`
   for subdir in $subdirs; do
@@ -104,6 +101,9 @@ EOF
   done
 }
 
+##
+## Helper function to look up configure.{in,ac}.in files recursively.
+##
 lookup_configure_ac_in_files()
 {
   configure_ac_in_file=""
@@ -251,8 +251,7 @@ done
 ##
 ## Search for the configure.{ac,in} files
 ##
-CONFIGURE_AC_FILES=""
-lookup_configure_ac_files "$MASTER_DIR"
+CONFIGURE_AC_FILES=`lookup_configure_ac_files "$MASTER_DIR"`
 
 
 ##
