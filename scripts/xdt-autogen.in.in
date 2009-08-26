@@ -306,7 +306,7 @@ EOF
 ##
 test -z "${XDT_PROG_INTLTOOLIZE}" && XDT_PROG_INTLTOOLIZE="intltoolize"
 for configure_file in $CONFIGURE_FILES; do
-  if grep -E "^(AC|IT)_PROG_INTLTOOL" "${configure_file}" >/dev/null 2>&1; then
+  if grep -q -E "^(AC|IT)_PROG_INTLTOOL" "${configure_file}"; then
     (${XDT_PROG_INTLTOOLIZE} --version) </dev/null >/dev/null 2>&1 || {
       cat >&2 <<EOF
 xdt-autogen: You must have "intltool" installed on your system.
@@ -325,7 +325,7 @@ done
 ##
 test -z "${XDT_PROG_LIBTOOLIZE}" && XDT_PROG_LIBTOOLIZE="libtoolize"
 for configure_file in $CONFIGURE_FILES; do
-  if grep "^AC_PROG_LIBTOOL" "${configure_file}" >/dev/null 2>&1; then
+  if grep -q "^AC_PROG_LIBTOOL" "${configure_file}"; then
     (${XDT_PROG_LIBTOOLIZE} --version) </dev/null >/dev/null 2>&0 || {
       cat >&2 <<EOF
 xdt-autogen: You must have "libtool" installed on your system.
@@ -363,7 +363,7 @@ done
 ##
 test -z "${XDT_PROG_GTKDOCIZE}" && XDT_PROG_GTKDOCIZE="gtkdocize"
 for configure_file in $CONFIGURE_FILES; do
-  if grep "^GTK_DOC_CHECK" "${configure_file}" >/dev/null 2>&1; then
+  if grep -q "^GTK_DOC_CHECK" "${configure_file}"; then
     (${XDT_PROG_GTKDOCIZE} --version) </dev/null >/dev/null 2>&1 || {
       cat >&2 <<EOF
 xdt-autogen: You must have "gtk-doc" installed. You can get if from
@@ -402,7 +402,7 @@ EOF
 ##
 test -z "${XDT_PROG_AUTOHEADER}" &&
 for configure_file in $CONFIGURE_FILES; do
-  if grep "^AM_CONFIG_HEADER" "${configure_file}" >/dev/null 2>&1; then
+  if grep -q "^AM_CONFIG_HEADER" "${configure_file}"; then
     for i in autoheader-2.61 autoheader-2.60 autoheader-2.59 autoheader-2.58 autoheader-2.57 autoheader-2.53 autoheader; do
       (${i} --version) </dev/null >/dev/null 2>&1 &&
       XDT_PROG_AUTOHEADER=${i} && break
@@ -490,7 +490,7 @@ for configure_file in ${CONFIGURE_FILES}; do
     fi
   fi
 
-  if grep -E "^(AC|IT)_PROG_INTLTOOL" "${configure_file}" >/dev/null 2>&1; then
+  if grep -q -E "^(AC|IT)_PROG_INTLTOOL" "${configure_file}"; then
     (echo "Running ${XDT_PROG_INTLTOOLIZE} --automake --copy --force" &&
      cd "${source_dir}" &&
      ${XDT_PROG_INTLTOOLIZE} --automake --copy --force) || exit 1
@@ -518,13 +518,13 @@ XGETTEXT_ARGS = @XGETTEXT_ARGS@
     fi
   fi
 
-  if grep "^AC_PROG_LIBTOOL" "${configure_file}" >/dev/null 2>&1; then
+  if grep -q "^AC_PROG_LIBTOOL" "${configure_file}"; then
     (echo "Running ${XDT_PROG_LIBTOOLIZE} --force --copy..." &&
      cd "${source_dir}" &&
      ${XDT_PROG_LIBTOOLIZE} --force --copy) || exit 1
   fi
 
-  if grep "^GTK_DOC_CHECK" "${configure_file}" >/dev/null 2>&1; then
+  if grep -q "^GTK_DOC_CHECK" "${configure_file}"; then
     (echo "Running ${XDT_PROG_GTKDOCIZE} --copy..." &&
      cd ${source_dir} &&
      ${XDT_PROG_GTKDOCIZE} --copy) || exit 1
@@ -534,7 +534,7 @@ XGETTEXT_ARGS = @XGETTEXT_ARGS@
    cd ${source_dir} &&
    ${XDT_PROG_ACLOCAL} ${ACLOCAL_FLAGS}) || exit 1
 
-  if grep "^AM_CONFIG_HEADER" "${configure_file}" >/dev/null 2>&1; then
+  if grep -q "^AM_CONFIG_HEADER" "${configure_file}"; then
     (echo "Running ${XDT_PROG_AUTOHEADER}..." &&
      cd ${source_dir} &&
      ${XDT_PROG_AUTOHEADER}) || exit 1
