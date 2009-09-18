@@ -109,6 +109,57 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support [default]]),
 ])
 
 
+dnl XDT_FEATURE_VISIBILITY()
+dnl
+dnl Checks to see if the compiler supports the 'visibility' attribute
+dnl If so, adds -DHAVE_GNUC_VISIBILTY to CPPFLAGS.  Also sets the
+dnl automake conditional HAVE_GNUC_VISIBILITY.
+dnl
+AC_DEFUN([XDT_FEATURE_VISIBILITY],
+[
+  AC_ARG_ENABLE([visibility],
+                AC_HELP_STRING([--disable-visibility],
+                               [Don't use ELF visibility attributes]),
+                               [], [enable_visibility=yes])
+  have_gnuc_visibility=no
+  if test "x$enable_visibility" != "xno"; then
+    XDT_SUPPORTED_FLAGS([xdt_vis_test_cflags], [-Wall -Werror -Wno-unused-parameter])
+    saved_CFLAGS="$CFLAGS"
+    CFLAGS="$CFLAGS $xdt_vis_test_cflags"
+    AC_MSG_CHECKING([whether $CC supports the GNUC visibility attribute])
+    AC_COMPILE_IFELSE(AC_LANG_SOURCE(
+    [
+      void test_default (void);
+      void test_hidden (void);
+
+      void __attribute__ ((visibility("default"))) test_default (void) {}
+      void __attribute__ ((visibility("hidden"))) test_hidden (void) {}
+
+      int main (int argc, char **argv) {
+        test_default ();
+        test_hidden ();
+        return 0;
+      }
+    ]),
+    [
+      have_gnuc_visibility=yes
+      AC_MSG_RESULT([yes])
+    ],
+    [
+      AC_MSG_RESULT([no])
+    ])
+    CFLAGS="$saved_CFLAGS"
+  fi
+
+  if test "x$have_gnuc_visibility" = "xyes"; then
+    CPPFLAGS="$CPPFLAGS -DHAVE_GNUC_VISIBILITY"
+    XDT_SUPPORTED_FLAGS([xdt_vis_hidden_cflags], [-fvisibility=hidden])
+    CFLAGS="$CFLAGS $xdt_vis_hidden_cflags"
+  fi
+
+  AM_CONDITIONAL([HAVE_GNUC_VISIBILITY], [test "x$have_gnuc_visibility" = "xyes"])
+])
+
 
 dnl BM_DEBUG_SUPPORT()
 dnl

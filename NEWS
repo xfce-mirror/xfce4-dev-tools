@@ -1,6 +1,8 @@
 4.7.1
 =====
 - Also support the newer AC_CONFIG_HEADERS macro.
+- Add XDT_FEATURE_VISIBILITY to check for and enable symbol visibility
+  support (only useful for building libraries).
 
 4.7.0
 =====
