@@ -61,6 +61,8 @@ AC_DEFUN([XDT_FEATURE_DEBUG],
   AC_ARG_ENABLE([debug],
                 AC_HELP_STRING([--enable-debug@<:@=no|minimum|yes|full@:>@],
                                [Build with debugging support @<:@default=m4_default([$1], [minimum])@:>@]),
+                AC_HELP_STRING([--disable-debug],
+                               [Include no debugging support]),
                 [enable_debug=$enableval], [enable_debug=m4_default([$1], [minimum])])
 
   AC_MSG_CHECKING([whether to build with debugging support])
@@ -129,7 +131,7 @@ AC_DEFUN([XDT_FEATURE_VISIBILITY],
   AC_ARG_ENABLE([visibility],
                 AC_HELP_STRING([--disable-visibility],
                                [Don't use ELF visibility attributes]),
-                [], [enable_visibility=no])
+                [], [enable_visibility=yes])
   have_gnuc_visibility=no
   if test "x$enable_visibility" != "xno"; then
     XDT_SUPPORTED_FLAGS([xdt_vis_test_cflags], [-Wall -Werror -Wno-unused-parameter])
@@ -178,7 +180,7 @@ AC_DEFUN([XDT_FEATURE_LINKER_OPTS],
   AC_ARG_ENABLE([linker-opts],
                 AC_HELP_STRING([--disable-linker-opts],
                                [Disable linker optimizations])
-                [], [enable_linker_opts=no])
+                [], [enable_linker_opts=yes])
 
   if test "x$enable_linker_opts" != "xno"; then
     AC_MSG_CHECKING([whether $LD accepts --as-needed])
