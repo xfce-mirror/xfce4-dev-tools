@@ -58,14 +58,12 @@ dnl XDT_FEATURE_DEBUG(default_level=minimum)
 dnl
 AC_DEFUN([XDT_FEATURE_DEBUG],
 [
-  test "$1" && default_level=$1 || default_level=minimum
-
   AC_ARG_ENABLE([debug],
                 AC_HELP_STRING([--enable-debug@<:@=no|minimum|yes|full@:>@],
-                               [Build with debugging support (default=$default_level)])
+                               [Build with debugging support @<:@default=m4_default([$1], [minimum])@:>@]),
                 AC_HELP_STRING([--disable-debug],
-                               [Include no debugging support [default]]),
-                [], [enable_debug=$default_level])
+                               [Include no debugging support]),
+                [enable_debug=$enableval], [enable_debug=m4_default([$1], [minimum])])
 
   AC_MSG_CHECKING([whether to build with debugging support])
   if test x"$enable_debug" = x"full" -o x"$enable_debug" = x"yes"; then
