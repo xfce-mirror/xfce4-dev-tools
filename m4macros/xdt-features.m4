@@ -120,7 +120,7 @@ AC_DEFUN([XDT_FEATURE_VISIBILITY],
   AC_ARG_ENABLE([visibility],
                 AC_HELP_STRING([--disable-visibility],
                                [Don't use ELF visibility attributes]),
-                               [], [enable_visibility=yes])
+                [], [enable_visibility=yes])
   have_gnuc_visibility=no
   if test "x$enable_visibility" != "xno"; then
     XDT_SUPPORTED_FLAGS([xdt_vis_test_cflags], [-Wall -Werror -Wno-unused-parameter])
@@ -160,6 +160,40 @@ AC_DEFUN([XDT_FEATURE_VISIBILITY],
   AM_CONDITIONAL([HAVE_GNUC_VISIBILITY], [test "x$have_gnuc_visibility" = "xyes"])
 ])
 
+dnl XDT_FEATURE_LINKER_OPTS
+dnl
+dnl Checks for and enables any special linker optimizations.
+dnl
+AC_DEFUN([XDT_FEATURE_LINKER_OPTS],
+[
+  AC_ARG_ENABLE([linker-opts],
+                AC_HELP_STRING([--disable-linker-opts],
+                               [Disable linker optimizations])
+                [], [enable_linker_opts=yes])
+
+  if test "x$enable_linker_opts" != "xno"; then
+    AC_MSG_CHECKING([whether $LD accepts --as-needed])
+    case `$LD --as-needed -v 2>&1 </dev/null` in
+    *GNU* | *'with BFD'*)
+      LDFLAGS="$LDFLAGS -Wl,--as-needed"
+      AC_MSG_RESULT([yes])
+      ;;
+    *)
+      AC_MSG_RESULT([no])
+      ;;
+    esac
+    AC_MSG_CHECKING([whether $LD accepts -O1])
+    case `$LD -O1 -v 2>&1 </dev/null` in
+    *GNU* | *'with BFD'*)
+      LDFLAGS="$LDFLAGS -Wl,-O1"
+      AC_MSG_RESULT([yes])
+      ;;
+    *)
+      AC_MSG_RESULT([no])
+      ;;
+    esac
+  fi
+])
 
 dnl BM_DEBUG_SUPPORT()
 dnl

@@ -3,6 +3,9 @@
 - Also support the newer AC_CONFIG_HEADERS macro.
 - Add XDT_FEATURE_VISIBILITY to check for and enable symbol visibility
   support (only useful for building libraries).
+- Add XDT_FEATURE_LINKER_OPTS that checks for and enables useful linker
+  optimizations if supported.  This currently only checks for
+  --as-needed and -O1, but more may be added in the future.
 
 4.7.0
 =====
