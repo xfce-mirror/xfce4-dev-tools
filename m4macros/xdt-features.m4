@@ -54,17 +54,21 @@ AC_DEFUN([XDT_SUPPORTED_FLAGS],
 
 
 
-dnl XDT_FEATURE_DEBUG()
+dnl XDT_FEATURE_DEBUG(default_level=minimum)
 dnl
 AC_DEFUN([XDT_FEATURE_DEBUG],
 [
+  test "$1" && default_level=$1 || default_level=minimum
+
   AC_ARG_ENABLE([debug],
-AC_HELP_STRING([--enable-debug[=yes|no|full]], [Build with debugging support])
-AC_HELP_STRING([--disable-debug], [Include no debugging support [default]]),
-  [], [enable_debug=no])
+                AC_HELP_STRING([--enable-debug@<:@=no|minimum|yes|full@:>@],
+                               [Build with debugging support (default=$default_level)])
+                AC_HELP_STRING([--disable-debug],
+                               [Include no debugging support [default]]),
+                [], [enable_debug=$default_level])
 
   AC_MSG_CHECKING([whether to build with debugging support])
-  if test x"$enable_debug" != x"no"; then
+  if test x"$enable_debug" = x"full" -o x"$enable_debug" = x"yes"; then
     AC_DEFINE([DEBUG], [1], [Define for debugging support])
 
     xdt_cv_additional_CFLAGS="-DXFCE_DISABLE_DEPRECATED \
@@ -77,11 +81,13 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support [default]]),
                               -Wcast-align -Wformat-security \
                               -Winit-self -Wmissing-include-dirs -Wundef \
                               -Wmissing-format-attribute -Wnested-externs \
-                              -fstack-protector -D_FORTIFY_SOURCE=2"
+                              -fstack-protector"
+    CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"
     
     if test x"$enable_debug" = x"full"; then
       AC_DEFINE([DEBUG_TRACE], [1], [Define for tracing support])
-      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -g3 -Werror"
+      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -O0 -g3 -Werror"
+      CPPFLAGS="$CPPFLAGS -DG_ENABLE_DEBUG"
       AC_MSG_RESULT([full])
     else
       xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -g"
@@ -104,7 +110,14 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support [default]]),
     CFLAGS="$CFLAGS $supported_CFLAGS"
     CXXFLAGS="$CXXFLAGS $supported_CXXFLAGS"
   else
-    AC_MSG_RESULT([no])
+    CPPFLAGS="$CPPFLAGS -DNDEBUG"
+
+    if test x"$enable_debug" = x"no"; then
+      CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS -DG_DISABLE_ASSERT -DG_DISABLE_CHECKS"
+      AC_MSG_RESULT([no])
+    else
+      AC_MSG_RESULT([minimum])
+    fi
   fi
 ])
 

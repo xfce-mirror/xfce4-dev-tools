@@ -6,6 +6,13 @@
 - Add XDT_FEATURE_LINKER_OPTS that checks for and enables useful linker
   optimizations if supported.  This currently only checks for
   --as-needed and -O1, but more may be added in the future.
+- Beef up XDT_FEATURE_DEBUG:
+  * Add new 'minimum' debug level, which is now the default and behaves
+    similarly to the old 'no' default.
+  * Debug level 'no' disables many glib/gobject-related checks and
+    asserts (this is not really recommended).
+  * Debug level 'full' disables code optimization.
+  * The macro now takes an argument to specify the default debug level.
 
 4.7.0
 =====
