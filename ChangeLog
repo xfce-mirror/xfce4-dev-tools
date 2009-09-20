@@ -1,5 +1,12 @@
 2009-09-19  Brian J. Tarricone <brian@tarricone.org>
 
+  * ChangeLog, configure.in.in: == 4.7.2 released! ==
+
+  * NEWS, configure.in.in, m4macros/xdt-features.m4: fix typo that breaks
+  XDT_FEATURE_LINKER_OPTS
+
+  * ChangeLog, configure.in.in: == 4.7.1 released! ==
+
   * m4macros/xdt-features.m4: put --disable-debug back and fix defaults for
   visibility and linker opts  also make the non-defaults explicit and therefore
   less confusing (it worked before due to default autoconf shell-ification of
