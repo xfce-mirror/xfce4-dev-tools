@@ -1,3 +1,7 @@
+4.7.2
+=====
+- Brown bag: fix typo that breaks XDT_FEATURE_LINKER_OPTS
+
 4.7.1
 =====
 - Also support the newer AC_CONFIG_HEADERS macro.

@@ -179,7 +179,7 @@ AC_DEFUN([XDT_FEATURE_LINKER_OPTS],
 [
   AC_ARG_ENABLE([linker-opts],
                 AC_HELP_STRING([--disable-linker-opts],
-                               [Disable linker optimizations])
+                               [Disable linker optimizations]),
                 [enable_linker_opts=$enableval], [enable_linker_opts=yes])
 
   if test "x$enable_linker_opts" != "xno"; then
