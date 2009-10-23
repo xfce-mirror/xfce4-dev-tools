@@ -164,6 +164,8 @@ AC_DEFUN([XDT_FEATURE_VISIBILITY],
 
   if test "x$have_gnuc_visibility" = "xyes"; then
     CPPFLAGS="$CPPFLAGS -DHAVE_GNUC_VISIBILITY"
+    XDT_SUPPORTED_FLAGS([xdt_vis_hidden_cflags], [-fvisibility=hidden])
+    CFLAGS="$CFLAGS $xdt_vis_hidden_cflags"
   fi
 
   AM_CONDITIONAL([HAVE_GNUC_VISIBILITY], [test "x$have_gnuc_visibility" = "xyes"])
