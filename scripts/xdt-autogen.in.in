@@ -70,7 +70,7 @@ fi
 ##
 parse_configure_subdirs()
 {
-  cat "$1" | tr '\\n\\t\\\\' '   ' | sed -ne 's|.*AC_CONFIG_SUBDIRS(\[\{0,1\}\([[:alnum:]_ @/-]\{1,\}\).*|\1|p'
+  test -f "$1" && cat "$1" | tr '\\n\\t\\\\' '   ' | sed -ne 's|.*AC_CONFIG_SUBDIRS(\[\{0,1\}\([[:alnum:]_ @/-]\{1,\}\).*|\1|p'
 }
 
 ##
