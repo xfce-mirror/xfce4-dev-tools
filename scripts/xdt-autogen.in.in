@@ -197,8 +197,11 @@ do_version_check() {
 }
 
 if ! do_version_check; then
-  echo "This version of xdt-autogen ($VERSION) is too old.  Version" >&2
-  echo "$XDT_AUTOGEN_REQUIRED_VERSION or greater is required." >&2
+          cat >&2 <<EOF
+xdt-autogen: This version of xdt-autogen ($VERSION) is too old.
+             Version $XDT_AUTOGEN_REQUIRED_VERSION or greater is required.
+EOF
+
   exit 1
 fi
 
@@ -213,6 +216,41 @@ export XDG_DATA_DIRS XDG_DATA_HOME
 
 
 MASTER_DIR=`pwd`; test -z "${MASTER_DIR}" && MASTER_DIR="."
+
+##
+## Check for documentation submodule
+##
+if test -n "$XDT_AUTOGEN_CHECK_DOCS"; then
+  if test ! -f "$MASTER_DIR/$XDT_AUTOGEN_CHECK_DOCS/Makefile.am"; then
+    # Check for git and needed files, if found, automatically
+    # update the submodule
+    if test -d .git -a -f .gitmodules; then
+      echo "xdt-autogen: Automaticcaly initializing the $XDT_AUTOGEN_CHECK_DOCS submodule."
+
+      # Run git command to get the lastest docs revision
+      res=0 && git submodule sync $XDT_AUTOGEN_CHECK_DOCS && \
+      git submodule update --init $XDT_AUTOGEN_CHECK_DOCS && res=1
+
+      if test $res -eq 0; then
+        cat >&2 <<EOF
+xdt-autogen: Pulling the xfce4-docs git submodule failed. See errors
+             above for more information and take a look at
+             http://wiki.xfce.org/documentation.
+EOF
+        exit 1
+      fi
+    else
+      cat >&2 <<EOF
+xdt-autogen: The directory $XDT_AUTOGEN_CHECK_DOCS does not contain
+             the required files to run configure. See
+             http://wiki.xfce.org/documentation for more information.
+EOF
+      exit 1
+    fi
+  #else
+    # We could warn about out-of-date submodules here.
+  fi
+fi
 
 ##
 ## First we do some substitutions to generate configure.{ac,in} if necessary
