@@ -1,3 +1,10 @@
+4.7.3
+=====
+- Build ChangeLog from GIT.
+- Add check stage for documentation submodules.
+- Check for automake 1.11.
+- Check if $1 is a file before calling cat (bug #6101).
+
 4.7.2
 =====
 - Brown bag: fix typo that breaks XDT_FEATURE_LINKER_OPTS
