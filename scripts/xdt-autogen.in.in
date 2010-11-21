@@ -225,7 +225,7 @@ if test -n "$XDT_AUTOGEN_CHECK_DOCS"; then
     # Check for git and needed files, if found, automatically
     # update the submodule
     if test -d .git -a -f .gitmodules; then
-      echo "xdt-autogen: Automaticcaly initializing the $XDT_AUTOGEN_CHECK_DOCS submodule."
+      echo "xdt-autogen: Automatically initializing the $XDT_AUTOGEN_CHECK_DOCS submodule."
 
       # Run git command to get the lastest docs revision
       res=0 && git submodule sync $XDT_AUTOGEN_CHECK_DOCS && \
