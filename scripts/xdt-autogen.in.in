@@ -409,7 +409,13 @@ done
 ##
 ## Check for libtoolize
 ##
-test -z "${XDT_PROG_LIBTOOLIZE}" && XDT_PROG_LIBTOOLIZE="libtoolize"
+if test -z "${XDT_PROG_LIBTOOLIZE}"; then
+  if type glibtoolize >/dev/null 2>&1; then
+    XDT_PROG_LIBTOOLIZE="glibtoolize"
+  elif type libtoolize >/dev/null 2>&1; then
+    XDT_PROG_LIBTOOLIZE="libtoolize"
+  fi
+fi
 for configure_ac_file in $CONFIGURE_AC_FILES; do
   if grep -q "^AC_PROG_LIBTOOL" "${configure_ac_file}"; then
     (${XDT_PROG_LIBTOOLIZE} --version) </dev/null >/dev/null 2>&0 || {
