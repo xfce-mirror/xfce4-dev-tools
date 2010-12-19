@@ -2,7 +2,7 @@
 #
 # $Id$
 #
-# Copyright (c) 2002-2006
+# Copyright (c) 2002-2010
 #         The Xfce development team. All rights reserved.
 #
 # Written for Xfce by Benedikt Meurer <benny@xfce.org>.
@@ -93,7 +93,7 @@ EOF
     exit 1
   fi
 
-  test "x$configure_ac_file" != "x" && echo -n "$configure_ac_file "
+  test "x$configure_ac_file" != "x" && printf "%s" "$configure_ac_file "
 
   subdirs=`parse_configure_subdirs ${configure_ac_file}`
   for subdir in $subdirs; do
@@ -114,7 +114,7 @@ lookup_configure_ac_in_files()
     configure_ac_in_file="$1/configure.in.in";
   fi
 
-  test "x$configure_ac_in_file" != "x" && echo -n "$configure_ac_in_file "
+  test "x$configure_ac_in_file" != "x" && printf "%s" "$configure_ac_in_file "
 
   subdirs=`parse_configure_subdirs ${configure_ac_in_file}`
   for subdir in $subdirs; do
