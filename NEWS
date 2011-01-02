@@ -1,3 +1,9 @@
+4.7.4
+=====
+- Check for glibtoolize.
+- Use printf instead of echo -n.
+- Fix typo.
+
 4.7.3
 =====
 - Build ChangeLog from GIT.
