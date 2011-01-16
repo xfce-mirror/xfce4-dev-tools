@@ -1,6 +1,6 @@
 dnl $Id$
 dnl
-dnl Copyright (c) 2002-2008
+dnl Copyright (c) 2002-2011
 dnl         The Xfce development team. All rights reserved.
 dnl
 dnl Written for Xfce by Benedikt Meurer <benny@xfce.org>.
@@ -10,11 +10,11 @@ dnl ***************************
 dnl *** Version information ***
 dnl ***************************
 m4_define([xdt_version_major], [4])
-m4_define([xdt_version_minor], [7])
-m4_define([xdt_version_micro], [4])
+m4_define([xdt_version_minor], [8])
+m4_define([xdt_version_micro], [0])
 m4_define([xdt_version_nano], [])
 m4_define([xdt_version_build], [@REVISION@])
-m4_define([xdt_version_tag], [git])
+m4_define([xdt_version_tag], [])
 m4_define([xdt_version], [xdt_version_major().xdt_version_minor().xdt_version_micro()ifelse(xdt_version_nano(), [], [], [.xdt_version_nano()])ifelse(xdt_version_tag(), [git], [xdt_version_tag()-xdt_version_build()], [])])
 
 
@@ -27,10 +27,7 @@ dnl *** Initialize autoconf ***
 dnl ***************************
 AC_INIT([xfce4-dev-tools], [xdt_version],
         [http://bugzilla.xfce.org/enter_bug.cgi?product=Xfce4-dev-tools])
-AC_COPYRIGHT([Copyright (c) 2002-2008
-        The Xfce development team. All rights reserved.
-
-Written for Xfce by Benedikt Meurer <benny@xfce.org>.])
+AC_COPYRIGHT([Copyright (c) 2002-2011 The Xfce development team. All rights reserved.])
 AC_REVISION([$Id$])
 
 dnl substitute version info
