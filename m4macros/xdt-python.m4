@@ -5,19 +5,19 @@ dnl         The Xfce development team. All rights reserved.
 dnl
 dnl Written for Xfce by Benedikt Meurer <benny@xfce.org>.
 dnl
-dnl This program is free software; you can redistribute it and/or modify it
-dnl under the terms of the GNU General Public License as published by the Free
-dnl Software Foundation; either version 2 of the License, or (at your option)
-dnl any later version.
+dnl This program is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2 of the License, or
+dnl (at your option) any later version.
 dnl
-dnl This program is distributed in the hope that it will be useful, but WITHOUT
-dnl ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-dnl FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-dnl more details.
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
 dnl
-dnl You should have received a copy of the GNU General Public License along with
-dnl this program; if not, write to the Free Software Foundation, Inc., 59 Temple
-dnl Place, Suite 330, Boston, MA  02111-1307  USA
+dnl You should have received a copy of the GNU General Public License along
+dnl with this program; if not, write to the Free Software Foundation, Inc.,
+dnl 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 dnl
 dnl xdt-python
 dnl ----------
@@ -28,7 +28,7 @@ dnl
 
 
 dnl XDT_CHECK_PYTHON_HEADERS([ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-dnl 
+dnl
 dnl Checks if the target system has the ability to create Python
 dnl extensions, that is, if all required Python headers are found.
 dnl Executes ACTION-IF-FOUND if all required headers are found, else
