@@ -78,10 +78,13 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support]),
                               -Wmissing-noreturn -Wshadow -Wpointer-arith \
                               -Wcast-align -Wformat-security \
                               -Winit-self -Wmissing-include-dirs -Wundef \
-                              -Wmissing-format-attribute -Wnested-externs \
-                              -fstack-protector"
+                              -Wmissing-format-attribute -Wnested-externs"
     CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=2"
-    
+
+    if test x`uname` = x"Linux"; then
+      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -fstack-protector"
+    fi
+
     if test x"$enable_debug" = x"full"; then
       AC_DEFINE([DEBUG_TRACE], [1], [Define for tracing support])
       xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -O0 -g3 -Werror"
