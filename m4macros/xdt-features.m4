@@ -74,7 +74,7 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support]),
                               -Wno-missing-field-initializers \
                               -Wno-unused-parameter -Wold-style-definition \
                               -Wdeclaration-after-statement \
-                              -Wmissing-declarations -Wredundant-decls \
+                              -Wmissing-declarations \
                               -Wmissing-noreturn -Wshadow -Wpointer-arith \
                               -Wcast-align -Wformat-security \
                               -Winit-self -Wmissing-include-dirs -Wundef \
@@ -83,6 +83,11 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support]),
 
     if test x`uname` = x"Linux"; then
       xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -fstack-protector"
+    fi
+
+    dnl # signal.h inline is crapy on openbsd
+    if test x`uname` != x"OpenBSD"; then
+      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -Wredundant-decls"
     fi
 
     if test x"$enable_debug" = x"full"; then
