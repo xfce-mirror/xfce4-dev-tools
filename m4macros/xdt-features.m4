@@ -195,16 +195,18 @@ AC_DEFUN([XDT_FEATURE_LINKER_OPTS],
                 [enable_linker_opts=$enableval], [enable_linker_opts=yes])
 
   if test "x$enable_linker_opts" != "xno"; then
-    AC_MSG_CHECKING([whether $LD accepts --as-needed])
-    case `$LD --as-needed -v 2>&1 </dev/null` in
-    *GNU* | *'with BFD'*)
-      LDFLAGS="$LDFLAGS -Wl,--as-needed"
-      AC_MSG_RESULT([yes])
-      ;;
-    *)
-      AC_MSG_RESULT([no])
-      ;;
-    esac
+    if test x`uname` != x"OpenBSD"; then
+      AC_MSG_CHECKING([whether $LD accepts --as-needed])
+      case `$LD --as-needed -v 2>&1 </dev/null` in
+      *GNU* | *'with BFD'*)
+        LDFLAGS="$LDFLAGS -Wl,--as-needed"
+        AC_MSG_RESULT([yes])
+        ;;
+      *)
+        AC_MSG_RESULT([no])
+        ;;
+      esac
+    fi
     AC_MSG_CHECKING([whether $LD accepts -O1])
     case `$LD -O1 -v 2>&1 </dev/null` in
     *GNU* | *'with BFD'*)
