@@ -43,11 +43,23 @@ AC_DEFUN([XDT_PROG_PKG_CONFIG],
   # minimum supported version of pkg-config
   xdt_cv_PKG_CONFIG_MIN_VERSION=0.9.0
 
-  # lookup pkg-config utility
-  if test x"$PKG_CONFIG" = x""; then
-    AC_PATH_PROG([PKG_CONFIG], [pkg-config], [no])
+  m4_ifdef([PKG_PROG_PKG_CONFIG],
+    [
+      PKG_PROG_PKG_CONFIG([$xdt_cv_PKG_CONFIG_MIN_VERSION])
 
-    if test x"$PKG_CONFIG" = x"no"; then
+      if test x"$PKG_CONFIG" = x""; then
+        echo
+        echo "*** Your version of pkg-config is too old. You need atleast"
+        echo "*** pkg-config $xdt_cv_PKG_CONFIG_MIN_VERSION or newer. You can download pkg-config"
+        echo "*** from the freedesktop.org software repository at"
+        echo "***"
+        echo "***    http://www.freedesktop.org/software/pkgconfig"
+        echo "***"
+        exit 1;
+      fi
+    ],
+    [
+      echo
       echo "*** The pkg-config utility could not be found on your system."
       echo "*** Make sure it is in your path, or set the PKG_CONFIG"
       echo "*** environment variable to the full path to pkg-config."
@@ -57,25 +69,7 @@ AC_DEFUN([XDT_PROG_PKG_CONFIG],
       echo "***    http://www.freedesktop.org/software/pkgconfig"
       echo "***"
       exit 1
-    fi
-
-    # check pkg-config version
-    AC_MSG_CHECKING([for pkg-config >= $xdt_cv_PKG_CONFIG_MIN_VERSION])
-    if $PKG_CONFIG --atleast-pkgconfig-version $xdt_cv_PKG_CONFIG_MIN_VERSION; then
-      xdt_cv_PKG_CONFIG_VERSION=`$PKG_CONFIG --version`
-      AC_MSG_RESULT([$xdt_cv_PKG_CONFIG_VERSION])
-    else
-      xdt_cv_PKG_CONFIG_VERSION=`$PKG_CONFIG --version`
-      AC_MSG_RESULT([$xdt_cv_PKG_CONFIG_VERSION])
-      echo "*** Your version of pkg-config is too old. You need atleast"
-      echo "*** pkg-config $xdt_cv_PKG_CONFIG_MIN_VERSION or newer. You can download pkg-config "
-      echo "*** from the freedesktop.org software repository at"
-      echo "***"
-      echo "***    http://www.freedesktop.org/software/pkgconfig"
-      echo "***"
-      exit 1
-    fi
-  fi
+    ])
 ])
 
 
