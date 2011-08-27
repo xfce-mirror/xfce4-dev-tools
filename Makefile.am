@@ -8,7 +8,8 @@
 
 SUBDIRS = 								\
 	m4macros							\
-	scripts
+	scripts								\
+	xdt-csource
 
 AUTOMAKE_OPTIONS =							\
 	1.8								\
