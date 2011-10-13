@@ -1,3 +1,14 @@
+4.9.0
+=====
+- Fix FSF address and add missing licenses.
+- Only use -fstack-protector on Linux systems.
+- Don't use -g3 for full debugging.
+- Support xldscope for Sun Studio.
+- Skip -Wredundant-decls on OpenBSD.
+- Disable --as-needed on OpenBSD (bug #7546).
+- Use pkg-config macro for detection (bug #7787).
+- Port exo-csource to xdt-csource (bug #6449).
+
 4.8.0
 =====
 - No changes since 4.7.4.
