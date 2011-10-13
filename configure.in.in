@@ -14,7 +14,7 @@ m4_define([xdt_version_minor], [9])
 m4_define([xdt_version_micro], [0])
 m4_define([xdt_version_nano], [])
 m4_define([xdt_version_build], [@REVISION@])
-m4_define([xdt_version_tag], [])
+m4_define([xdt_version_tag], [git])
 m4_define([xdt_version], [xdt_version_major().xdt_version_minor().xdt_version_micro()ifelse(xdt_version_nano(), [], [], [.xdt_version_nano()])ifelse(xdt_version_tag(), [git], [xdt_version_tag()-xdt_version_build()], [])])
 
 
