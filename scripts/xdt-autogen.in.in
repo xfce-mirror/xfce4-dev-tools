@@ -415,7 +415,25 @@ if test -z "${XDT_PROG_LIBTOOLIZE}"; then
   fi
 fi
 for configure_ac_file in $CONFIGURE_AC_FILES; do
+  runlibtoolize=0
   if grep -q "^AC_PROG_LIBTOOL" "${configure_ac_file}"; then
+  cat >&2 <<EOF
+xdt-autogen: It is recommended to use LT_PREREQ([2.2.6]) and
+             LT_INIT([disable-static]) in your configure.ac
+             file and remove AC_PROG_LIBTOOL and AC_DISABLE_STATIC.
+
+             See http://bugzilla.xfce.org/show_bug.cgi?id=6920 for
+             more information.
+
+EOF
+    runlibtoolize=1
+  fi;
+
+  if grep -q "^LT_PREREQ" "${configure_ac_file}"; then
+    runlibtoolize=1
+  fi;
+
+  if test $runlibtoolize -eq 1; then
     (${XDT_PROG_LIBTOOLIZE} --version) </dev/null >/dev/null 2>&0 || {
       cat >&2 <<EOF
 xdt-autogen: You must have "libtool" installed on your system.
@@ -608,7 +626,7 @@ XGETTEXT_ARGS = @XGETTEXT_ARGS@
     fi
   fi
 
-  if grep -q "^AC_PROG_LIBTOOL" "${configure_ac_file}"; then
+  if grep -q -e "^AC_PROG_LIBTOOL" -e "^LT_PREREQ" "${configure_ac_file}"; then
     (echo "Running ${XDT_PROG_LIBTOOLIZE} --force --copy..." &&
      cd "${source_dir}" &&
      ${XDT_PROG_LIBTOOLIZE} --force --copy) || exit 1
