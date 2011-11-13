@@ -68,7 +68,6 @@ dnl *** Generate files ***
 dnl **********************
 AC_OUTPUT([
 Makefile
-xfce4-dev-tools.spec
 m4macros/Makefile
 scripts/Makefile
 scripts/xdt-autogen.in
