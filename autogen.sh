@@ -29,19 +29,16 @@ if test "x$revision" = "x"; then
 fi
 sed -e "s/@REVISION@/${revision}/g" < "configure.in.in" > "configure.in"
 
-if (type xdt-autogen) >/dev/null 2>&1; then
-  exec xdt-autogen "$@"
-else
-  (aclocal &&
-   automake --add-missing --copy --gnu &&
-   autoconf) || exit 1
+(libtoolize &&
+ aclocal &&
+ automake --add-missing --copy --gnu &&
+ autoconf) || exit 1
 
-  if test x"${NOCONFIGURE}" = x""; then
-    (./configure --enable-maintainer-mode "$@" &&
-     echo "Now type \"make\" to build.") || exit 1
-  else
-    echo "Skipping configure process."
-  fi
+if test x"${NOCONFIGURE}" = x""; then
+  (./configure --enable-maintainer-mode "$@" &&
+   echo "Now type \"make\" to build.") || exit 1
+else
+  echo "Skipping configure process."
 fi
 
 # vi:set ts=2 sw=2 et ai:
