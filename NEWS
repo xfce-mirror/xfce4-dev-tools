@@ -1,3 +1,10 @@
+4.9.1
+=====
+- Add support for LT_PREREQ (bug #6920).
+- Remove spec file and rpm build target.
+- Do not create a gzip tarball.
+- Never use xdt-autogen in autogen.sh.
+
 4.9.0
 =====
 - Fix FSF address and add missing licenses.
