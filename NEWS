@@ -1,3 +1,6 @@
+4.9.x
+=====
+
 4.9.1
 =====
 - Add support for LT_PREREQ (bug #6920).
