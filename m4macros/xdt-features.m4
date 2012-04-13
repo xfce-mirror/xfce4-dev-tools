@@ -119,7 +119,7 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support]),
     CPPFLAGS="$CPPFLAGS -DNDEBUG"
 
     if test x"$enable_debug" = x"no"; then
-      CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS -DG_DISABLE_ASSERT -DG_DISABLE_CHECKS"
+      CPPFLAGS="$CPPFLAGS -DG_DISABLE_CAST_CHECKS -DG_DISABLE_ASSERT"
       AC_MSG_RESULT([no])
     else
       AC_MSG_RESULT([minimum])
