@@ -1,5 +1,9 @@
-4.9.x
+4.9.2
 =====
+- Fix license.
+- Remove the old BM_ macros.
+- Use ?_VERSION for special versioned binary detection (bug #8683).
+- Never disable checks.
 
 4.9.1
 =====
