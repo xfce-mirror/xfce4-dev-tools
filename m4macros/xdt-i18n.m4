@@ -75,16 +75,3 @@ AC_DEFUN([XDT_I18N],
   AC_MSG_RESULT([$XGETTEXT_ARGS])
 ])
 
-
-
-dnl BM_I18N(PACKAGE, LINGUAS)
-dnl
-dnl Simple wrapper for XDT_I18N(LINGUAS, PACKAGE). Kept for
-dnl backward compatibility. Will be removed in the
-dnl future.
-dnl
-AC_DEFUN([BM_I18N],
-[
-  XDT_I18N([$2], [$1])
-])
-

@@ -202,30 +202,6 @@ AC_HELP_STRING([--disable-$4], [Disable checking for $5]),
 
 
 
-dnl BM_DEPEND(varname, package, version)
-dnl
-dnl Simple wrapper for XDT_CHECK_PACKAGE("varname", "package", "version"). Kept
-dnl for backward compatibility. Will be removed in the future.
-dnl
-AC_DEFUN([BM_DEPEND],
-[
-  XDT_CHECK_PACKAGE([$1], [$2], [$3])
-])
-
-
-
-dnl BM_DEPEND_CHECK(var, pkg, version, name, helpstring, default)
-dnl
-dnl Simple wrapper for XDT_CHECK_OPTIONAL_PACKAGE(). Kept for backward
-dnl compatibility. Will be removed in the future.
-dnl
-AC_DEFUN([BM_DEPEND_CHECK],
-[
-  XDT_CHECK_OPTIONAL_PACKAGE([$1], [$2], [$3], [$4], [$5], [$6])
-])
-
-
-
 dnl XDT_CHECK_LIBX11()
 dnl
 dnl Executes various checks for X11. Sets LIBX11_CFLAGS, LIBX11_LDFLAGS
@@ -359,65 +335,5 @@ AC_DEFUN([XDT_CHECK_LIBXPM_REQUIRE],
   if test x"$LIBXPM_LIBS" = x""; then
     AC_MSG_ERROR([The Xpm library was not found on your system])
   fi
-])
-
-
-
-dnl BM_LIBX11()
-dnl
-dnl Simple wrapper for XDT_CHECK_LIBX11. Kept for backward
-dnl compatibility. Will be removed in the future.
-dnl
-AC_DEFUN([BM_LIBX11],
-[
-  AC_REQUIRE([XDT_CHECK_LIBX11])
-])
-
-
-
-dnl BM_LIBX11_REQUIRE()
-dnl
-dnl Simple wrapper for XDT_CHECK_LIBX11_REQUIRE. Kept for backward
-dnl compatibility. Will be removed in the future.
-dnl
-AC_DEFUN([BM_LIBX11_REQUIRE],
-[
-  AC_REQUIRE([XDT_CHECK_LIBX11_REQUIRE])
-])
-
-
-
-dnl BM_LIBSM()
-dnl
-dnl Simple wrapper for XDT_CHECK_LIBSM. Kept for backward
-dnl compatibility. Will be removed in the future.
-dnl
-AC_DEFUN([BM_LIBSM],
-[
-  AC_REQUIRE([XDT_CHECK_LIBSM])
-])
-
-
-
-dnl BM_LIBXPM
-dnl
-dnl Simple wrapper for XDT_CHECK_LIBXPM. Kept for backward
-dnl compatibility. Will be removed in the future.
-dnl
-AC_DEFUN([BM_LIBXPM],
-[
-  AC_REQUIRE([XDT_CHECK_LIBXPM])
-])
-
-
-
-dnl BM_LIBXPM_REQUIRE
-dnl
-dnl Simple wrapper for XDT_CHECK_LIBXPM_REQUIRE. Kept for
-dnl backward compatibility. Will be removed in the future.
-dnl
-AC_DEFUN([BM_LIBXPM_REQUIRE],
-[
-  AC_REQUIRE([XDT_CHECK_LIBXPM_REQUIRE])
 ])
 
