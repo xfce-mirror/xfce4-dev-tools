@@ -366,14 +366,13 @@ fi
 
 
 ##
-## Check for autoconf, first trying autoconf-2.59, then autoconf-2.58, then
-## autoconf-2.57, then autoconf-2.53, and finally simply autoconf.
+## Check for autoconf
 ##
-test -z "${XDT_PROG_AUTOCONF}" &&
-for i in autoconf-2.61 autoconf-2.60 autoconf-2.59 autoconf-2.58 autoconf-2.57 autoconf-2.53 autoconf; do
+if test -z "${XDT_PROG_AUTOCONF}"; then
+  test -z "${AUTOCONF_VERSION}" && i=autoconf || i=autoconf-${AUTOCONF_VERSION}
   (${i} --version) </dev/null >/dev/null 2>&1 &&
-  XDT_PROG_AUTOCONF=${i} && break
-done
+    XDT_PROG_AUTOCONF=${i}
+fi
 
 test -z "${XDT_PROG_AUTOCONF}" && {
   cat >&2 <<EOF
@@ -485,14 +484,13 @@ done
 
 
 ##
-## Check for aclocal, first trying aclocal-1.9, then aclocal-1.8, and finally
-## simply aclocal.
+## Check for aclocal
 ##
-test -z "${XDT_PROG_ACLOCAL}" &&
-for i in aclocal-1.11 aclocal-1.10 aclocal-1.9 aclocal-1.8 aclocal; do
+if test -z "${XDT_PROG_ACLOCAL}"; then
+  test -z "${ACLOCAL_VERSION}" && i=aclocal || i=aclocal-${ACLOCAL_VERSION}
   (${i} --version) </dev/null >/dev/null 2>&1 &&
-  XDT_PROG_ACLOCAL=${i} && break
-done
+    XDT_PROG_ACLOCAL=${i}
+fi
 
 test -z "${XDT_PROG_ACLOCAL}" && {
   cat >&2 <<EOF
@@ -511,10 +509,10 @@ EOF
 test -z "${XDT_PROG_AUTOHEADER}" &&
 for configure_ac_file in $CONFIGURE_AC_FILES; do
   if $EGREP -q "^A(M|C)_CONFIG_HEADER" "${configure_ac_file}"; then
-    for i in autoheader-2.61 autoheader-2.60 autoheader-2.59 autoheader-2.58 autoheader-2.57 autoheader-2.53 autoheader; do
-      (${i} --version) </dev/null >/dev/null 2>&1 &&
-      XDT_PROG_AUTOHEADER=${i} && break
-    done
+    test -z "${AUTOHEADER_VERSION}" && i=autoheader || i=autoheader-${AUTOHEADER_VERSION}
+    (${i} --version) </dev/null >/dev/null 2>&1 &&
+      XDT_PROG_AUTOHEADER=${i}
+
     test -z "${XDT_PROG_AUTOHEADER}" && {
       cat >&2 <<EOF
 xdt-autogen: You must have "autoconf" installed (which includes the
@@ -529,14 +527,13 @@ done
 
 
 ##
-## Check for automake, first trying automake-1.9, then automake-1.8, and finally
-## simply automake.
+## Check for automake
 ##
-test -z "${XDT_PROG_AUTOMAKE}" &&
-for i in automake-1.11 automake-1.10 automake-1.9 automake-1.8 automake; do
+if test -z "${XDT_PROG_AUTOMAKE}"; then
+  test -z "${AUTOMAKE_VERSION}" && i=automake || i=automake-${AUTOMAKE_VERSION}
   (${i} --version) </dev/null >/dev/null 2>&1 &&
-  XDT_PROG_AUTOMAKE=${i} && break
-done
+    XDT_PROG_AUTOMAKE=${i}
+fi
 
 test -z "${XDT_PROG_AUTOMAKE}" && {
   cat >&2 <<EOF
