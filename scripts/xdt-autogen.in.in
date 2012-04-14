@@ -503,8 +503,7 @@ EOF
 
 
 ##
-## Check for autoheader, first trying autoheader-2.59, then autoheader-2.58,
-## then autoheader-2.57, then autoheader-2.53, and finally simply autoheader.
+## Check for autoheader
 ##
 test -z "${XDT_PROG_AUTOHEADER}" &&
 for configure_ac_file in $CONFIGURE_AC_FILES; do
