@@ -93,7 +93,7 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support]),
     if test x"$enable_debug" = x"full"; then
       AC_DEFINE([DEBUG_TRACE], [1], [Define for tracing support])
       xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -O0 -g -Werror"
-      CPPFLAGS="$CPPFLAGS -DG_ENABLE_DEBUG"
+      CPPFLAGS="$CPPFLAGS -DG_ENABLE_DEBUG -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -DGSEAL_ENABLE"
       AC_MSG_RESULT([full])
     else
       xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -g"
@@ -104,7 +104,7 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support]),
 
     ifelse([$CXX], , , [
       dnl FIXME: should test on c++ compiler, but the following line causes
-      dnl        autoconf errors for projects that don't check for a
+      dnl        autoconf errors for projects that do nott check for a
       dnl        c++ compiler at all.
       dnl AC_LANG_PUSH([C++])
       dnl XDT_SUPPORTED_FLAGS([supported_CXXFLAGS], [$xdt_cv_additional_CFLAGS])
