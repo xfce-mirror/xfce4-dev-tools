@@ -42,7 +42,7 @@ AC_DEFUN([XDT_SUPPORTED_FLAGS],
     AC_MSG_CHECKING([if $CC supports $flag])
     saved_CFLAGS="$CFLAGS"
     CFLAGS="$CFLAGS $flag"
-    AC_COMPILE_IFELSE([ ], [flag_supported=yes], [flag_supported=no])
+    AC_COMPILE_IFELSE(AC_LANG_SOURCE([ ]), [flag_supported=yes], [flag_supported=no])
     CFLAGS="$saved_CFLAGS"
     AC_MSG_RESULT([$flag_supported])
 

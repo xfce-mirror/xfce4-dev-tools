@@ -27,7 +27,7 @@ fi
 if test "x$revision" = "x"; then
   revision=UNKNOWN
 fi
-sed -e "s/@REVISION@/${revision}/g" < "configure.in.in" > "configure.in"
+sed -e "s/@REVISION@/${revision}/g" < "configure.ac.in" > "configure.ac"
 
 (libtoolize &&
  aclocal &&
