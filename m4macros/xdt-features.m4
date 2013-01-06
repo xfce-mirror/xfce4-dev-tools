@@ -42,7 +42,7 @@ AC_DEFUN([XDT_SUPPORTED_FLAGS],
     AC_MSG_CHECKING([if $CC supports $flag])
     saved_CFLAGS="$CFLAGS"
     CFLAGS="$CFLAGS $flag"
-    AC_COMPILE_IFELSE(AC_LANG_SOURCE([ ]), [flag_supported=yes], [flag_supported=no])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([ ])], [flag_supported=yes], [flag_supported=no])
     CFLAGS="$saved_CFLAGS"
     AC_MSG_RESULT([$flag_supported])
 
@@ -146,7 +146,7 @@ AC_DEFUN([XDT_FEATURE_VISIBILITY],
     saved_CFLAGS="$CFLAGS"
     CFLAGS="$CFLAGS $xdt_vis_test_cflags"
     AC_MSG_CHECKING([whether $CC supports the GNUC visibility attribute])
-    AC_COMPILE_IFELSE(AC_LANG_SOURCE(
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE(
     [
       void test_default (void);
       void test_hidden (void);
@@ -159,7 +159,7 @@ AC_DEFUN([XDT_FEATURE_VISIBILITY],
         test_hidden ();
         return 0;
       }
-    ]),
+    ])],
     [
       have_gnuc_visibility=yes
       AC_MSG_RESULT([yes])

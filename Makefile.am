@@ -11,11 +11,6 @@ SUBDIRS = 								\
 	scripts								\
 	xdt-csource
 
-AUTOMAKE_OPTIONS =							\
-	1.8								\
-	dist-bzip2							\
-	no-dist-gzip
-
 distclean-local:
 	rm -rf *.cache *~
 
