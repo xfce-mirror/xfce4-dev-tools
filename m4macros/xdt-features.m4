@@ -76,9 +76,9 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support]),
                               -Wdeclaration-after-statement \
                               -Wmissing-declarations \
                               -Wmissing-noreturn -Wshadow -Wpointer-arith \
-                              -Wcast-align -Wformat-security \
+                              -Wcast-align -Wformat -Wformat-security -Wformat-y2k \
                               -Winit-self -Wmissing-include-dirs -Wundef \
-                              -Wmissing-format-attribute -Wnested-externs"
+                              -Wnested-externs"
     CPPFLAGS="$CPPFLAGS"
 
     if test x`uname` = x"Linux"; then
