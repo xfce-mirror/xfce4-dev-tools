@@ -1,3 +1,10 @@
+4.11.0
+======
+- Remove FORTIFY_SOURCE=2.
+- Some build improvements.
+- Correctly quote AC_COMPILE_IFELSE macro.
+- Avoid gnu_printf warnings in debugging in gcc 4.8.
+
 4.10.0
 ======
 - Bump version.
