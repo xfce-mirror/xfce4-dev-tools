@@ -401,6 +401,18 @@ EOF
     break;
   fi;
 done
+for configure_ac_file in $CONFIGURE_AC_FILES; do
+  if grep -q "^AC_PROG_INTLTOOL" "${configure_ac_file}"; then
+  cat >&2 <<EOF
+xdt-autogen: It is recommended to use IT_PROG_INTLTOOL([0.35.0])
+             in your configure.ac file and remove AC_PROG_INTLTOOL
+
+             See http://bugzilla.xfce.org/show_bug.cgi?id=8930 for
+             more information.
+
+EOF
+  fi;
+done
 
 
 ##
