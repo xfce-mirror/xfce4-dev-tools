@@ -24,14 +24,14 @@ dnl
 
 
 
-dnl XDT_XFCE_PANEL_PLUGIN(varname, [version = 4.2.0])
+dnl XDT_XFCE_PANEL_PLUGIN(varname, [version = 4.9.0])
 dnl
 dnl This macro is intended to be used by panel plugin writers. It
 dnl detects the xfce4-panel package on the target system and sets
 dnl "varname"_CFLAGS, "varname"_LIBS, "varname"_REQUIRED_VERSION
 dnl and "varname"_VERSION properly. The parameter "version"
 dnl specifies the minimum required version of xfce4-panel (defaults
-dnl to 4.2.0 if not given).
+dnl to 4.9.0 if not given).
 dnl
 dnl This macro also takes care of handling special panel versions,
 dnl like the threaded panel, that was used during the Xfce 4.2.0
@@ -45,7 +45,7 @@ dnl
 AC_DEFUN([XDT_XFCE_PANEL_PLUGIN],
 [
   dnl Check for the xfce4-panel package
-  XDT_CHECK_PACKAGE([$1], [xfce4-panel-1.0], [m4_default([$2], [4.2.0])])
+  XDT_CHECK_PACKAGE([$1], [xfce4-panel-1.0], [m4_default([$2], [4.9.0])])
 
   dnl Check if the panel is threaded (only for old panels)
   xdt_cv_CFLAGS=$$1_CFLAGS

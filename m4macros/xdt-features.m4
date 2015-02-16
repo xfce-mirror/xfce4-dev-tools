@@ -26,7 +26,7 @@ dnl
 
 
 dnl We need recent a autoconf version
-AC_PREREQ([2.53])
+AC_PREREQ([2.60])
 
 
 dnl XDT_SUPPORTED_FLAGS(VAR, FLAGS)
