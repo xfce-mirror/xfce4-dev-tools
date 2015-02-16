@@ -1,6 +1,4 @@
-# $Id$
-#
-# Copyright (c) 2002-2014
+# Copyright (c) 2002-2015
 #         The Xfce development team. All rights reserved.
 #
 # Written for Xfce by Benedikt Meurer <benny@xfce.org>.

@@ -14,3 +14,15 @@ missing
 xfce4-dev-tools.spec
 scripts/xdt-autogen
 scripts/xdt-autogen.in
+compile
+config.guess
+config.sub
+configure.ac
+depcomp
+libtool
+ltmain.sh
+ChangeLog
+xfce4-dev-tools-*.tar.bz2
+xdt-csource/*
+!xdt-csource/Makefile.am
+!xdt-csource/main.c

@@ -1,6 +1,4 @@
-dnl $Id$
-dnl
-dnl Copyright (c) 2002-2006
+dnl Copyright (c) 2002-2015
 dnl         The Xfce development team. All rights reserved.
 dnl
 dnl Written for Xfce by Benedikt Meurer <benny@xfce.org>.

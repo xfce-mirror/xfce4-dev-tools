@@ -1,3 +1,6 @@
+# Copyright (c) 2002-2015
+#         The Xfce development team. All rights reserved.
+#
 
 AM_CPPFLAGS = 								\
 	-I$(top_srcdir)							\

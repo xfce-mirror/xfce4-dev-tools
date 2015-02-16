@@ -1,4 +1,7 @@
-/*-
+/*
+ * Copyright (c) 2002-2015
+ *       The Xfce development team. All rights reserved.
+ *
  * Copyright (c) 2005-2007 Benedikt Meurer <benny@xfce.org>
  * Copyright (c) 2007      Nick Schermer <nick@xfce.org>
  *
@@ -304,7 +307,7 @@ static void
 print_version (void)
 {
   g_print ("%s %s\n\n", G_LOG_DOMAIN, PACKAGE_VERSION);
-  g_print ("Copyright (c) 2005-2011\n");
+  g_print ("Copyright (c) 2005-2015\n");
   g_print ("\t%s\n\n", _("The Xfce development team. All rights reserved."));
   g_print ("%s comes with ABSOLUTELY NO WARRANTY,\n"
            "You may redistribute copies of %s under the terms of\n"
