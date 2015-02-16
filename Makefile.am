@@ -4,6 +4,8 @@
 # Written for Xfce by Benedikt Meurer <benny@xfce.org>.
 #
 
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+
 SUBDIRS = 								\
 	m4macros							\
 	scripts								\

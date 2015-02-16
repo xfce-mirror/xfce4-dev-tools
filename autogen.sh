@@ -34,6 +34,8 @@ sed -e "s/@REVISION@/${revision}/g" < "configure.ac.in" > "configure.ac"
  automake --add-missing --copy --gnu &&
  autoconf) || exit 1
 
+test -d m4 || mkdir m4
+
 if test x"${NOCONFIGURE}" = x""; then
   (./configure --enable-maintainer-mode "$@" &&
    echo "Now type \"make\" to build.") || exit 1

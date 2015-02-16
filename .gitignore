@@ -26,3 +26,4 @@ xfce4-dev-tools-*.tar.bz2
 xdt-csource/*
 !xdt-csource/Makefile.am
 !xdt-csource/main.c
+m4
