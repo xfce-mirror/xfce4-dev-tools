@@ -429,7 +429,7 @@ for configure_ac_file in $CONFIGURE_AC_FILES; do
   runlibtoolize=0
   if grep -q "^AC_PROG_LIBTOOL" "${configure_ac_file}"; then
   cat >&2 <<EOF
-xdt-autogen: It is recommended to use LT_PREREQ([2.2.6]) and
+xdt-autogen: It is recommended to use LT_PREREQ([@VERSION_LIBTOOL@]) and
              LT_INIT([disable-static]) in your configure.ac
              file and remove AC_PROG_LIBTOOL and AC_DISABLE_STATIC.
 
