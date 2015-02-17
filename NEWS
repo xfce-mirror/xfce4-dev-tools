@@ -1,3 +1,13 @@
+4.11.1
+======
+- Update list of files to clean with xdt-autogen
+- Remove definitions related to the obsolete xfce-mcs-manager
+- Remove obsolete check for threaded panels (<= 4.1.90)
+- Bump dependencies for xfce4-dev-tools and m4macros
+- Fix autotools m4 warning
+- Fix out of source building (bug #10899)
+- Display warning if AC_PROG_INTLTOOL is used (bug #8930)
+
 4.11.0
 ======
 - Remove FORTIFY_SOURCE=2.

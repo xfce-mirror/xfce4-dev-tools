@@ -8,7 +8,7 @@ bugs and post feature requests.
 Notes to developers
 ===================
 
-If you are a Xfce developer with write access to the Xfce SVN repository,
+If you are a Xfce developer with write access to the Xfce git repository,
 and you feel like you want or need to change something in this module,
 do not simply commit your changes, unless its really a trivial fix. If it's
 a non-trivial change, discuss the change on xfce4-dev@xfce.org first. In
@@ -19,8 +19,8 @@ Patches
 =======
 
 Please submit patches to the Xfce bugtracking system or the xfce4-dev@xfce.org
-mailinglist. Your patch should be in unified diff format (the -u option to
-GNU diff) and it should follow the coding style used by the maintainer.
+mailinglist. Your patch should be created with the git-format command (see man
+git-format) and it should follow the coding style used by the maintainer.
 
 Please send a patch against a recent version of this package. Patches against
 the HEAD branch are most preferable.
