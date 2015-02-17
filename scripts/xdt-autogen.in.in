@@ -342,11 +342,16 @@ if test x"$1" = x"clean"; then
     (cd ${directory} ;
      rm -f config.* configure configure.lineno aclocal.m4 ;
      rm -f compile depcomp ltmain.sh missing install-sh ;
-     rm -f po/Makefile.in.in ;
+     rm -f po/Makefile.in.in po/stamp-it ;
      rm -f stamp-h1 *.spec ;
      rm -f mkinstalldirs libtool ;
-     rm -rf autom4te.cache ;
+     rm -rf autom4te.cache m4 gtk-doc.m4 ;
      rm -f intltool-* gtk-doc.make ;
+     rm -f test-driver ;
+
+     if test -f po/POTFILES.in; then
+         rm -f po/POTFILES
+     fi
      if test -f configure.ac.in -a -f configure.ac; then
        rm -f configure.ac
      elif test -f configure.in.in -a -f configure.in; then
