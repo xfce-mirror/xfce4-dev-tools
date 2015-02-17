@@ -50,36 +50,6 @@ AC_DEFUN([XDT_XFCE_PANEL_PLUGIN],
   AC_MSG_RESULT([$$1_PLUGINSDIR])
 ])
 
-
-
-dnl XDT_XFCE_MCS_PLUGIN(varname, [version = 4.2.0])
-dnl
-dnl This macro is intented to be used by MCS plugin writers. It
-dnl detects the MCS manager package on the target system and sets
-dnl "varname"_CFLAGS, "varname"_LIBS, "varname"_REQUIRED_VERSION,
-dnl and "varname"_VERSION. The parameter "version" allows you
-dnl to specify the minimum required version of xfce-mcs-manager
-dnl (defaults to 4.2.0 if not given).
-dnl
-dnl In addition, this macro defines "varname"_PLUGINSDIR (and
-dnl marks it for substitution), which points to the directory
-dnl where the MCS plugin should be installed to. You should use
-dnl this variable in your Makefile.am.
-dnl
-AC_DEFUN([XDT_XFCE_MCS_PLUGIN],
-[
-  dnl Check for the xfce-mcs-manager package
-  XDT_CHECK_PACKAGE([$1], [xfce-mcs-manager], [m4_default([$2], [4.2.0])])
-
-  dnl Check where to put the plugins to
-  AC_MSG_CHECKING([where to install MCS plugins])
-  $1_PLUGINSDIR=$libdir/xfce4/mcs-plugins
-  AC_SUBST([$1_PLUGINSDIR])
-  AC_MSG_RESULT([$$1_PLUGINSDIR])
-])
-
-
-
 dnl XFCE_PANEL_PLUGIN(varname, version)
 dnl
 dnl Simple wrapper for XDT_XFCE_PANEL_PLUGIN(varname, version). Kept
@@ -89,16 +59,3 @@ AC_DEFUN([XFCE_PANEL_PLUGIN],
 [
   XDT_XFCE_PANEL_PLUGIN([$1], [$2])
 ])
-
-
-
-dnl XFCE_MCS_PLUGIN(varname, version)
-dnl
-dnl Simple wrapper for XDT_XFCE_MCS_PLUGIN(varname, version). Kept
-dnl for backward compatibility. Will be removed in the future.
-dnl
-AC_DEFUN([XFCE_MCS_PLUGIN],
-[
-  XDT_XFCE_MCS_PLUGIN([$1], [$2])
-])
-
