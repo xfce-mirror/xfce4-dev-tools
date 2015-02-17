@@ -33,10 +33,6 @@ dnl and "varname"_VERSION properly. The parameter "version"
 dnl specifies the minimum required version of xfce4-panel (defaults
 dnl to 4.9.0 if not given).
 dnl
-dnl This macro also takes care of handling special panel versions,
-dnl like the threaded panel, that was used during the Xfce 4.2.0
-dnl development, and automatically sets up the correct flags.
-dnl
 dnl In addition, this macro defines "varname"_PLUGINSDIR (and
 dnl marks it for substitution), which points to the directory
 dnl where the panel plugin should be installed to. You should
@@ -46,21 +42,6 @@ AC_DEFUN([XDT_XFCE_PANEL_PLUGIN],
 [
   dnl Check for the xfce4-panel package
   XDT_CHECK_PACKAGE([$1], [xfce4-panel-1.0], [m4_default([$2], [4.9.0])])
-
-  dnl Check if the panel is threaded (only for old panels)
-  xdt_cv_CFLAGS=$$1_CFLAGS
-  AC_MSG_CHECKING([whether the Xfce panel is threaded])
-  if $PKG_CONFIG --max-version=4.1.90 xfce4-panel-1.0 >/dev/null 2>&1; then
-    AC_MSG_RESULT([yes])
-    xdt_cv_CFLAGS="$xdt_cv_CFLAGS -DXFCE_PANEL_THREADED=1"
-    xdt_cv_CFLAGS="$xdt_cv_CFLAGS -DXFCE_PANEL_LOCK\(\)=gdk_threads_enter\(\)"
-    xdt_cv_CFLAGS="$xdt_cv_CFLAGS -DXFCE_PANEL_UNLOCK\(\)=gdk_threads_leave\(\)"
-  else
-    AC_MSG_RESULT([no])
-    xdt_cv_CFLAGS="$xdt_cv_CFLAGS -DXFCE_PANEL_LOCK\(\)=do{}while\(0\)"
-    xdt_cv_CFLAGS="$xdt_cv_CFLAGS -DXFCE_PANEL_UNLOCK\(\)=do{}while\(0\)"
-  fi
-  $1_CFLAGS="$xdt_cv_CFLAGS"
 
   dnl Check where to put the plugins to
   AC_MSG_CHECKING([where to install panel plugins])
