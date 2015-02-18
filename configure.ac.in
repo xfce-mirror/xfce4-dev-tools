@@ -28,6 +28,7 @@ AC_INIT([xfce4-dev-tools], [xdt_version],
         [http://bugzilla.xfce.org/enter_bug.cgi?product=Xfce4-dev-tools])
 AC_COPYRIGHT([Copyright (c) 2002-2015 The Xfce development team. All rights reserved.])
 AC_CONFIG_MACRO_DIR([m4])
+AC_REVISION([xdt_version_build])
 
 dnl substitute version info
 AC_SUBST([VERSION_MAJOR], [xdt_version_major])
