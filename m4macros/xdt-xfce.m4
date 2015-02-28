@@ -41,7 +41,7 @@ dnl
 AC_DEFUN([XDT_XFCE_PANEL_PLUGIN],
 [
   dnl Check for the xfce4-panel package
-  XDT_CHECK_PACKAGE([$1], [xfce4-panel-1.0], [m4_default([$2], [4.9.0])])
+  XDT_CHECK_PACKAGE([$1], [xfce4-panel-1.0], [m4_default([$2], [4.11.0])])
 
   dnl Check where to put the plugins to
   AC_MSG_CHECKING([where to install panel plugins])
