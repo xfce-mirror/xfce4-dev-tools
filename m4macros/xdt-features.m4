@@ -73,7 +73,7 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support]),
                               -Wno-unused-parameter -Wold-style-definition \
                               -Wdeclaration-after-statement \
                               -Wmissing-declarations \
-                              -Wmissing-noreturn -Wshadow -Wpointer-arith \
+                              -Wmissing-noreturn -Wpointer-arith \
                               -Wcast-align -Wformat -Wformat-security -Wformat-y2k \
                               -Winit-self -Wmissing-include-dirs -Wundef \
                               -Wnested-externs"
@@ -94,7 +94,7 @@ AC_HELP_STRING([--disable-debug], [Include no debugging support]),
       CPPFLAGS="$CPPFLAGS -DG_ENABLE_DEBUG"
       AC_MSG_RESULT([full])
     else
-      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -g"
+      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -g -Wshadow"
       AC_MSG_RESULT([yes])
     fi
 
