@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (c) 2002-2010
+# Copyright (c) 2002-2019
 #         The Xfce development team. All rights reserved.
 #
 # Written for Xfce by Benedikt Meurer <benny@xfce.org>.

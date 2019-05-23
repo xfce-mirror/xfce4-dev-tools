@@ -5,8 +5,7 @@
 #
 
 bin_SCRIPTS =								\
-	xdt-autogen							\
-	xdt-commit
+	xdt-autogen
 
 xdt-autogen: Makefile xdt-autogen.in
 	rm -f xdt-autogen xdt-autogen.gen
@@ -20,8 +19,5 @@ CLEANFILES =								\
 
 DISTCLEANFILES =							\
 	xdt-autogen.in
-
-EXTRA_DIST =								\
-	xdt-commit
 
 # vi:set ts=8 sw=8 noet ai:

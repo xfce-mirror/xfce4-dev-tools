@@ -51,7 +51,7 @@ AC_DEFUN([XDT_PROG_PKG_CONFIG],
         echo "*** pkg-config $xdt_cv_PKG_CONFIG_MIN_VERSION or newer. You can download pkg-config"
         echo "*** from the freedesktop.org software repository at"
         echo "***"
-        echo "***    http://www.freedesktop.org/software/pkgconfig"
+        echo "***    https://www.freedesktop.org/wiki/Software/pkg-config/"
         echo "***"
         exit 1;
       fi
@@ -64,7 +64,7 @@ AC_DEFUN([XDT_PROG_PKG_CONFIG],
       echo "*** You can download pkg-config from the freedesktop.org"
       echo "*** software repository at"
       echo "***"
-      echo "***    http://www.freedesktop.org/software/pkgconfig"
+      echo "***    https://www.freedesktop.org/wiki/Software/pkg-config/"
       echo "***"
       exit 1
     ])
