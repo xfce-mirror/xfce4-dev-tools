@@ -41,13 +41,9 @@
 #include <string.h>
 #endif
 
-#ifndef GETTEXT_PACKAGE
-#define GETTEXT_PACKAGE PACKAGE
-#endif
-
 #include <glib.h>
-#include <glib/gi18n-lib.h>
 #include <glib/gprintf.h>
+#include <glib/gstdio.h>
 
 
 
@@ -69,6 +65,7 @@ static gboolean     gen_stripcomments = FALSE;
 static gboolean     gen_stripcontent = FALSE;
 static const gchar *gen_linkage = "static ";
 static const gchar *gen_varname = "my_data";
+static const gchar *out_name = NULL;
 
 
 
@@ -136,6 +133,21 @@ parse_args (gint    *argc_p,
       else if (strcmp (argv[n], "--strip-content") == 0)
         {
           gen_stripcontent = TRUE;
+          argv[n] = NULL;
+        }
+      else if (strcmp (argv[n], "--output") == 0
+          || strncmp (argv[n], "--output=", 9) == 0)
+        {
+          s = argv[n] + 8;
+          if (G_LIKELY (*s == '='))
+            {
+              out_name = g_strdup (s + 1);
+            }
+          else if (n + 1 < argc)
+            {
+              out_name = g_strdup (argv[n + 1]);
+              argv[n++] = NULL;
+            }
           argv[n] = NULL;
         }
     }
@@ -287,6 +299,11 @@ print_csource (FILE        *fp,
 static void
 print_usage (void)
 {
+  g_print ("  xdt-csource is a small utility that generates C code containing arbitrary data,\n");
+  g_print ("  useful for compiling texts or other data directly into programs.\n");
+  g_print ("  It either takes as input one file name to generate code for, or, using the --build-list option,\n");
+  g_print ("  a list of (name, file) pairs to generate code for a list of images into named variables.\n");
+  g_print ("  This is the successor of exo-csource.\n\n");
   g_print ("Usage: %s [options] [file]\n", g_get_prgname ());
   g_print ("       %s [options] --build-list [[name file]...]\n", g_get_prgname ());
   g_print ("\n");
@@ -298,6 +315,7 @@ print_usage (void)
   g_print ("  --build-list      Parse (name, file) pairs\n");
   g_print ("  --strip-comments  Remove comments from XML files\n");
   g_print ("  --strip-content   Remove node contents from XML files\n");
+  g_print ("  --output=filename Write generated csource to specified file\n");
   g_print ("\n");
 }
 
@@ -307,11 +325,11 @@ static void
 print_version (void)
 {
   g_print ("%s %s\n\n", G_LOG_DOMAIN, PACKAGE_VERSION);
-  g_print ("Copyright (c) 2005-2015\n");
-  g_print ("\t%s\n\n", _("The Xfce development team. All rights reserved."));
+  g_print ("Copyright (c) 2005-2019\n");
+  g_print ("\tThe Xfce development team. All rights reserved.\n\n");
   g_print ("%s comes with ABSOLUTELY NO WARRANTY,\n"
            "You may redistribute copies of %s under the terms of\n"
-           "the GNU Lesser General Public License which can be found in the\n"
+           "the GNU General Public License which can be found in the\n"
            "%s source package.\n\n", g_get_prgname (), g_get_prgname (), PACKAGE_TARNAME);
   g_print ("Please report bugs to <%s>.", PACKAGE_BUGREPORT);
   g_print ("\n");
@@ -329,6 +347,7 @@ main (int argc, char **argv)
   gchar   *data;
   gsize    length;
   gint     n;
+  FILE    *out_file;
 
   setlocale (LC_ALL, NULL);
 
@@ -345,6 +364,16 @@ main (int argc, char **argv)
           print_usage ();
           return EXIT_FAILURE;
         }
+      if (out_name == NULL)
+          out_file = stdout;
+      else
+        {
+          out_file = g_fopen (out_name, "w");
+          if (out_file == NULL) {
+            g_fprintf (stderr, "Failed to open output file \"%s\"\n", out_name);
+            return EXIT_FAILURE;
+          }
+        }
 
 #ifdef G_OS_WIN32
       filename = g_local_to_utf8 (argv[1], -1, NULL, NULL, NULL);
@@ -360,7 +389,10 @@ main (int argc, char **argv)
           return EXIT_FAILURE;
         }
 
-      print_csource (stdout, data, length, filename);
+      print_csource (out_file, data, length, filename);
+
+      if (out_file != NULL && out_file != stdout)
+        fclose (out_file);
 
       g_free (data);
     }
