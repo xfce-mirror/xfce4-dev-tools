@@ -147,49 +147,9 @@ do_version_check() {
   test $XDT_AUTOGEN_VERSION_MINOR -gt $minor && return 0
 
   micro=`echo $XDT_AUTOGEN_REQUIRED_VERSION | cut -d. -f3`
-  if echo "$micro" | $EGREP -q "svn|git"; then
-    revision=`echo "$micro" | sed -e 's/[[:digit:].]\+\(.*\)/\1/'`
-    micro=`echo "$micro" | sed -e 's/\([[:digit:].]\+\).*/\1/'`
-  fi
-  if echo "$micro" | grep -q '\.'; then
-    nano=`echo "$micro" | cut -d. -f2`
-    micro=`echo "$micro" | cut -d. -f1`
-  fi
-
   test "$micro" || return 1
   test $micro -le $XDT_AUTOGEN_VERSION_MICRO || return 1
   test $XDT_AUTOGEN_VERSION_MICRO -gt $micro && return 0
-
-  # the caller may or may not have specified a nano
-  if test "$nano"; then
-    # and we may or may not have a nano
-    test "$XDT_AUTOGEN_VERSION_NANO" || XDT_AUTOGEN_VERSION_NANO="0"
-
-    test $nano -le $XDT_AUTOGEN_VERSION_NANO || return 1
-    test $XDT_AUTOGEN_VERSION_NANO -gt $nano && return 0
-  fi
-
-  # the caller may or may not have specified a revision
-  if test "$revision"; then
-    # if we don't have a revision, then the check fails
-    test "$XDT_AUTOGEN_VERSION_REVISION" || return 1
-    
-    # version compares are handled differently between svn and git.
-    if echo "$revision" | grep -q "svn"; then
-      # if our revision includes "git", then we must be newer
-      echo "$XDT_AUTOGEN_VERSION_REVISION" | grep -q "git" && return 0
-
-      # figure out the revision numbers
-      rev_num=`echo "$revision" | sed -e 's/svn-r\([[:digit:]]\+\)/\1/'`
-      XDT_AUTOGEN_VERSION_REV_NUM=`echo "$XDT_AUTOGEN_VERSION_REVISION" | sed -e 's/svn-r\([[:digit:]]\+\)/\1/'`
-      test $rev_num -le $XDT_AUTOGEN_VERSION_REV_NUM || return 1
-    elif echo "$revision" | grep -q "git"; then
-      # since git rev info is of the form "git-$SHORT_SHA1", they cannot
-      # be ordered without knowing the full git history.
-      echo "xdt-autogen: Git revision comparison is not reliable.  Continuing anyway." >&2
-      echo "             If you experience problems, upgrade xfce4-dev-tools." >&2
-    fi
-  fi
 
   return 0
 }
@@ -216,41 +176,6 @@ export XDG_DATA_DIRS XDG_DATA_HOME
 MASTER_DIR=`pwd`; test -z "${MASTER_DIR}" && MASTER_DIR="."
 
 ##
-## Check for documentation submodule
-##
-if test -n "$XDT_AUTOGEN_CHECK_DOCS"; then
-  if test ! -f "$MASTER_DIR/$XDT_AUTOGEN_CHECK_DOCS/Makefile.am"; then
-    # Check for git and needed files, if found, automatically
-    # update the submodule
-    if test -d .git -a -f .gitmodules; then
-      echo "xdt-autogen: Automatically initializing the $XDT_AUTOGEN_CHECK_DOCS submodule."
-
-      # Run git command to get the lastest docs revision
-      res=0 && git submodule sync $XDT_AUTOGEN_CHECK_DOCS && \
-      git submodule update --init $XDT_AUTOGEN_CHECK_DOCS && res=1
-
-      if test $res -eq 0; then
-        cat >&2 <<EOF
-xdt-autogen: Pulling the xfce4-docs git submodule failed. See errors
-             above for more information and take a look at
-             http://wiki.xfce.org/documentation.
-EOF
-        exit 1
-      fi
-    else
-      cat >&2 <<EOF
-xdt-autogen: The directory $XDT_AUTOGEN_CHECK_DOCS does not contain
-             the required files to run configure. See
-             http://wiki.xfce.org/documentation for more information.
-EOF
-      exit 1
-    fi
-  #else
-    # We could warn about out-of-date submodules here.
-  fi
-fi
-
-##
 ## First we do some substitutions to generate configure.{ac,in} if necessary
 ##
 CONFIGURE_AC_IN_FILES=`lookup_configure_ac_in_files "$MASTER_DIR"`
@@ -258,15 +183,8 @@ for configure_ac_in_file in $CONFIGURE_AC_IN_FILES; do
   configure_ac_file="`echo $configure_ac_in_file | sed -e 's:\.in$::'`"
 
   # first generate a revision id
-  if test -d .git/svn; then
-    revision=`git svn find-rev trunk 2>/dev/null ||
-              git svn find-rev origin/trunk 2>/dev/null ||
-              git svn find-rev HEAD 2>/dev/null ||
-              git svn find-rev master 2>/dev/null`
-  elif test -d .git; then
+  if test -d .git; then
     revision=`git rev-parse --short HEAD`
-  elif test -d .svn; then
-    revision=`LC_ALL=C svn info $0 | $AWK '/^Revision: / {printf "%05d\n", $2}'`
   fi
 
   if test "x$revision" = "x"; then
@@ -412,7 +330,7 @@ for configure_ac_file in $CONFIGURE_AC_FILES; do
 xdt-autogen: It is recommended to use IT_PROG_INTLTOOL([0.35.0])
              in your configure.ac file and remove AC_PROG_INTLTOOL
 
-             See http://bugzilla.xfce.org/show_bug.cgi?id=8930 for
+             See https://bugzilla.xfce.org/show_bug.cgi?id=8930 for
              more information.
 
 EOF
@@ -438,7 +356,7 @@ xdt-autogen: It is recommended to use LT_PREREQ([@VERSION_LIBTOOL@]) and
              LT_INIT([disable-static]) in your configure.ac
              file and remove AC_PROG_LIBTOOL and AC_DISABLE_STATIC.
 
-             See http://bugzilla.xfce.org/show_bug.cgi?id=6920 for
+             See https://bugzilla.xfce.org/show_bug.cgi?id=6920 for
              more information.
 
 EOF
