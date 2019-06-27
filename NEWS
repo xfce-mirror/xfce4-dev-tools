@@ -1,3 +1,16 @@
+4.13.0
+======
+
+- Merge exo-csource modifications in xdt-csource
+- xdt-csource will replace exo-csource (projects using exo-csource needs to be updated)
+- The work started in issue #6449 but the full migration has never been done.
+- Remove svn support in xdt-autogen
+- Simplify a bit the XDT_AUTOGEN_REQUIRED_VERSION detection
+- Remove the check of the unused doc submodule
+- Remove useless macros: m4macros/xdt-python.m4 and m4macros/xdt-xfce.m4 are not used
+- Remove xdt-commit, used to generate Changelog, now done via make distcheck
+- No -Wshadow flag for enable_debug=full (bug #11637). Use it only for enable_debug=yes.
+
 4.12.0
 ======
 - Bump version.
