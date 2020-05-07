@@ -1,0 +1,6 @@
+build:
+  image: xfce/xfce-build:master
+  script:
+    - ./autogen.sh
+    - make
+    
