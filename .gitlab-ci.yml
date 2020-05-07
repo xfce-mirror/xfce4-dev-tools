@@ -5,8 +5,6 @@
 variables:
   CI_REGISTRY: "docker.io"
   CI_REGISTRY_IMAGE: "index.docker.io/xfce/xfce-build"
-  # disable TLS (needs to be enabled in Runner to remove this: https://about.gitlab.com/releases/2019/07/31/docker-in-docker-with-docker-19-dot-03/)
-  DOCKER_TLS_CERTDIR: ""
 
 build:
   image: docker:19.03.8
