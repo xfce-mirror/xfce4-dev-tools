@@ -1,4 +1,3 @@
-
 # Set secrets as follows:
 # CI_REGISTRY_USER=your_user
 # CI_REGISTRY_PASSWORD=********
@@ -18,3 +17,5 @@ build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
+  only:
+    - master
