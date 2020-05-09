@@ -1,5 +1,5 @@
 build:
-  image: xfce/xfce-build:master
+  image: xfce/xfce-build:latest
   script:
     - ./autogen.sh
     - make
