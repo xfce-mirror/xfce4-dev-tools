@@ -5,7 +5,6 @@
 variables:
   CI_REGISTRY: "docker.io"
   CI_REGISTRY_IMAGE: "index.docker.io/xfce/xfce-build"
-  DOCKER_TLS_CERTDIR: "/certs"
 
 build:
   image: docker:19.03.8
