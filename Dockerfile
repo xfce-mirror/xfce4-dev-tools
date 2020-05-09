@@ -2,6 +2,9 @@ FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# Enable source repositories
+RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
+
 # set up dependencies
 RUN apt-get update
 
