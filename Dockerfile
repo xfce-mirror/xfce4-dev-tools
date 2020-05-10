@@ -7,7 +7,7 @@ RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
 
 # Set up dependencies
 RUN apt-get update
-RUN apt-get -y --no-install-recommends install libglib2.0-dev git libtool m4 automake intltool libx11-dev libgtk-3-dev libxfce4util-dev libxfce4ui-2-dev libwnck-3-dev libexo-2-dev \
+RUN apt-get -y --no-install-recommends install libglib2.0-dev git libtool m4 automake intltool libx11-dev libgtk-3-dev libxfce4util-dev libxfce4ui-2-dev libwnck-3-dev libexo-2-dev gobject-introspection \
   && apt-get -y --no-install-recommends install automake-1.15 make \
   && apt-get -y --no-install-recommends build-dep xfce4-panel thunar xfce4-settings xfce4-session xfdesktop4 xfwm4 xfce4-appfinder tumbler xfce4-terminal xfce4-clipman-plugin xfce4-screenshooter
 
