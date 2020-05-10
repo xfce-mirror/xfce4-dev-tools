@@ -25,4 +25,8 @@ build:
   only:
     # This only ever runs on a change in master currently, but it would be possible
     # to make this run on/push branches with different tags as well.
-    - master
+    refs:
+      - master
+    changes:
+      - "Dockerfile"
+      - "ci/build_libs.sh"
