@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Just a small script to get all language updates to a repository since a
+# commit or tag.
+
+LAST_TAG=$(git describe --abbrev=0)
+STARTTAG="${1:-$LAST_TAG}"
+ENDTAG="${2:-HEAD}"
+SILENT="${3:-}"
+
+LINE_LENGTH=72
+INDENT="  "
+
+UPDATES=$(git log --pretty=format:'%s' "$STARTTAG".."$ENDTAG" -- po/*.po | awk '{print $4}' | sort -u)
+
+if [ "${ENDTAG}" == "HEAD" ]; then
+	ENDTAG_PRETTY="now"
+else
+	ENDTAG_PRETTY=${ENDTAG}
+fi
+NUM_LANGS=$(echo ${UPDATES}|wc -w)
+
+if [ "$NUM_LANGS" = "0" ]; then
+	exit 0
+fi
+
+printf '%s\n' '- Translation Updates:'
+
+LANGUAGES=$(
+for l in $UPDATES; do
+	echo "$(grep '^"Language-Team:' po/$l.po | grep -Po '(?<=: ).*' | grep -Po '^(.*)(?= \(http)')"
+done
+)
+
+SORTED=$(echo "$LANGUAGES" | sort)
+while read line; do
+	echo -n "$line, "
+done <<< "$SORTED" | fold -s -w $LINE_LENGTH - | sed -e "s/^[^ ]/${INDENT}&/g" | sed -e 's/[[:space:]]*$//'
+echo ""
+
+if [ "$SILENT" != "silent" ]; then
+	echo -n "From ${STARTTAG} until ${ENDTAG_PRETTY} ${NUM_LANGS} language"
+	if [ $NUM_LANGS -ne 1 ]; then
+		echo -n "s have "
+	else
+		echo -n " has "
+	fi
+	echo "been updated."
+fi
