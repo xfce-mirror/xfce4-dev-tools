@@ -1,0 +1,28 @@
+# Set secrets as follows:
+# CI_REGISTRY_USER=your_user
+# CI_REGISTRY_PASSWORD=********
+
+variables:
+  CI_REGISTRY: "docker.io"
+  CI_REGISTRY_IMAGE: "index.docker.io/xfce/xfce-build"
+  DOCKER_TLS_CERTDIR: "/certs"
+
+build:
+  image: docker:19.03.8
+  stage: build
+  services:
+    - docker:19.03.8-dind
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    LATEST_TAG: $CI_REGISTRY_IMAGE:latest
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $IMAGE_TAG -t $LATEST_TAG .
+    # This will push to the master tag
+    - docker push $IMAGE_TAG
+    # May eventually want to add some tests before latest is pushed?
+    - docker push $LATEST_TAG
+  only:
+    # This only ever runs on a change in master currently, but it would be possible
+    # to make this run on/push branches with different tags as well.
+    - master
