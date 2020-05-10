@@ -1,6 +1,13 @@
-build:
-  image: xfce/xfce-build:latest
+image: xfce/xfce-build:latest
+    
+stages:
+  - build
+
+build-distcheck:
+  stage: build
   script:
     - ./autogen.sh
-    - make
-    
+    - make distcheck
+  except:
+    changes:
+      - "po/*.po"
