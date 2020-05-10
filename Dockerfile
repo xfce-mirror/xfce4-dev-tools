@@ -1,4 +1,5 @@
 FROM ubuntu:focal
+MAINTAINER Xfce Development Team
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -21,3 +22,10 @@ COPY . /
 # Configure and build dev tools
 RUN ./autogen.sh
 RUN make install
+
+# Build and install the latest tag for all Xfce core libraries
+RUN mkdir /git
+COPY ci/build_libs.sh /git/build_libs.sh
+RUN chmod a+x /git/build_libs.sh
+
+RUN /git/build_libs.sh
