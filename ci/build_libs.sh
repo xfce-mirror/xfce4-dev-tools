@@ -7,12 +7,13 @@ AUTOGEN_OPTIONS="--disable-debug --enable-maintainer-mode --host=x86_64-linux-gn
                 --libexecdir=/usr/lib/x86_64-linux-gnu --sysconfdir=/etc --localstatedir=/var --enable-gtk-doc"
 
 # (BUILD_TYPE BRANCH URL NAME) tuples:
-REPOS=( "${XFCE_BASE}/xfce/libxfce4ui.git libxfce4ui")
+REPOS= ("${XFCE_BASE}/xfce/xfce4-dev-tools.git xfce4-dev-tools")
 REPOS+=("${XFCE_BASE}/xfce/libxfce4util.git libxfce4util")
+REPOS+=("${XFCE_BASE}/xfce/xfconf.git xfconf")
+REPOS+=("${XFCE_BASE}/xfce/libxfce4ui.git libxfce4ui")
 REPOS+=("${XFCE_BASE}/xfce/exo.git exo")
-REPOS+=("${XFCE_BASE}/xfce/xfce4-dev-tools.git xfce4-dev-tools")
-REPOS+=("${XFCE_BASE}/xfce/xfce4-panel.git xfce4-panel")
 REPOS+=("${XFCE_BASE}/xfce/garcon.git garcon")
+REPOS+=("${XFCE_BASE}/xfce/xfce4-panel.git xfce4-panel")
 
 for tuple in "${REPOS[@]}"; do
     set -- $tuple
