@@ -16,13 +16,6 @@ RUN apt-get -y --no-install-recommends install libglib2.0-dev git libtool m4 aut
 # If this is removed we should also remove the explicit install of automake-1.15 above.
 RUN apt-get remove -y automake
 
-# Replicate git repo
-COPY . /
-
-# Configure and build dev tools
-RUN ./autogen.sh
-RUN make install
-
 # Build and install the latest tag for all Xfce core libraries
 RUN mkdir /git
 COPY ci/build_libs.sh /git/build_libs.sh
