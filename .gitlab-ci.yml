@@ -16,8 +16,6 @@ xfce-build-container:
     IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     LATEST_TAG: $CI_REGISTRY_IMAGE:latest
   script:
-    # quick fail for testing
-    - 'false'
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE_TAG -t $LATEST_TAG .
     # This will push to the master tag
