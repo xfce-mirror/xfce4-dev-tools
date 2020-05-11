@@ -26,5 +26,5 @@ xfce-build-container:
     - docker push $LATEST_TAG
   rules:
     # Set to only run on official repo/master
-    - if: '$CI_PROJECT_PATH == "j4yav/xfce4-dev-tools" && $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_PROJECT_PATH == "xfce/xfce4-dev-tools" && $CI_COMMIT_BRANCH == "master"'
       when: always
