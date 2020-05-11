@@ -23,6 +23,9 @@ xfce-build-container:
     # May eventually want to add some tests before latest is pushed?
     - docker push $LATEST_TAG
   rules:
-    # Set to only run on official repo/master
+    # Set to only run on official repo/master when there are relevant changes
     - if: '$CI_PROJECT_PATH == "xfce/xfce4-dev-tools" && $CI_COMMIT_BRANCH == "master"'
+      changes:
+        - "Dockerfile"
+        - "ci/build_libs.sh"
       when: always
