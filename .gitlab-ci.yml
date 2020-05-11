@@ -29,3 +29,5 @@ build:
         - "Dockerfile"
         - "ci/build_libs.sh"
       when: always
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: always
