@@ -1,4 +1,4 @@
-# Set secrets as follows:
+# Set secrets as follows to publish build environment to Docker Hub:
 # CI_REGISTRY_USER=your_user
 # CI_REGISTRY_PASSWORD=********
 
@@ -7,7 +7,7 @@ variables:
   CI_REGISTRY_IMAGE: "index.docker.io/xfce/xfce-build"
   DOCKER_TLS_CERTDIR: "/certs"
 
-build:
+xfce-build-container:
   image: docker:19.03.8
   stage: build
   services:
@@ -16,13 +16,15 @@ build:
     IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     LATEST_TAG: $CI_REGISTRY_IMAGE:latest
   script:
+    # quick fail for testing
+    - 'false'
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE_TAG -t $LATEST_TAG .
     # This will push to the master tag
     - docker push $IMAGE_TAG
     # May eventually want to add some tests before latest is pushed?
     - docker push $LATEST_TAG
-  only:
-    # This only ever runs on a change in master currently, but it would be possible
-    # to make this run on/push branches with different tags as well.
-    - master
+  rules:
+    # Set to only run on official repo/master
+    - if: '$CI_PROJECT_PATH == "j4yav/xfce4-dev-tools" && $CI_COMMIT_BRANCH == "master"'
+      when: always
