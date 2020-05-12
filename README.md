@@ -22,7 +22,7 @@ this repository, and is built via the build job in [`.gitlab-ci.yml`](.gitlab-ci
 
 ## CI templates for Xfce
 
-The [CI folder](ci/) contains the `.gitlab-ci.yml` template for building the various
+The [CI folder](ci/) contains the `build_project.yml` template for building the various
 Xfce projects, as well as supporting scripts such as `build_libs.sh` which handles
 building any needed dependencies. This helps us avoid repeating the same build
 code in each project.
