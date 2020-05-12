@@ -10,9 +10,12 @@ build:
     - ./autogen.sh
     - make
   rules:
+    # If there are changes to .po, never run
     - changes: 
       - "po/*.po"
       when: never
+    # Otherwise, always run
+    - when: always
 
 translations:
   stage: build
@@ -20,15 +23,21 @@ translations:
     #  Could validate translations, but for now just pass
     - "true"
   rules:
+    # If there are changes to .po, run this job
     - changes: 
       - "po/*.po"
       when: always
+    # Otherwise, never run
+    - when: never
 
 distcheck:
   stage: distcheck
   script:
     - make distcheck
   rules:
+    # If there are changes to .po, never run
     - changes: 
       - "po/*.po"
       when: never
+    # Otherwise, always run
+    - when: always
