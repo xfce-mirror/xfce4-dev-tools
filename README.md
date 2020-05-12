@@ -18,15 +18,11 @@ docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) \
 The steps to build the container are encoded in the [`Dockerfile`](Dockerfile) in
 this repository, and is built via the build job in [`.gitlab-ci.yml`](.gitlab-ci.yml).
 
-## Installation
-
-The file [`INSTALL`](INSTALL) contains generic installation instructions.
-
 
 ## How to report bugs?
 
 Bugs should be reported to the [Xfce bugtracking system](http://bugzilla.xfce.org), 
 product Xfce development tools). You will need to create an account for yourself.
 
-Please read the file 'HACKING' for information on where to send changes
+Please read the file [`HACKING`](HACKING) for information on where to send changes
 or bugfixes for this package.
