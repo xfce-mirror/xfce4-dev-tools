@@ -2,12 +2,35 @@ image: xfce/xfce-build:latest
     
 stages:
   - build
+  - distcheck
 
-build-distcheck:
+build:
   stage: build
   script:
     - ./autogen.sh
-    - make distcheck
-  except:
-    changes:
+    - make
+  rules:
+    - changes: 
       - "po/*.po"
+      when: never
+
+translations:
+  stage: build
+  script:
+    #  Could validate translations, but for now just pass
+    - "true"
+  rules:
+    - changes: 
+      - "po/*.po"
+      when: always
+
+distcheck:
+  stage: distcheck
+  script:
+    - make distcheck
+  rules:
+    - changes: 
+      - "po/*.po"
+      when: never
+    - if: '$CI_PROJECT_NAME == "xfconf"'
+      when: never
