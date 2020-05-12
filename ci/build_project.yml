@@ -33,6 +33,7 @@ translations:
 distcheck:
   stage: distcheck
   script:
+    - ./autogen.sh
     - make distcheck
   rules:
     # If there are changes to .po, never run
