@@ -5,6 +5,18 @@ The Xfce development tools are a collection of tools and macros for
 Xfce developers and people that want to build Xfce from Git In addition
 it contains the Xfce developer's handbook.
 
+This project also contains the code to build and deploy xfce-build to
+https://hub.docker.com/repository/docker/xfce/xfce-build/. This container
+is the build environment used by Xfce to build the various projects. It
+can also be used as your own build environment as follows:
+
+docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) \
+  --volume $(pwd):/tmp xfce/xfce-build:master /bin/bash \
+  -c "cd /tmp; ./autogen.sh && make distcheck"
+
+The steps to build the container are encoded in the Dockerfile in the
+this repository, and it is built via the build job in .gitlab-ci.yml.
+
 
 Installation
 ============
