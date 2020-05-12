@@ -1,5 +1,4 @@
-What is it?
-===========
+## What is it?
 
 The Xfce development tools are a collection of tools and macros for
 Xfce developers and people that want to build Xfce from Git In addition
@@ -16,22 +15,18 @@ docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) \
   -c "cd /tmp; ./autogen.sh && make distcheck"
 ```
 
-The steps to build the container are encoded in the [Dockerfile](Dockerfile) in the
-this repository, and it is built via the build job in [.gitlab-ci.yml](.gitlab-ci.yml).
+The steps to build the container are encoded in the [`Dockerfile`](Dockerfile) in
+this repository, and is built via the build job in [`.gitlab-ci.yml`](.gitlab-ci.yml).
+
+## Installation
+
+The file [`INSTALL`](INSTALL) contains generic installation instructions.
 
 
-Installation
-============
+## How to report bugs?
 
-The file 'INSTALL' contains generic installation instructions.
-
-
-How to report bugs?
-===================
-
-Bugs should be reported to the Xfce bugtracking system
-(http://bugzilla.xfce.org, product Xfce development tools). You will
-need to create an account for yourself.
+Bugs should be reported to the [Xfce bugtracking system](http://bugzilla.xfce.org), 
+product Xfce development tools). You will need to create an account for yourself.
 
 Please read the file 'HACKING' for information on where to send changes
 or bugfixes for this package.
