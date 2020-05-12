@@ -8,6 +8,17 @@ build-distcheck:
   script:
     - ./autogen.sh
     - make distcheck
-  except:
-    changes:
+  rules:
+    - changes: 
       - "po/*.po"
+      when: never
+
+translations:
+  stage: build
+  script:
+    #  Could validate translations, but for now just pass
+    - "true"
+  rules:
+    - changes: 
+      - "po/*.po"
+      when: always
