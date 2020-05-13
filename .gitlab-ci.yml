@@ -18,13 +18,14 @@ build:
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE_TAG -t $LATEST_TAG .
-    # This will push to the master tag
+    # This will push to the branch name tag
     - docker push $IMAGE_TAG
     # May eventually want to add some tests before latest is pushed?
-    - docker push $LATEST_TAG
+    # In any case, only push latest if we are building master.
+    - if [ $CI_COMMIT_BRANCH == "master" ]; then docker push $LATEST_TAG; else echo Skipping latest tag on non-master branch; fi 
   rules:
-    # Set to only run on official repo/master and when there are relevant changes
-    - if: '$CI_PROJECT_PATH == "xfce/xfce4-dev-tools" && $CI_COMMIT_BRANCH == "master"'
+     # Set to only run on the branches of the official repo and when there are relevant changes
+    - if: '$CI_PROJECT_PATH == "xfce/xfce4-dev-tools"'
       changes:
         - "Dockerfile"
         - "ci/build_libs.sh"
