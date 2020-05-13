@@ -1,15 +1,21 @@
-# Set secrets as follows:
-# CI_REGISTRY_USER=your_user
-# CI_REGISTRY_PASSWORD=********
+include:
+  - project: 'xfce/xfce4-dev-tools'
+    file: '/ci/build_project.yml'
 
-variables:
-  CI_REGISTRY: "docker.io"
-  CI_REGISTRY_IMAGE: "index.docker.io/xfce/xfce-build"
-  DOCKER_TLS_CERTDIR: "/certs"
-
-build:
+# In addition to building xfce4-dev-tools itself, we build the xfce-build container
+# and deploy it to DockerHub.
+build-container:
+  variables:
+    CI_REGISTRY: "docker.io"
+    CI_REGISTRY_IMAGE: "index.docker.io/xfce/xfce-build"
+    DOCKER_TLS_CERTDIR: "/certs"
+    # Set secrets in project environment variables as follows:
+    # CI_REGISTRY_USER=your_user
+    # CI_REGISTRY_PASSWORD=********
   image: docker:19.03.8
-  stage: build
+  # The container build is in the .pre stage in order to ensure it is subsequently
+  # used for the included build.
+  stage: .pre
   services:
     - docker:19.03.8-dind
   variables:
