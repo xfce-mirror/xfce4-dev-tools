@@ -3,10 +3,12 @@ include:
     file: '/ci/build_project.yml'
 
 # Set overall pipeline rules to avoid duplicated pipelines
+# https://docs.gitlab.com/ee/ci/yaml/index.html#exclude-jobs-with-rules-from-certain-pipelines
 workflow:
   rules:
     - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_MERGE_REQUEST_IID
 
 # In addition to building xfce4-dev-tools itself, we build the xfce-build container
 # and deploy it to DockerHub.
