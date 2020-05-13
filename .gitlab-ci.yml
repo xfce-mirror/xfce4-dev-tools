@@ -2,6 +2,12 @@ include:
   - project: 'xfce/xfce4-dev-tools'
     file: '/ci/build_project.yml'
 
+# Set overall pipeline rules to avoid duplicated pipelines
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
+
 # In addition to building xfce4-dev-tools itself, we build the xfce-build container
 # and deploy it to DockerHub.
 build-container:
