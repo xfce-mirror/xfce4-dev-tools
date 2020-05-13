@@ -24,4 +24,5 @@ ChangeLog: Makefile
 dist-hook: ChangeLog
 
 EXTRA_DIST =								\
-	HACKING
+	HACKING \
+	README.md

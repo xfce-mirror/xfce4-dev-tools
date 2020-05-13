@@ -2,12 +2,43 @@ image: xfce/xfce-build:latest
     
 stages:
   - build
+  - distcheck
 
-build-distcheck:
+build:
   stage: build
   script:
     - ./autogen.sh
-    - make distcheck
-  except:
-    changes:
+    - make
+  rules:
+    # If there are changes to .po, never run
+    - changes: 
       - "po/*.po"
+      when: never
+    # Otherwise, always run
+    - when: always
+
+translations:
+  stage: build
+  script:
+    #  Could validate translations, but for now just pass
+    - "true"
+  rules:
+    # If there are changes to .po, run this job
+    - changes: 
+      - "po/*.po"
+      when: always
+    # Otherwise, never run
+    - when: never
+
+distcheck:
+  stage: distcheck
+  script:
+    - ./autogen.sh
+    - make distcheck
+  rules:
+    # If there are changes to .po, never run
+    - changes: 
+      - "po/*.po"
+      when: never
+    # Otherwise, always run
+    - when: always

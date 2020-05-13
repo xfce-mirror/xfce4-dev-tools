@@ -31,7 +31,7 @@ sed -e "s/@REVISION@/${revision}/g" < "configure.ac.in" > "configure.ac"
 
 (libtoolize &&
  aclocal &&
- automake --add-missing --copy --gnu &&
+ automake --add-missing --copy &&
  autoconf) || exit 1
 
 test -d m4 || mkdir m4
