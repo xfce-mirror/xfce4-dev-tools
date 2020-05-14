@@ -10,8 +10,8 @@ workflow:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_MERGE_REQUEST_IID
 
-# In addition to building xfce4-dev-tools itself, we build the xfce-build container
-# and deploy it to DockerHub.
+# In addition to building xfce4-dev-tools itself, we build the xfce-build 
+# container and deploy it to DockerHub.
 build-container:
   variables:
     CI_REGISTRY: "docker.io"
@@ -21,8 +21,8 @@ build-container:
     # CI_REGISTRY_USER=your_user
     # CI_REGISTRY_PASSWORD=********
   image: docker:19.03.8
-  # The container build is in the .pre stage in order to ensure it is subsequently
-  # used for the included build.
+  # The container build is in the .pre stage in order to ensure it is
+  # subsequently used for the included build.
   stage: .pre
   services:
     - docker:19.03.8-dind
@@ -38,7 +38,8 @@ build-container:
     # In any case, only push latest if we are building master.
     - if [ $CI_COMMIT_BRANCH == "master" ]; then docker push $LATEST_TAG; else echo Skipping latest tag on non-master branch; fi 
   rules:
-     # Set to only run on the branches of the official repo and when there are relevant changes
+     # Set to only run on the branches of the official repo and when there are
+     # relevant changes
     - if: '$CI_PROJECT_PATH == "xfce/xfce4-dev-tools"'
       changes:
         - "Dockerfile"
