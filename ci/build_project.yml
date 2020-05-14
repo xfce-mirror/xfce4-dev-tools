@@ -1,27 +1,53 @@
 image: xfce/xfce-build:latest
-    
+
+# Set overall pipeline rules to avoid duplicated pipelines
+# https://docs.gitlab.com/ee/ci/yaml/index.html#exclude-jobs-with-rules-from-certain-pipelines
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_MERGE_REQUEST_IID
+
 stages:
   - build
   - distcheck
 
-build:
+translations:
+  extends: .translation
   stage: build
   script:
-    - ./autogen.sh
+    #  Could validate translations, but for now just pass
+    - "true"
+
+build:
+  extends: .make
+  stage: build
+  script:
     - make
+
+distcheck:
+  extends: .make
+  stage: distcheck
+  script:
+    - make distcheck
+
+.make:
+  before_script:
+    - ./autogen.sh
   rules:
-    # If there are changes to .po, never run
-    - changes: 
+    # If there are changes to .po, never run. We also check
+    # BEFORE_SHA to see if it is zeros, in which case we are
+    # running on a manual trigger or scheduled pipeline. In 
+    # that case, changes resolves to true so we need to check
+    # both.
+    - if: '$CI_COMMIT_BEFORE_SHA != "0000000000000000000000000000000000000000"'
+      changes: 
       - "po/*.po"
       when: never
     # Otherwise, always run
     - when: always
 
-translations:
-  stage: build
-  script:
-    #  Could validate translations, but for now just pass
-    - "true"
+.translation:
   rules:
     # If there are changes to .po, run this job
     - changes: 
@@ -29,16 +55,3 @@ translations:
       when: always
     # Otherwise, never run
     - when: never
-
-distcheck:
-  stage: distcheck
-  script:
-    - ./autogen.sh
-    - make distcheck
-  rules:
-    # If there are changes to .po, never run
-    - changes: 
-      - "po/*.po"
-      when: never
-    # Otherwise, always run
-    - when: always
