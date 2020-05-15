@@ -12,15 +12,14 @@ build-container:
     # Set secrets in project environment variables as follows:
     # CI_REGISTRY_USER=your_user
     # CI_REGISTRY_PASSWORD=********
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    LATEST_TAG: $CI_REGISTRY_IMAGE:latest    
   image: docker:19.03.8
   # The container build is in the .pre stage in order to ensure it is
   # subsequently used for the included build.
   stage: .pre
   services:
     - docker:19.03.8-dind
-  variables:
-    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-    LATEST_TAG: $CI_REGISTRY_IMAGE:latest
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE_TAG -t $LATEST_TAG .
