@@ -25,7 +25,7 @@ for URL in ${REPOS}; do
     echo "--- Building $NAME ($TAG) ---"
     git checkout -b build-$TAG $TAG
     ./autogen.sh $AUTOGEN_OPTIONS
-    make -j8
+    make -j${NPROC:-$(nproc)}
     make install
     echo "$(pwd): $(git describe)" >> /git/xfce_build_version_info.txt
 done
