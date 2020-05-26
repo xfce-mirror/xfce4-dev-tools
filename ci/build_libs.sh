@@ -1,24 +1,23 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 XFCE_BASE=https://gitlab.xfce.org
 
-AUTOGEN_OPTIONS="--disable-debug --enable-maintainer-mode --host=x86_64-linux-gnu \
-                --build=x86_64-linux-gnu --prefix=/usr --libdir=/usr/lib/x86_64-linux-gnu \
+AUTOGEN_OPTIONS="--disable-debug --enable-maintainer-mode --host=x86_64-linux-gnu
+                --build=x86_64-linux-gnu --prefix=/usr --libdir=/usr/lib/x86_64-linux-gnu
                 --libexecdir=/usr/lib/x86_64-linux-gnu --sysconfdir=/etc --localstatedir=/var --enable-gtk-doc"
 
-# (BUILD_TYPE BRANCH URL NAME) tuples:
-REPOS=( "${XFCE_BASE}/xfce/xfce4-dev-tools.git xfce4-dev-tools")
-REPOS+=("${XFCE_BASE}/xfce/libxfce4util.git libxfce4util")
-REPOS+=("${XFCE_BASE}/xfce/xfconf.git xfconf")
-REPOS+=("${XFCE_BASE}/xfce/libxfce4ui.git libxfce4ui")
-REPOS+=("${XFCE_BASE}/xfce/exo.git exo")
-REPOS+=("${XFCE_BASE}/xfce/garcon.git garcon")
-REPOS+=("${XFCE_BASE}/xfce/xfce4-panel.git xfce4-panel")
+# list of git repos in build order
+REPOS="${XFCE_BASE}/xfce/xfce4-dev-tools.git
+  ${XFCE_BASE}/xfce/libxfce4util.git
+  ${XFCE_BASE}/xfce/xfconf.git
+  ${XFCE_BASE}/xfce/libxfce4ui.git
+  ${XFCE_BASE}/xfce/exo.git
+  ${XFCE_BASE}/xfce/garcon.git
+  ${XFCE_BASE}/xfce/xfce4-panel.git
+"
 
-for tuple in "${REPOS[@]}"; do
-    set -- $tuple
-    URL=$1
-    NAME=$2
+for URL in ${REPOS}; do
+    NAME=$(basename $URL .git)
     cd /git
     git clone $URL
     cd $NAME
