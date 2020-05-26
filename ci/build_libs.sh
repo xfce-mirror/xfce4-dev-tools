@@ -23,7 +23,7 @@ for URL in ${REPOS}; do
     cd $NAME
     TAG=$(git describe --abbrev=0 --match "$NAME*" 2>/dev/null)
     echo "--- Building $NAME ($TAG) ---"
-    git checkout $TAG
+    git checkout -b build-$TAG $TAG
     ./autogen.sh $AUTOGEN_OPTIONS
     make -j8
     make install
