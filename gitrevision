@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if test -d .git; then
+  revision=$(git rev-parse --short HEAD 2>/dev/null)
+fi
+printf "%s" "${revision:-UNKNOWN}"

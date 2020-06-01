@@ -17,7 +17,6 @@ scripts/xdt-autogen.in
 compile
 config.guess
 config.sub
-configure.ac
 depcomp
 libtool
 ltmain.sh
