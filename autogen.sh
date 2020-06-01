@@ -20,17 +20,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-# substitute revision and date
-if test -d .git; then
-  revision=$(git rev-parse --short HEAD)
-fi
-if test "x$revision" = "x"; then
-  revision=UNKNOWN
-fi
-sed -e "s/@REVISION@/${revision}/g" < "configure.ac.in" > "configure.ac"
-
 (libtoolize &&
- aclocal &&
+ aclocal -I m4macros &&
  automake --add-missing --copy &&
  autoconf) || exit 1
 
