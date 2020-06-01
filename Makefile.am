@@ -4,7 +4,7 @@
 # Written for Xfce by Benedikt Meurer <benny@xfce.org>.
 #
 
-ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+ACLOCAL_AMFLAGS = -I m4 -I m4macros ${ACLOCAL_FLAGS}
 
 SUBDIRS =     \
   docs        \

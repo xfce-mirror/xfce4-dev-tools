@@ -8,14 +8,8 @@ dnl
 dnl ***************************
 dnl *** Version information ***
 dnl ***************************
-m4_define([xdt_version_major], [4])
-m4_define([xdt_version_minor], [14])
-m4_define([xdt_version_micro], [0])
-m4_define([xdt_version_nano], [])
-m4_define([xdt_version_build], [@REVISION@])
-m4_define([xdt_version_tag], [git])
-m4_define([xdt_version], [xdt_version_major().xdt_version_minor().xdt_version_micro()ifelse(xdt_version_nano(), [], [], [.xdt_version_nano()])ifelse(xdt_version_tag(), [git], [xdt_version_tag()-xdt_version_build()], [])])
 
+XDT_VERSION_INIT([4.14.0])
 
 dnl # DO NOT MODIFY ANYTHING BELOW THIS LINE, UNLESS YOU KNOW WHAT
 dnl # YOU ARE DOING.
@@ -34,7 +28,6 @@ dnl substitute version info
 AC_SUBST([VERSION_MAJOR], [xdt_version_major])
 AC_SUBST([VERSION_MINOR], [xdt_version_minor])
 AC_SUBST([VERSION_MICRO], [xdt_version_micro])
-AC_SUBST([VERSION_NANO], [xdt_version_nano])
 VERSION_REVISION=ifelse(xdt_version_tag(), [git], [xdt_version_tag()-xdt_version_build()], [])
 AC_SUBST([VERSION_REVISION])
 
