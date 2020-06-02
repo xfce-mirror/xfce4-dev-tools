@@ -23,9 +23,12 @@ dnl  Internalization M4 macros.
 dnl
 
 
-dnl XDT_I18N(LINGUAS [, PACKAGE])
+dnl XDT_I18N([LINGUAS][, PACKAGE])
 dnl
 dnl This macro takes care of setting up everything for i18n support.
+dnl
+dnl If LINGUAS isn't specified, it will automatically extract the linuguas
+dnl from po/*.po.
 dnl
 dnl If PACKAGE isn't specified, it defaults to the package tarname; see
 dnl the description of AC_INIT() for an explanation of what makes up
@@ -40,7 +43,10 @@ AC_DEFUN([XDT_I18N],
   AC_SUBST([GETTEXT_PACKAGE])
 
   dnl gettext and stuff
-  ALL_LINGUAS="$1"
+  ALL_LINGUAS="m4_ifblank(
+    [$1],
+    [esyscmd([ echo $(for i in po/*.po; do test -e "$i" && basename "$i" .po; done) | tr -d '\n'])],
+    [$1])"
   AM_GLIB_GNU_GETTEXT()
 
   dnl This is required on some Linux systems
