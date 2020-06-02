@@ -82,6 +82,9 @@ m4macros/Makefile
 scripts/Makefile
 scripts/xdt-autogen.in
 xdt-csource/Makefile
+docs/Makefile
+tests/Makefile
+tests/data/Makefile
 ])
 
 dnl vi:set ts=2 sw=2 et ai:

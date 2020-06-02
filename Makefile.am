@@ -6,10 +6,12 @@
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
-SUBDIRS = 								\
-	m4macros							\
-	scripts								\
-	xdt-csource
+SUBDIRS =     \
+  docs        \
+  m4macros    \
+  scripts     \
+  xdt-csource \
+  tests
 
 distclean-local:
 	rm -rf *.cache *~
