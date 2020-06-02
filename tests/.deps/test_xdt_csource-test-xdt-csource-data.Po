@@ -1,0 +1,3 @@
+test_xdt_csource-test-xdt-csource-data.o: test-xdt-csource-data.c \
+ /usr/include/stdc-predef.h
+/usr/include/stdc-predef.h:
