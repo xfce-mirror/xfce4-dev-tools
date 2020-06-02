@@ -73,7 +73,7 @@ AC_OUTPUT([
 Makefile
 m4macros/Makefile
 scripts/Makefile
-scripts/xdt-autogen.in
+scripts/xdt-autogen
 xdt-csource/Makefile
 ])
 
