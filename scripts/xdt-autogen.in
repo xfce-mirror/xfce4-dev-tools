@@ -29,6 +29,8 @@ XDT_AUTOGEN_VERSION_MINOR="@VERSION_MINOR@"
 XDT_AUTOGEN_VERSION_MICRO="@VERSION_MICRO@"
 XDT_AUTOGEN_VERSION_REVISION="@VERSION_REVISION@"
 
+prefix="@prefix@"
+datarootdir="@prefix@"
 
 ##
 ## a few portability tests
@@ -167,7 +169,7 @@ fi
 ##
 test -z "${XDG_DATA_HOME}" && XDG_DATA_HOME="${HOME}/.local/share"
 test -z "${XDG_DATA_DIRS}" && XDG_DATA_DIRS="/usr/local/share:/usr/share"
-test -d "@DATADIR@" && XDG_DATA_DIRS="@DATADIR@:${XDG_DATA_DIRS}"
+test -d "@datadir@" && XDG_DATA_DIRS="@datadir@:${XDG_DATA_DIRS}"
 XDG_DATA_DIRS="${XDG_DATA_HOME}:${XDG_DATA_DIRS}"
 export XDG_DATA_DIRS XDG_DATA_HOME
 
