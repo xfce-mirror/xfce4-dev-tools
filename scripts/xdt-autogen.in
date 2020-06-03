@@ -44,25 +44,6 @@ if test -z "$EGREP"; then
   fi
 fi
 
-awk_tests="gawk mawk nawk awk"
-if test -z "$AWK"; then
-  for a in $awk_tests; do
-    if type $a >/dev/null 2>&1; then
-      AWK=$a
-      break
-    fi
-  done
-else
-  if ! type $AWK >/dev/null 2>/dev/null; then
-    unset AWK
-  fi
-fi
-if test -z "$AWK"; then
-  echo "xdt-autogen: The 'awk' program (one of $awk_tests) is" >&2
-  echo "             required, but cannot be found." >&2
-  exit 1
-fi
-
 ##
 ## figures out any subdirs that should be configured as a part
 ## of recursive configure.
@@ -194,7 +175,7 @@ for configure_ac_in_file in $CONFIGURE_AC_IN_FILES; do
 
   # find out what languages we support
   conf_dir=`dirname $configure_ac_file`
-  linguas=`cd "$conf_dir/po" 2>/dev/null && ls *.po 2>/dev/null | $AWK 'BEGIN { FS="."; ORS=" " } { print $1 }'`
+  linguas=$(echo $(for i in "$conf_dir"/po/*.po; do test -e "$i" && basename -- "$i" .po; done) | tr -d '\n')
 
   # and do the substitution
   tmp=`basename ${configure_ac_in_file}`
