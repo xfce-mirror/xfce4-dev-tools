@@ -71,6 +71,7 @@ dnl *** Generate files ***
 dnl **********************
 AC_OUTPUT([
 Makefile
+helpers/Makefile
 m4macros/Makefile
 scripts/Makefile
 scripts/xdt-autogen
