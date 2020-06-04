@@ -1,5 +1,5 @@
 dnl
-dnl Copyright (c) 2002-2019
+dnl Copyright (c) 2002-2020
 dnl         The Xfce development team. All rights reserved.
 dnl
 dnl Written for Xfce by Benedikt Meurer <benny@xfce.org>.
@@ -9,7 +9,7 @@ dnl ***************************
 dnl *** Version information ***
 dnl ***************************
 
-XDT_VERSION_INIT([4.14.0])
+XDT_VERSION_INIT([4.14.0], [git])
 
 dnl # DO NOT MODIFY ANYTHING BELOW THIS LINE, UNLESS YOU KNOW WHAT
 dnl # YOU ARE DOING.
@@ -19,8 +19,8 @@ dnl ***************************
 dnl *** Initialize autoconf ***
 dnl ***************************
 AC_INIT([xfce4-dev-tools], [xdt_version],
-        [https://bugzilla.xfce.org/enter_bug.cgi?product=Xfce4-dev-tools])
-AC_COPYRIGHT([Copyright (c) 2002-2019 The Xfce development team. All rights reserved.])
+        [https://gitlab.xfce.org/xfce/xfce4-dev-tools/])
+AC_COPYRIGHT([Copyright (c) 2002-2020 The Xfce development team. All rights reserved.])
 AC_CONFIG_MACRO_DIR([m4])
 AC_REVISION([xdt_version_build])
 

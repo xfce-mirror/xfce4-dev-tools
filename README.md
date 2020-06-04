@@ -29,8 +29,8 @@ code in each project.
 
 ## How to report bugs?
 
-Bugs should be reported to the [Xfce bugtracking system](http://bugzilla.xfce.org), 
-product Xfce development tools). You will need to create an account for yourself.
+Bugs should be reported to the [Xfce bugtracking system](https://gitlab.xfce.org/xfce/xfce4-dev-tools/).
+You will need to create an account for yourself.
 
 Please read the file [`HACKING`](HACKING) for information on where to send changes
 or bugfixes for this package.

@@ -1,7 +1,7 @@
 Bug tracking system
 ===================
 
-Please use the Xfce bugtracking system at http://bugzilla.xfce.org/ to report
+Please use the Xfce bugtracking system at https://gitlab.xfce.org/xfce/xfce4-dev-tools/ to report
 bugs and post feature requests.
 
 
@@ -30,8 +30,7 @@ Feature requests
 ================
 
 Please send your feature requests to the Xfce bugtracking system
-(http://bugzilla.xfce.org, product Xfce developer tools) with a Severity of
-enhancement. Make sure that your feature request wasn't reported already
+(https://gitlab.xfce.org/xfce/xfce4-dev-tools) Make sure that your feature request wasn't reported already
 before; requesting a feature several times won't increase the chance that
 it gets added.
 
