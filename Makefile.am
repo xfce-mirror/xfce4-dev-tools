@@ -7,6 +7,7 @@
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 SUBDIRS = 								\
+	helpers								\
 	m4macros							\
 	scripts								\
 	xdt-csource
