@@ -7,4 +7,7 @@ bin_SCRIPTS =								\
 	xfce-get-translations							\
 	xfce-update-news
 
+EXTRA_DIST =								\
+	$(bin_SCRIPTS)
+
 # vi:set ts=8 sw=8 noet ai:
