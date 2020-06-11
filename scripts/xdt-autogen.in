@@ -469,19 +469,6 @@ CONFIGURE_FLAGS="${XDT_CONFIGURE_FLAGS} $@"
 
 
 ##
-## Check for aclocal flags
-##
-XDT_ACLOCAL_FLAGS="${ACLOCAL_FLAGS} ${XDT_ACLOCAL_FLAGS}"
-for path in `echo "${XDG_DATA_DIRS}" | sed 's,:, ,g'`; do
-  if test -d "${path}/xfce4/dev-tools/m4macros"; then
-    XDT_ACLOCAL_FLAGS="${XDT_ACLOCAL_FLAGS} -I ${path}/xfce4/dev-tools/m4macros"
-  elif test -d "${path}/xfce4/dev-tools/m4"; then
-    XDT_ACLOCAL_FLAGS="${XDT_ACLOCAL_FLAGS} -I ${path}/xfce4/dev-tools/m4"
-  fi
-done
-
-
-##
 ## Do the real work(TM)
 ##
 for configure_ac_file in ${CONFIGURE_AC_FILES}; do
@@ -490,7 +477,7 @@ for configure_ac_file in ${CONFIGURE_AC_FILES}; do
   echo "Preparing package directory ${source_dir}..."
 
   # set aclocal flags
-  ACLOCAL_FLAGS="${XDT_ACLOCAL_FLAGS}"
+  ACLOCAL_FLAGS="${ACLOCAL_FLAGS} ${XDT_ACLOCAL_FLAGS}"
   if test -d "${source_dir}/m4macros"; then
     ACLOCAL_FLAGS="${ACLOCAL_FLAGS} -I ${source_dir}/m4macros";
   fi

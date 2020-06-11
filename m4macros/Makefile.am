@@ -4,7 +4,7 @@
 # Written for Xfce by Benedikt Meurer <benny@xfce.org>.
 #
 
-macrodir = $(datadir)/xfce4/dev-tools/m4macros
+macrodir = $(datadir)/aclocal
 macro_DATA =								\
 	xdt-depends.m4							\
 	xdt-features.m4							\
