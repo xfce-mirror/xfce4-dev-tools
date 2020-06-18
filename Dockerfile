@@ -12,7 +12,7 @@ RUN apt-get -y --no-install-recommends install libglib2.0-dev git libtool m4 aut
   && apt-get -y --no-install-recommends build-dep xfce4-panel thunar xfce4-settings xfce4-session xfdesktop4 xfwm4 xfce4-appfinder tumbler \
   && apt-get -y --no-install-recommends build-dep catfish gigolo mousepad parole ristretto xfburn xfce4-dict xfce4-notifyd xfce4-screensaver xfce4-screenshooter xfce4-taskmanager xfce4-terminal \
   && apt-get -y --no-install-recommends build-dep xfce4-clipman-plugin \
-  && apt-get -y --no-install-recommends install libmpd-dev valac
+  && apt-get -y --no-install-recommends install libmpd-dev valac libdbusmenu-gtk3-dev
 
 # Build and install the latest tag for all Xfce core libraries
 RUN mkdir /git
