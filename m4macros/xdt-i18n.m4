@@ -62,7 +62,7 @@ AC_DEFUN([XDT_I18N],
     if test x"$CATOBJEXT" = x".mo"; then
       localedir=$libdir/locale
     else
-      localedir=$datadir/locale
+      localedir=$datarootdir/locale
     fi
   ])
   AC_MSG_RESULT([$localedir])
