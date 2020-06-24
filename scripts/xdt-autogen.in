@@ -30,7 +30,8 @@ XDT_AUTOGEN_VERSION_MICRO="@VERSION_MICRO@"
 XDT_AUTOGEN_VERSION_REVISION="@VERSION_REVISION@"
 
 prefix="@prefix@"
-datarootdir="@prefix@"
+datarootdir="@datarootdir@"
+m4macrodir="${datarootdir}/aclocal"
 
 ##
 ## a few portability tests
@@ -477,7 +478,7 @@ for configure_ac_file in ${CONFIGURE_AC_FILES}; do
   echo "Preparing package directory ${source_dir}..."
 
   # set aclocal flags
-  ACLOCAL_FLAGS="${ACLOCAL_FLAGS} ${XDT_ACLOCAL_FLAGS}"
+  ACLOCAL_FLAGS="${ACLOCAL_FLAGS} ${XDT_ACLOCAL_FLAGS} -I ${m4macrodir}"
   if test -d "${source_dir}/m4macros"; then
     ACLOCAL_FLAGS="${ACLOCAL_FLAGS} -I ${source_dir}/m4macros";
   fi
