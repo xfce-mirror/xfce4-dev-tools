@@ -37,5 +37,9 @@ for URL in ${REPOS}; do
     ./autogen.sh $AUTOGEN_OPTIONS
     make -j${NPROC:-$(nproc)}
     make install
-    echo "$(pwd): $(git describe)" >> /git/xfce_build_version_info.txt
+    echo "$(pwd): $(git describe)" >> /tmp/xfce_build_version_info.txt
 done
+
+# cleanup
+rm -rf /git/*
+mv /tmp/xfce_build_version_info.txt /git/
