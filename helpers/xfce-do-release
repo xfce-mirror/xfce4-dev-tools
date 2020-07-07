@@ -1,0 +1,230 @@
+#!/bin/bash
+
+component=$1
+version=$2
+steps=0
+steps_complete=0
+version_scheme=1
+
+# Check if the working directory is in the state we expect it to be in
+sanity_checks () {
+	is_git=$(git rev-parse --is-inside-work-tree)
+	if [ "$is_git" != "true" ]; then
+		exit 1
+	fi
+	current_branch=$(git rev-parse --abbrev-ref HEAD)
+	if [ "$current_branch" != "master" ]; then
+		if [[ "$current_branch" == *"xfce-4"* ]]; then
+			echo "You are on a maintenance branch."
+		else
+			printf "\e[1mWarning:\e[0m You are not on the master branch.\n"
+			read -n 1 -s -p "Do you really want to continue?"
+		fi
+	fi
+	echo "Updating $current_branch to avoid conflicts..."
+	git pull
+	if [ -n "$(git status --untracked-files=no --porcelain)" ]; then
+		printf "\e[1mWarning:\e[0m The working directory is not clean.\nYou have the following unstaged or uncommitted changes:\n"
+		git status --untracked-files=no -s
+		read -n 1 -s -p "Do you really want to continue?"
+	fi
+	if ! which xfce-test >/dev/null; then
+		echo "INFO: please install xfce-test to support building in a clean environment. See https://github.com/schuellerf/xfce-test"
+	else
+		images=$(docker images|grep -Po "(?<=^schuellerf/xfce-test) +[^ ]+"|tr -d ' ')
+		echo "Select xfce-test docker-tag to work with:"
+		select image in $images; do
+			break
+		done
+
+		if [ -z "$image" ]; then
+			echo "No xfce-test images found or selected. Use 'xfce-test pull' to get one."
+		else
+			export TAG=$image
+			echo "Working with $image"
+		fi
+
+	fi
+}
+
+# Check if the input parameters (component version) were provided
+test_parameters () {
+	# Get the component
+	if [ -n "$1" ]; then
+		echo "Component: $component"
+	else
+		currentdir=${PWD##*/}
+		read -p "Specify a component (Default: '$currentdir') " new_component
+		if [ "$new_component" = "" ]; then
+			component="$(echo "$currentdir")"
+			echo "Component: $component"
+		else
+			component="$(echo "$new_component")"
+			echo "Component: $component"
+		fi
+	fi
+
+	# Get the latest tag and increment the patch version by 1
+	latest_tag=$(git describe --abbrev=0 --match "$component*" 2>/dev/null)
+	if [ "$latest_tag" = "" ]; then
+		echo "Note: This repository does not follow the <component>-<version> schema."
+		latest_tag=$(git describe --abbrev=0)
+		version_scheme=0
+	fi
+
+	if [ $version_scheme = 0 ]; then
+		latest_major=$(echo $latest_tag | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/')
+		latest_minor=$(echo $latest_tag | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\2/')
+		latest_patch=$(echo $latest_tag | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\3/')
+	else
+		latest_major=$(echo $latest_tag | sed 's/\(.*\)-\(.*\)\.\(.*\)\.\(.*\)/\2/')
+		latest_minor=$(echo $latest_tag | sed 's/\(.*\)-\(.*\)\.\(.*\)\.\(.*\)/\3/')
+		latest_patch=$(echo $latest_tag | sed 's/\(.*\)-\(.*\)\.\(.*\)/\3/')
+	fi
+	new_patch=$(echo "$(($latest_patch + 1))")
+
+	# Get the version
+	if [ -n "$2" ]; then
+		echo "Version: $version"
+	else
+		read -p "Specify a version (Default: $latest_major.$latest_minor.$new_patch): " new_version
+		if [ "$new_version" = "" ]; then
+			version="$(echo "$latest_major.$latest_minor.$new_patch")"
+			echo "Version: $version"
+		else
+			if [ "$(git tag | grep -c $new_version\$)" = "1" ]; then
+				read -n 1 -p "\e[1mWarning:\e[0m The version you specified ('$new_version') exists as a git tag. Do you really want to release again?"
+			fi
+			version="$(echo "$new_version")"
+			echo "Version: $version"
+		fi
+	fi
+
+	# Split up the actual version number so we can re-use it later
+	semantic_version=( ${version//./ } )
+	version_major="${semantic_version[0]}"
+	version_minor="${semantic_version[1]}"
+	version_patch="${semantic_version[2]}"
+}
+
+# Print the step info
+step () {
+	printf "\n\n \e[1mStep $steps: $1\e[0m\n ==================\n"
+}
+
+# Just pause for user confirmation
+get_on_with_it () {
+	read -n 1 -p " → Done?"
+	let steps++
+	let steps_complete++
+}
+
+# Ask whether the step should be executed
+run_command () {
+	let steps++
+	read -n 1 -p " → Do it? ([y]es, [n]o, [s]kip)" response
+	printf "\n"
+	if [ "$response" = "y" ]; then
+		eval $1 && eval $2 && eval $3
+		printf "\n ✓ Done."
+		let steps_complete++
+	elif [ "$response" = "s" ]; then
+		printf "\n Step $(( $steps - 1 )) skipped."
+		return
+	else
+		read -n 1 -p " Step $(( $steps - 1 )) aborted. Do you really want to quit? ([y]es, [n]o)" abort
+		if [ "$abort" = "y" ]; then
+			printf "\n Aborted. (Steps complete: $steps_complete)\n"
+			exit 0
+		else
+			printf "\n Step $(( $steps - 1 )) aborted. Continuing...\n"
+			return
+		fi
+	fi
+}
+
+edit () {
+	read -n 1 -p " → Accept? ([y]es, [e]dit" response
+	if [ "$response" = "y" ]; then
+		printf "\n ✓ Accepted.\n"
+	elif [ "$response" = "e" ]; then
+		$(git config --global core.editor) $1
+	fi
+}
+
+update_configure_ac_in () {
+	if [ -f "configure.ac.in" ]; then
+		if [ "$1" = "pre" ]; then
+			sed -i "s/^\(m4_define(\[.*_version_major\].* \[\)\(.*\)\(\])\)/\1$version_major\3/g" configure.ac.in
+			sed -i "s/^\(m4_define(\[.*_version_minor\].* \[\)\(.*\)\(\])\)/\1$version_minor\3/g" configure.ac.in
+			sed -i "s/^\(m4_define(\[.*_version_micro\].* \[\)\(.*\)\(\])\)/\1$version_patch\3/g" configure.ac.in
+			sed -i 's/^\(m4_define(\[.*_version_tag\], \[\)\(git\)\(\])\)/\1\3/g' configure.ac.in
+		elif [ "$1" = "post" ]; then
+			sed -i 's/\(m4_define(\[.*_version_tag\], \[\)\(.*\)\(\])\)/\1git\3/g' configure.ac.in
+		fi
+		git diff configure.ac.in
+	elif [ -f "configure.ac" ]; then
+		if [ "$1" = "pre" ]; then
+			sed -i "s/^\(XDT_VERSION_INIT\s*\)(.*/\1([$version])/" configure.ac
+		elif [ "$1" = "post" ]; then
+			sed -i "s/^\(XDT_VERSION_INIT\s*\)(.*/\1([$version], [git])/" configure.ac
+		fi
+	else
+		echo "There is no 'configure.ac.in' or 'configure.ac' file."
+	fi
+}
+
+get_sha1_hash () {
+	sha1sum $component-$version.tar.bz2 | cut -d ' ' -f 1
+}
+
+# Playbook for all release steps
+run_steps () {
+	step "Update configure.ac.in \e[0m(add new version and remove git tag)"
+	run_command "update_configure_ac_in pre"
+
+	step "Update NEWS file with changelog? \e[0m(xfce-update-news)"
+	run_command "xfce-update-news $component $version"
+	edit NEWS
+
+	step "Build the tarball \e[0m(./autogen.sh && make distcheck)"
+	# either in xfce-test container or on the local machine
+	if [ -n "$TAG" ]; then
+		run_command "xfce-test call ./autogen.sh" "xfce-test call make distcheck"
+	else
+		run_command "./autogen.sh" "make distcheck"
+	fi
+
+	step "Commit the changes \e[0m(git add -u; git commit -m 'Updates for release')"
+	run_command "git add -u" "git commit -m 'Updates for release'"
+
+	step "Tag the version \e[0m(git tag -a $component-$version)"
+	run_command 'git tag -a $component-$version -e -m "$(xfce-update-news $component $version WRITETAG)"'
+
+	step "Push your changes \e[0m(git push && git push --tags)"
+	run_command "git push" "git push --tags"
+
+	step "Log in to the release manager \e[0m(https://releases.xfce.org/)"
+	run_command "exo-open 'https://releases.xfce.org/'"
+
+	step "Click on 'Release New Version' \e[0m(https://releases.xfce.org/project/$component/new-release/tarball)"
+	run_command "exo-open 'https://releases.xfce.org/project/$component/new-release/tarball?checksum=$(get_sha1_hash)'"
+
+	step "Add the git back to version_tag() in configure.ac.in"
+	run_command "update_configure_ac_in post"
+
+	step "Commit and push the change \e[0m(git add -u; git commit -m 'Back to development'; git push)"
+	run_command "git add -u" "git commit -m 'Back to development'" "git push"
+}
+
+### Main loop
+
+main () {
+	sanity_checks
+	test_parameters $component $version
+	run_steps
+
+	printf "\nCongrats, you completed $steps_complete of $steps steps of doing a release for Xfce!\n"
+}
+
+main
