@@ -7,9 +7,13 @@ LAST_TAG=$(git describe --abbrev=0)
 RELEASE_NOTES=$(xfce-get-release-notes "$LAST_TAG" silent)
 TRANSLATIONS=$(xfce-get-translations "$LAST_TAG" "HEAD" silent)
 
-# Check if there is a NEWS file
 if [ "$WRITE_TAG" = "WRITETAG" ]; then
-    printf '%s\n\n%s\n%s\n' $VERSION "$RELEASE_NOTES" "$TRANSLATIONS"
+    # Use release note from NEWS if possible, they may have been edited
+    if [ -f "NEWS" ] && [ "$VERSION" = "$(head -n 1 NEWS)" ]; then
+        sed '/^[[:space:]]*$/q' NEWS
+    else
+        printf '%s\n\n%s\n%s\n' $VERSION "$RELEASE_NOTES" "$TRANSLATIONS"
+    fi
 elif [ ! -f "NEWS" ]; then
     echo "There is no 'NEWS' file. Changelog since $VERSION:"
     printf '%s\n======\n%s\n%s\n\n%s' $VERSION "$RELEASE_NOTES" "$TRANSLATIONS"
