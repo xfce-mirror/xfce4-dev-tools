@@ -3,6 +3,7 @@
 #
 
 bin_SCRIPTS =								\
+	xfce-do-release								\
 	xfce-get-release-notes							\
 	xfce-get-translations							\
 	xfce-update-news
