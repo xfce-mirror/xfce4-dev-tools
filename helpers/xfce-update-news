@@ -24,7 +24,7 @@ elif [ ! -f "NEWS" ]; then
     printf '%s\n======\n%s\n%s\n\n%s' $VERSION "$(cat $RELEASE_NOTES)" "$(cat $TRANSLATIONS)"
     cleanup
 else
-    printf '%s\n======\n%s\n%s\n\n%s' $VERSION "$(cat $RELEASE_NOTES)" "$(cat $TRANSLATIONS)" "$(cat NEWS)" > NEWS
+    printf '%s\n======\n%s\n%s\n\n%s\n' $VERSION "$(cat $RELEASE_NOTES)" "$(cat $TRANSLATIONS)" "$(cat NEWS)" > NEWS
     cleanup
     git diff NEWS
 fi
