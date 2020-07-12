@@ -22,6 +22,8 @@ depcomp
 libtool
 ltmain.sh
 ChangeLog
+test-driver
+tests/.deps
 tests/test-xdt-csource-data.c
 tests/test_xdt_csource-test-*
 tests/test-xdt-csource
