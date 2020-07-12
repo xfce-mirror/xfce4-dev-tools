@@ -10,7 +10,7 @@ TRANSLATIONS=$(xfce-get-translations "$LAST_TAG" "HEAD" silent)
 if [ "$WRITE_TAG" = "WRITETAG" ]; then
     # Use release note from NEWS if possible, they may have been edited
     if [ -f "NEWS" ] && [ "$VERSION" = "$(head -n 1 NEWS)" ]; then
-        sed '/^[[:space:]]*$/q' NEWS
+        sed '/^[[:space:]]*$/q' NEWS | sed 's/======//'
     else
         printf '%s\n\n%s\n%s\n' $VERSION "$RELEASE_NOTES" "$TRANSLATIONS"
     fi
