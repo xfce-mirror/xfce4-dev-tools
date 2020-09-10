@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://gitlab.xfce.org/xfce/xfce4-dev-tools/COPYING)
 
-xfce4-dev-tools
-====================
+# xfce4-dev-tools
+
 
 The Xfce development tools are a collection of tools and macros for
 Xfce developers and people that want to build Xfce from Git In addition
@@ -51,6 +51,7 @@ See [NEWS](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/blob/master/NEWS) for 
 [xfce4-dev-tools archive](https://archive.xfce.org/src/xfce/xfce4-dev-tools)
     or
 [xfce4-dev-tools tags](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/tags)
+
 ### Installation
 
 From source: 
