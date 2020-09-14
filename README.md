@@ -1,10 +1,10 @@
-[![License](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://gitlab.xfce.org/xfce/xfce4-dev-tools/COPYING)
+[![License](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/blob/master/COPYING)
 
 # xfce4-dev-tools
 
 
 The Xfce development tools are a collection of tools and macros for
-Xfce developers and people that want to build Xfce from Git In addition
+Xfce developers and people that want to build Xfce from git. In addition,
 it contains the Xfce developer's handbook.
 
 ----
@@ -22,8 +22,8 @@ docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) \
   -c "cd /tmp; ./autogen.sh && make distcheck"
 ```
 
-The steps to build the container are encoded in the [`Dockerfile`](Dockerfile) in
-this repository, and is built via the build job in [`.gitlab-ci.yml`](.gitlab-ci.yml).
+The steps to build the container are encoded in the [`Dockerfile`](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/blob/master/Dockerfile) in
+this repository, and is built via the build job in [`.gitlab-ci.yml`](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/blob/master/.gitlab-ci.yml).
 
 ## CI templates for Xfce
 
@@ -36,7 +36,7 @@ code in each project.
 
 ### Homepage
 
-[xfce4-dev-tools documentation](https://docs.xfce.org/xfce/xfce4-dev-tools/start)
+[Xfce4-dev-tools documentation](https://docs.xfce.org/xfce/xfce4-dev-tools/start)
 
 ### Changelog
 
@@ -44,13 +44,13 @@ See [NEWS](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/blob/master/NEWS) for 
 
 ### Source Code Repository
 
-[xfce4-dev-tools source code](https://gitlab.xfce.org/xfce/xfce4-dev-tools)
+[Xfce4-dev-tools source code](https://gitlab.xfce.org/xfce/xfce4-dev-tools)
 
-### Download A Release Tarball
+### Download a Release Tarball
 
-[xfce4-dev-tools archive](https://archive.xfce.org/src/xfce/xfce4-dev-tools)
+[Xfce4-dev-tools archive](https://archive.xfce.org/src/xfce/xfce4-dev-tools)
     or
-[xfce4-dev-tools tags](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/tags)
+[Xfce4-dev-tools tags](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/tags)
 
 ### Installation
 
