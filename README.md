@@ -1,8 +1,13 @@
-## What is it?
+[![License](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/blob/master/COPYING)
+
+# xfce4-dev-tools
+
 
 The Xfce development tools are a collection of tools and macros for
-Xfce developers and people that want to build Xfce from Git In addition
+Xfce developers and people that want to build Xfce from git. In addition,
 it contains the Xfce developer's handbook.
+
+----
 
 ## `xfce-build` containerized build environment
 
@@ -17,8 +22,8 @@ docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) \
   -c "cd /tmp; ./autogen.sh && make distcheck"
 ```
 
-The steps to build the container are encoded in the [`Dockerfile`](Dockerfile) in
-this repository, and is built via the build job in [`.gitlab-ci.yml`](.gitlab-ci.yml).
+The steps to build the container are encoded in the [`Dockerfile`](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/blob/master/Dockerfile) in
+this repository, and is built via the build job in [`.gitlab-ci.yml`](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/blob/master/.gitlab-ci.yml).
 
 ## CI templates for Xfce
 
@@ -27,10 +32,44 @@ Xfce projects, as well as supporting scripts such as `build_libs.sh` which handl
 building any needed dependencies. This helps us avoid repeating the same build
 code in each project.
 
-## How to report bugs?
+----
 
-Bugs should be reported to the [Xfce bugtracking system](https://gitlab.xfce.org/xfce/xfce4-dev-tools/).
-You will need to create an account for yourself.
+### Homepage
 
-Please read the file [`HACKING`](HACKING) for information on where to send changes
-or bugfixes for this package.
+[Xfce4-dev-tools documentation](https://docs.xfce.org/xfce/xfce4-dev-tools/start)
+
+### Changelog
+
+See [NEWS](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/blob/master/NEWS) for details on changes and fixes made in the current release.
+
+### Source Code Repository
+
+[Xfce4-dev-tools source code](https://gitlab.xfce.org/xfce/xfce4-dev-tools)
+
+### Download a Release Tarball
+
+[Xfce4-dev-tools archive](https://archive.xfce.org/src/xfce/xfce4-dev-tools)
+    or
+[Xfce4-dev-tools tags](https://gitlab.xfce.org/xfce/xfce4-dev-tools/-/tags)
+
+### Installation
+
+From source: 
+
+    % cd xfce4-dev-tools
+    % ./autogen.sh
+    % make
+    % make install
+
+From release tarball:
+
+    % tar xf xfce4-dev-tools-<version>.tar.bz2
+    % cd xfce4-dev-tools-<version>
+    % ./configure
+    % make
+    % make install
+
+### Reporting Bugs
+
+Visit the [reporting bugs](https://docs.xfce.org/xfce/xfce4-dev-tools/bugs) page to view currently open bug reports and instructions on reporting new bugs or submitting bugfixes.
+
