@@ -51,7 +51,9 @@ fi
 ##
 parse_configure_subdirs()
 {
-  test -f "$1" && cat "$1" | tr '\\n\\t\\\\' '   ' | sed -ne 's|.*AC_CONFIG_SUBDIRS(\[\{0,1\}\([[:alnum:]_ @/-]\{1,\}\).*|\1|p'
+  test -f "$1" && sed -n -e 's|\\[\\nt]| |g' \
+                         -e 's|.*AC_CONFIG_SUBDIRS(\[\{0,1\}\([[:alnum:]_ @/-]\{1,\}\).*|\1|p' \
+                      "$1"
 }
 
 ##
@@ -231,7 +233,11 @@ if test x"$1" = x"clean"; then
     echo "Cleaning generated files in ${directory}..."
 
     # determine the output files used in this package directory
-    output_files=`tr '\\n\\t\\\\' '   ' < ${configure_ac_file} | sed -ne 's|.*AC_OUTPUT(\[\{0,1\}\([[:alnum:]_@/\. -]\{1,\}\).*|\1|p'`;
+    output_files=$(
+      sed -n -e 's|\\[\\nt]| |g' \
+             -e 's|.*AC_OUTPUT(\[\{0,1\}\([[:alnum:]_@/\. -]\{1,\}\).*|\1|p' \
+          "${configure_ac_file}"
+    )
     for output_file in $output_files; do
       if test x`basename $output_file` = x"Makefile"; then
         rm -f "${directory}/${output_file}.in";
@@ -260,7 +266,11 @@ if test x"$1" = x"clean"; then
      fi)
 
     # determine translations used in this package directory
-#    translations=`tr '\\n\\\\' '  ' < ${configure_ac_file} | sed -ne 's/.*XDT_I18N(\[\{0,1\}\([a-zA-Z_@ ]\{1,\}\).*/\1/p'`;
+#    translations=$(
+#      sed -n -e 's|\\[\\nt]| |g' \
+#             -e 's|.*XDT_I18N(\[\{0,1\}\([a-zA-Z_@ ]\{1,\}\).*|\1|p') \
+#          "${configure_ac_file}"
+#    )
 #    for translation in $translations; do
 #      rm -f "${directory}/po/${translation}.gmo";
 #    done
