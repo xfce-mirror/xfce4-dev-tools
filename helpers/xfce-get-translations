@@ -8,7 +8,7 @@ STARTTAG="${1:-$LAST_TAG}"
 ENDTAG="${2:-HEAD}"
 SILENT="${3:-}"
 
-LINE_LENGTH=72
+LINE_LENGTH=70 # 72 considering 2 spaces for indentation
 INDENT="  "
 
 UPDATES=$(git log --pretty=format:'%s' "$STARTTAG".."$ENDTAG" -- po/*.po | awk '{print $(NF-1)}' | sort -u)
