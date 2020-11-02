@@ -9,7 +9,7 @@ dnl ***************************
 dnl *** Version information ***
 dnl ***************************
 
-XDT_VERSION_INIT([4.15.0], [git])
+XDT_VERSION_INIT([4.15.1], [git])
 
 dnl # DO NOT MODIFY ANYTHING BELOW THIS LINE, UNLESS YOU KNOW WHAT
 dnl # YOU ARE DOING.

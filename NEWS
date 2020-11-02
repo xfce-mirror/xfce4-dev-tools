@@ -1,3 +1,29 @@
+4.15.1
+======
+
+Various improvements to the helpers introduced in 4.15.0,
+cleanup of xdt-autogen code, various fixes for our CI.
+
+- get-translations: Fix line wrapping
+- xdt-autogen: Various small improvements
+- xdt-autogen: Properly handle whitespaces in filenames
+- xdt-autogen: Use sed instead of tr to replace strings
+- Updates README.md
+- xfce-build: Add libclutter-1.0-dev for xfdashboard build
+- Update .gitignore
+- helpers: Use blank line for tags message
+- helpers: Reuse release notes from NEWS for tag message
+- helpers: Simplify xfce-update-news
+- helpers: Do not strip NEWS blank line at EOF
+- helpers: Install xfce-do-release
+- xfce-build: Add depend for mousepad (Fixes #37)
+- helpers: Add do-release helper and Readme
+- xfce-build: Install python3 version of distutils-extra
+- helpers: Make get-translations executable
+- get-translations: Remove last comma
+- get-translations: Correctly get locale from commit messages
+- xfce-build: Replace build-dep with package names
+
 4.15.0
 ======
 
