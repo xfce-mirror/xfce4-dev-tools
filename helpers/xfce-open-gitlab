@@ -31,4 +31,4 @@ fi
 URL="$GITLAB/$GROUP/$REPO/$SLUG"
 
 echo "Opening $URL in your browser..."
-xdg-open $URL
+exo-open $URL
