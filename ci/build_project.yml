@@ -33,7 +33,7 @@ distcheck:
 
 .make:
   before_script:
-    - ./autogen.sh
+    - env "CFLAGS=-Wall -Wno-deprecated-declarations -Werror=implicit-function-declaration -Werror=return-type" ./autogen.sh
   rules:
     # If there are changes to .po, never run. We also check
     # BEFORE_SHA to see if it is zeros, in which case we are
