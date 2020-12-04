@@ -117,6 +117,14 @@ AC_DEFUN([XDT_CHECK_PACKAGE],
     AC_SUBST([$1_LIBS])
     AC_SUBST([$1_REQUIRED_VERSION])
 
+    if test x"$1" = x"GLIB"; then
+      dnl Report uses of GLib functions newer than 2.56 as C compiler warnings.
+      dnl XFCE apps&libraries can override this setting after XDT_CHECK_PACKAGE(GLIB)
+      dnl using AC_DEFINE, in which case it is recommended to override both MAX and MIN.
+      AC_DEFINE(GLIB_VERSION_MAX_ALLOWED, GLIB_VERSION_2_56, [Prevent post 2.56 APIs])
+      AC_DEFINE(GLIB_VERSION_MIN_REQUIRED, GLIB_VERSION_2_56, [Ignore post 2.56 deprecations])
+    fi
+
     ifelse([$4], , , [$4])
   elif $PKG_CONFIG --exists "$2" >/dev/null 2>&1; then
     xdt_cv_version=`$PKG_CONFIG --modversion "$2"`
