@@ -3,6 +3,7 @@
 #
 
 bin_SCRIPTS =								\
+	xfce-build								\
 	xfce-do-release								\
 	xfce-get-release-notes							\
 	xfce-get-translations							\

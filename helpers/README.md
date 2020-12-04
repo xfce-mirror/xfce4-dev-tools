@@ -1,6 +1,9 @@
 # xfce-helpers
 Just some small helpers for developing Xfce
 
+## xfce-build
+A script to locally run the same build we run on GitLab CI.
+
 ## xfce-do-release
 A quick playbook that goes through my steps when doing an Xfce release, with all the steps that could be automated.
 
