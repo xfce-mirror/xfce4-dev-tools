@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Just a small script that runs the same build that we have on gitlab-ci locally.
+
+CONTAINER="xfce/xfce-build"
+VERSION="latest"
+CFLAGS="-Wall -Wno-deprecated-declarations -Werror=implicit-function-declaration -Werror=return-type"
+VOLUME=$(pwd)
+BUILD_CMD='cd /tmp; ./autogen.sh && make distcheck'
+
+if [ -z "$1" ]; then
+	VERSION="latest"
+else
+	VERSION=$1
+fi
+
+# Make sure we're running the latest version
+docker pull xfce/xfce-build:$VERSION
+
+docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) --volume $VOLUME:/tmp --env CFLAGS="${CFLAGS}" $CONTAINER:$VERSION /bin/bash -c "${BUILD_CMD}"
+
+printf "\n---\nBuilt using container $CONTAINER:$VERSION on $VOLUME\n"
