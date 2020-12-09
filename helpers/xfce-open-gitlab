@@ -4,23 +4,23 @@
 
 GITLAB="https://gitlab.xfce.org"
 APPS="xfce4-screensaver
-			xfmpc
-			xfdashboard
-			xfce4-volumed-pulse
-			xfce4-terminal
-			xfce4-taskmanager
-			xfce4-screenshooter
-			xfce4-panel-profiles
-			xfce4-notifyd
-			xfce4-mixer
-			xfce4-dict
-			xfburn
-			ristretto
-			parole
-			mousepad
-			gigolo
-			catfish
-			"
+	xfmpc
+	xfdashboard
+	xfce4-volumed-pulse
+	xfce4-terminal
+	xfce4-taskmanager
+	xfce4-screenshooter
+	xfce4-panel-profiles
+	xfce4-notifyd
+	xfce4-mixer
+	xfce4-dict
+	xfburn
+	ristretto
+	parole
+	mousepad
+	gigolo
+	catfish
+	"
 
 # Check if we're in a git repo and get the name
 is_git=$(git rev-parse --is-inside-work-tree)
