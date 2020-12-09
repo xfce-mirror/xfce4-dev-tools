@@ -16,13 +16,6 @@ AUTOGEN_OPTIONS="
   --enable-gtk-doc
 "
 
-CFLAGS="
-  -Wall
-  -Wno-deprecated-declarations
-  -Werror=implicit-function-declaration
-  -Werror=return-type
-"
-
 # list of git repos in build order
 REPOS="${XFCE_BASE}/xfce/xfce4-dev-tools.git
   ${XFCE_BASE}/xfce/libxfce4util.git
@@ -41,7 +34,7 @@ for URL in ${REPOS}; do
     TAG=$(git describe --abbrev=0 --match "$NAME*" 2>/dev/null)
     echo "--- Building $NAME ($TAG) ---"
     git checkout -b build-$TAG $TAG
-    env "CFLAGS=${CFLAGS}" ./autogen.sh $AUTOGEN_OPTIONS
+    ./autogen.sh $AUTOGEN_OPTIONS
     make -j${NPROC:-$(nproc)}
     make install
     echo "$(pwd): $(git describe)" >> /tmp/xfce_build_version_info.txt
