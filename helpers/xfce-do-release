@@ -28,7 +28,10 @@ sanity_checks () {
 		git status --untracked-files=no -s
 		read -n 1 -s -p "Do you really want to continue?"
 	fi
-	if ! which xfce-test >/dev/null; then
+	if which xfce-build >/dev/null; then
+		export TAG="xfce-build"
+		echo "Working with the 'xfce-build' script and container."
+	elif ! which xfce-test >/dev/null; then
 		echo "INFO: please install xfce-test to support building in a clean environment. See https://github.com/schuellerf/xfce-test"
 	else
 		images=$(docker images|grep -Po "(?<=^schuellerf/xfce-test) +[^ ]+"|tr -d ' ')
@@ -188,9 +191,13 @@ run_steps () {
 	edit NEWS
 
 	step "Build the tarball \e[0m(./autogen.sh && make distcheck)"
-	# either in xfce-test container or on the local machine
+	# either in the xfce-build or xfce-test container or on the local machine
 	if [ -n "$TAG" ]; then
-		run_command "xfce-test call ./autogen.sh" "xfce-test call make distcheck"
+		if [[ "$TAG" == "xfce-build" ]]; then
+			run_command "xfce-build"
+		else
+			run_command "xfce-test call ./autogen.sh" "xfce-test call make distcheck"
+		fi
 	else
 		run_command "./autogen.sh" "make distcheck"
 	fi
