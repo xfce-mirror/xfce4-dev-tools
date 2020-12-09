@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Small script to open the current projects GitLab page
+# You can supply an argument to get to the respective subpage (e.g. "issues" or "tags")
+
+GITLAB="https://gitlab.xfce.org"
+APPS="xfce4-screensaver
+	xfmpc
+	xfdashboard
+	xfce4-volumed-pulse
+	xfce4-terminal
+	xfce4-taskmanager
+	xfce4-screenshooter
+	xfce4-panel-profiles
+	xfce4-notifyd
+	xfce4-mixer
+	xfce4-dict
+	xfburn
+	ristretto
+	parole
+	mousepad
+	gigolo
+	catfish
+	"
+
+# Check if we're in a git repo and get the name
+is_git=$(git rev-parse --is-inside-work-tree)
+if [ "$is_git" != "true" ]; then
+	exit 1
+else
+	REPO=$(basename `git rev-parse --show-toplevel`)
+fi
+
+# Guess the GitLab group name
+if [[ $APPS == *"$REPO"* ]]; then
+	GROUP="apps"
+elif [[ "$REPO" =~ "thunar-" ]]; then
+	GROUP="thunar-plugins"
+elif [[ "$REPO" =~ "-plugin" ]]; then
+	GROUP="panel-plugins"
+else
+	GROUP="xfce"
+fi
+
+# Use the argument to go to subpages
+if [ -n "$1" ]; then
+	SLUG="-/$1"
+else
+	SLUG=""
+fi
+
+URL="$GITLAB/$GROUP/$REPO/$SLUG"
+
+echo "Opening $URL in your browser..."
+exo-open $URL
