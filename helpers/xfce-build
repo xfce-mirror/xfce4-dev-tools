@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # Just a small script that runs the same build that we have on gitlab-ci locally.
+# Possible arguments:
+#  - the version of the xfce-build container (if you want to build with a special version)
+#  - 'pull' to simply update the container and exit
 
 CONTAINER="xfce/xfce-build"
 VERSION="latest"
@@ -8,15 +11,23 @@ CFLAGS="-Wall -Wno-deprecated-declarations -Werror=implicit-function-declaration
 VOLUME=$(pwd)
 BUILD_CMD='cd /tmp; ./autogen.sh && make distcheck'
 
+docker_pull () {
+	docker pull xfce/xfce-build:$VERSION
+}
+
 if [ -z "$1" ]; then
 	VERSION="latest"
+elif [[ "$1" == "pull" ]]; then
+	docker_pull
+	exit 0
 else
 	VERSION=$1
 fi
 
 # Make sure we're running the latest version
-docker pull xfce/xfce-build:$VERSION
+docker_pull
 
+# Run the build in the docker container
 docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) --volume $VOLUME:/tmp --env CFLAGS="${CFLAGS}" $CONTAINER:$VERSION /bin/bash -c "${BUILD_CMD}"
 
 printf "\n---\nBuilt using container $CONTAINER:$VERSION on $VOLUME\n"
