@@ -26,6 +26,7 @@ REPOS="${XFCE_BASE}/xfce/xfce4-dev-tools.git
   ${XFCE_BASE}/xfce/exo.git
   ${XFCE_BASE}/xfce/garcon.git
   ${XFCE_BASE}/xfce/xfce4-panel.git
+  ${XFCE_BASE}/xfce/thunar.git
 "
 
 for URL in ${REPOS}; do
