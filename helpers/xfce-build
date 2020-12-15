@@ -4,6 +4,8 @@
 # Possible arguments:
 #  - the version of the xfce-build container (if you want to build with a special version)
 #  - 'pull' to simply update the container and exit
+#  - 'version' as second positional argument after an actual version (e.g. xfce-build latest version)
+#     to print all git versions built in the container by build_libs.sh
 
 CONTAINER="xfce/xfce-build"
 VERSION="latest"
@@ -15,6 +17,12 @@ docker_pull () {
 	docker pull xfce/xfce-build:$VERSION
 }
 
+docker_run () {
+	# Run the build in the docker container
+	docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) --volume $VOLUME:/tmp --env CFLAGS="${CFLAGS}" $CONTAINER:$VERSION /bin/bash -c "${BUILD_CMD}"
+}
+
+# Parse the commandline arguments
 if [ -z "$1" ]; then
 	VERSION="latest"
 elif [[ "$1" == "pull" ]]; then
@@ -22,12 +30,14 @@ elif [[ "$1" == "pull" ]]; then
 	exit 0
 else
 	VERSION=$1
+	if [[ "$2" == "version" ]]; then
+		BUILD_CMD='cat /git/xfce_build_version_info.txt'
+		docker_run
+		exit 0
+	fi
 fi
 
-# Make sure we're running the latest version
+# Run the local build
 docker_pull
-
-# Run the build in the docker container
-docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) --volume $VOLUME:/tmp --env CFLAGS="${CFLAGS}" $CONTAINER:$VERSION /bin/bash -c "${BUILD_CMD}"
-
+docker_run
 printf "\n---\nBuilt using container $CONTAINER:$VERSION on $VOLUME\n"
