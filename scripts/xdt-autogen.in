@@ -190,11 +190,8 @@ for configure_ac_in_file in $CONFIGURE_AC_IN_FILES; do
     revision="UNKNOWN"
   fi
 
-  # find out what languages we support
-  conf_dir=$(dirname "$configure_ac_file")
-  linguas=$(find "$conf_dir/po" -type f -name '*.po' -printf "%f " | sed 's/\.po//g')
-
   # and do the substitution
+  # We don't need @LINGUAS@ list anymore because it is generated from xdt-i18n.m4
   tmp=$(basename "${configure_ac_in_file}")
   cat >"$configure_ac_file" <<EOF
 dnl
@@ -204,7 +201,7 @@ dnl
 
 EOF
   sed -e "s/@REVISION@/${revision}/g" \
-      -e "s/@LINGUAS@/${linguas}/g" \
+      -e "s/@LINGUAS@//g" \
       "$configure_ac_in_file" >> "$configure_ac_file"
 
 done
