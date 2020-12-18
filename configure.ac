@@ -64,12 +64,12 @@ AC_CHECK_HEADERS([libintl.h locale.h memory.h stdio.h stdlib.h string.h])
 dnl ***********************************
 dnl *** Check for required packages ***
 dnl ***********************************
-PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.42.0])
+PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.50.0])
 
 dnl **********************
 dnl *** Generate files ***
 dnl **********************
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 helpers/Makefile
 m4macros/Makefile
@@ -80,5 +80,6 @@ docs/Makefile
 tests/Makefile
 tests/data/Makefile
 ])
+AC_OUTPUT
 
 dnl vi:set ts=2 sw=2 et ai:
