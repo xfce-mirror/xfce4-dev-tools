@@ -1,3 +1,18 @@
+4.16.0
+======
+- Bump glib to 2.50 based on xfce4.16 roadmap
+- Do not process @LINGUAS@ at xdt-autogen stage
+- xfce-build: Add Thunar to container (Fixes #40)
+- helpers: Add xfce-build 'pull' argument
+- Fail xfce-build container generation if there is any error
+- helpers: Prefer xfce-build over xfce-test (Fixes #38)
+- helpers: Add new helper xfce-open-gitlab
+- Disable CFLAGS override when building CI container
+- use strict CFLAGS to catch common mistakes in ci pipeline
+- helpers: Add helper to locally run xfce-build
+- Add xvfb on xfce-build
+
+
 4.15.1
 ======
 
@@ -265,4 +280,3 @@ this is no longer necessary to use a separate configure.ac.in and a plain config
 =====
 - xfce4-dev-tools is a new module in SVN, which includes tools, macros and
   documentation for Xfce developers.
-
