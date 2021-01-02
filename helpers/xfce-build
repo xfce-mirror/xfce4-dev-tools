@@ -19,7 +19,7 @@ docker_pull () {
 
 docker_run () {
 	# Run the build in the docker container
-	docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) --volume $VOLUME:/tmp --env CFLAGS="${CFLAGS}" $CONTAINER:$VERSION /bin/bash -c "${BUILD_CMD}"
+	docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) --volume $VOLUME:/tmp --env CFLAGS="${CFLAGS}" --env CONTAINER=$CONTAINER --env VERSION=$VERSION $CONTAINER:$VERSION /bin/bash -c "${BUILD_CMD}"
 }
 
 # Parse the commandline arguments
@@ -28,13 +28,13 @@ if [ -z "$1" ]; then
 elif [[ "$1" == "pull" ]]; then
 	docker_pull
 	exit 0
-else
-	VERSION=$1
-	if [[ "$2" == "version" ]]; then
-		BUILD_CMD='cat /git/xfce_build_version_info.txt'
-		docker_run
-		exit 0
+elif [[ "$1" == "describe" ]]; then
+	if [[ ! -z "$2" ]]; then
+			VERSION="$2"
 	fi
+	BUILD_CMD='printf "\e[1m$CONTAINER:$VERSION contains:\e[0m\n";cat /git/xfce_build_version_info.txt'
+	docker_run
+	exit 0
 fi
 
 # Run the local build
