@@ -26,7 +26,7 @@ dnl
 
 
 dnl We need recent a autoconf version
-AC_PREREQ([2.60])
+AC_PREREQ([2.69])
 
 
 dnl XDT_SUPPORTED_FLAGS(VAR, FLAGS)
@@ -58,9 +58,8 @@ AC_DEFUN([XDT_FEATURE_DEBUG],
 [
   dnl weird indentation to keep output indentation correct
   AC_ARG_ENABLE([debug],
-                AC_HELP_STRING([--enable-debug@<:@=no|minimum|yes|full@:>@],
-                               [Build with debugging support @<:@default=m4_default([$1], [minimum])@:>@])
-AC_HELP_STRING([--disable-debug], [Include no debugging support]),
+                AS_HELP_STRING([--enable-debug@<:@=no|minimum|yes|full@:>@],[Build with debugging support @<:@default=m4_default([$1], [minimum])@:>@])
+AS_HELP_STRING([--disable-debug],[Include no debugging support]),
                 [enable_debug=$enableval], [enable_debug=m4_default([$1], [minimum])])
 
   AC_MSG_CHECKING([whether to build with debugging support])
@@ -135,8 +134,7 @@ dnl
 AC_DEFUN([XDT_FEATURE_VISIBILITY],
 [
   AC_ARG_ENABLE([visibility],
-                AC_HELP_STRING([--disable-visibility],
-                               [Don't use ELF visibility attributes]),
+                AS_HELP_STRING([--disable-visibility],[Don't use ELF visibility attributes]),
                 [enable_visibility=$enableval], [enable_visibility=yes])
   have_gnuc_visibility=no
   if test "x$enable_visibility" != "xno"; then
@@ -188,8 +186,7 @@ dnl
 AC_DEFUN([XDT_FEATURE_LINKER_OPTS],
 [
   AC_ARG_ENABLE([linker-opts],
-                AC_HELP_STRING([--disable-linker-opts],
-                               [Disable linker optimizations]),
+                AS_HELP_STRING([--disable-linker-opts],[Disable linker optimizations]),
                 [enable_linker_opts=$enableval], [enable_linker_opts=yes])
 
   if test "x$enable_linker_opts" != "xno"; then

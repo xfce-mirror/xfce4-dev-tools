@@ -45,7 +45,7 @@ dnl
 dnl Example usage:
 dnl
 dnl XDT_VERSION_INIT([4.15.3],[git])
-dnl AC_INIT([xfce4-someproject], [xdt_version()])
+dnl AC_INIT([xfce4-someproject],[xdt_version()])
 dnl ...
 dnl XDT_FEATURE_DEBUG([xdt_debug_default])
 dnl

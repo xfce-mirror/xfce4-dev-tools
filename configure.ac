@@ -58,7 +58,6 @@ LT_INIT([disable-static])
 dnl ***************************************
 dnl *** Check for standard header files ***
 dnl ***************************************
-AC_HEADER_STDC()
 AC_CHECK_HEADERS([libintl.h locale.h memory.h stdio.h stdlib.h string.h])
 
 dnl ***********************************
