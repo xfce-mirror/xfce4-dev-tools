@@ -56,7 +56,7 @@ AC_DEFUN([XDT_I18N],
   AC_MSG_CHECKING([for locales directory])
   AC_ARG_WITH([locales-dir], 
   [
-    AC_HELP_STRING([--with-locales-dir=DIR], [Install locales into DIR])
+    AS_HELP_STRING([--with-locales-dir=DIR],[Install locales into DIR])
   ], [localedir=$withval],
   [
     if test x"$CATOBJEXT" = x".mo"; then

@@ -26,7 +26,7 @@ dnl
 
 
 dnl We need recent a autoconf version
-AC_PREREQ([2.60])
+AC_PREREQ([2.69])
 
 
 
@@ -175,8 +175,8 @@ AC_DEFUN([XDT_CHECK_OPTIONAL_PACKAGE],
   AC_REQUIRE([XDT_PROG_PKG_CONFIG])
 
   AC_ARG_ENABLE([$4],
-AC_HELP_STRING([--enable-$4], [Enable checking for $5 (default=m4_default([$6], [yes]))])
-AC_HELP_STRING([--disable-$4], [Disable checking for $5]),
+AS_HELP_STRING([--enable-$4],[Enable checking for $5 (default=m4_default([$6], [yes]))])
+AS_HELP_STRING([--disable-$4],[Disable checking for $5]),
     [xdt_cv_$1_check=$enableval], [xdt_cv_$1_check=m4_default([$6], [yes])])
 
   if test x"$xdt_cv_$1_check" = x"yes"; then
