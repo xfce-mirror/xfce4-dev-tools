@@ -47,7 +47,6 @@ AC_DEFUN([XDT_I18N],
     [$1],
     [esyscmd([echo $(for i in po/*.po; do test -e "$i" && basename -- "$i" .po; done) | tr -d '\n'])],
     [$1])"
-  AM_GLIB_GNU_GETTEXT()
 
   dnl This is required on some Linux systems
   AC_CHECK_FUNC([bind_textdomain_codeset])
