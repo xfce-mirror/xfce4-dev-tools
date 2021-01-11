@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (c) 2002-2019
+# Copyright (c) 2002-2021
 #         The Xfce development team. All rights reserved.
 #
 # Written for Xfce by Benedikt Meurer <benny@xfce.org>.
@@ -19,13 +19,8 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-
-(libtoolize &&
- aclocal -I m4macros &&
- automake --add-missing --copy &&
- autoconf) || exit 1
-
-test -d m4 || mkdir m4
+mkdir -p m4
+autoreconf --verbose --install --force || exit 1
 
 if test x"${NOCONFIGURE}" = x""; then
   (./configure --enable-maintainer-mode "$@" &&
