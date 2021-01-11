@@ -45,14 +45,10 @@ AC_PROG_CC()
 AM_PROG_CC_C_O()
 AC_PROG_INSTALL()
 
-dnl The libtool version is not only used here, but also in a warning
-dnl in the xdt-autogen script (to not confuse developers using
-dnl xfce4-dev-tools). Maybe one day this warning will become obsolete,
-dnl then it is safe to only use the version directly in the LT_PREREQ
-dnl statement, until then it is necessary to define it as is.
-m4_define([xdt_version_libtool], [2.4])
-AC_SUBST([VERSION_LIBTOOL], [xdt_version_libtool])
-LT_PREREQ(xdt_version_libtool())
+dnl **************************
+dnl *** Initialize libtool ***
+dnl **************************
+LT_PREREQ([2.4])
 LT_INIT([disable-static])
 
 dnl ***************************************
