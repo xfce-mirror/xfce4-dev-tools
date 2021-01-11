@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (c) 2002-2019
+# Copyright (c) 2002-2020
 #         The Xfce development team. All rights reserved.
 #
 # Written for Xfce by Benedikt Meurer <benny@xfce.org>.
@@ -20,10 +20,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-(libtoolize &&
- aclocal -I m4macros &&
- automake --add-missing --copy &&
- autoconf) || exit 1
+(autoreconf --verbose --install --force) || exit 1
 
 test -d m4 || mkdir m4
 
