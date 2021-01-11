@@ -75,7 +75,8 @@ AS_HELP_STRING([--disable-debug],[Include no debugging support]),
                               -Wmissing-noreturn -Wpointer-arith \
                               -Wcast-align -Wformat -Wformat-security -Wformat-y2k \
                               -Winit-self -Wmissing-include-dirs -Wundef \
-                              -Wnested-externs"
+                              -Wnested-externs \
+                              -Werror=implicit-function-declaration -Werror=return-type"
     CPPFLAGS="$CPPFLAGS"
 
     if test x`uname` = x"Linux"; then
