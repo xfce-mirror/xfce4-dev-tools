@@ -47,7 +47,6 @@ AC_DEFUN([XDT_I18N],
     [$1],
     [esyscmd([echo $(for i in po/*.po; do test -e "$i" && basename -- "$i" .po; done) | tr -d '\n'])],
     [$1])"
-  AM_GLIB_GNU_GETTEXT()
 
   dnl This is required on some Linux systems
   AC_CHECK_FUNC([bind_textdomain_codeset])
@@ -67,15 +66,5 @@ AC_DEFUN([XDT_I18N],
   ])
   AC_MSG_RESULT([$localedir])
   AC_SUBST([localedir])
-
-  dnl Determine additional xgettext flags
-  AC_MSG_CHECKING([for additional xgettext flags])
-  if test x"$XGETTEXT_ARGS" = x""; then
-    XGETTEXT_ARGS="--keyword=Q_ --from-code=UTF-8";
-  else
-    XGETTEXT_ARGS="$XGETTEXT_ARGS --keyword=Q_ --from-code=UTF-8";
-  fi
-  AC_SUBST([XGETTEXT_ARGS])
-  AC_MSG_RESULT([$XGETTEXT_ARGS])
 ])
 
