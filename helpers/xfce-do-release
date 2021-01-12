@@ -148,7 +148,7 @@ edit () {
 	if [ "$response" = "y" ]; then
 		printf "\n ✓ Accepted.\n"
 	elif [ "$response" = "e" ]; then
-		$(git config --global core.editor) $1
+		$(git config --default "${EDITOR:-vi}" --global core.editor) $1
 	fi
 }
 
