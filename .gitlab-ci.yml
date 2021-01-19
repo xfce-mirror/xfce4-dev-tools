@@ -2,7 +2,7 @@ include:
   - project: 'xfce/xfce4-dev-tools'
     file: '/ci/build_project.yml'
 
-# In addition to building xfce4-dev-tools itself, we build the xfce-build 
+# In addition to building xfce4-dev-tools itself, we build the xfce-build
 # container and deploy it to DockerHub.
 build-container:
   variables:
@@ -13,7 +13,7 @@ build-container:
     # CI_REGISTRY_USER=your_user
     # CI_REGISTRY_PASSWORD=********
     IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-    LATEST_TAG: $CI_REGISTRY_IMAGE:latest    
+    LATEST_TAG: $CI_REGISTRY_IMAGE:latest
   image: docker:19.03.8
   # The container build is in the .pre stage in order to ensure it is
   # subsequently used for the included build.
@@ -21,13 +21,16 @@ build-container:
   services:
     - docker:19.03.8-dind
   script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE_TAG -t $LATEST_TAG .
+    # Export the API docs to the runner so we can publish them
+    - docker create --name xfce-docs $IMAGE_TAG
+    - docker cp xfce-docs:/docs apidocs
+    - docker rm -f xfce-docs
     # This will push to the branch name tag
-    - docker push $IMAGE_TAG
+    - if [ -z "$CI_REGISTRY_PASSWORD" ]; then docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY && docker push $IMAGE_TAG; else echo Skipping pushing the image; fi
     # May eventually want to add some tests before latest is pushed?
     # In any case, only push latest if we are building master.
-    - if [ $CI_COMMIT_BRANCH == "master" ]; then docker push $LATEST_TAG; else echo Skipping latest tag on non-master branch; fi 
+    - if [ $CI_COMMIT_BRANCH == "master" ]; then docker push $LATEST_TAG; else echo Skipping latest tag on non-master branch; fi
   rules:
      # Set to only run on the branches of the official repo and when there
      # are relevant changes
@@ -38,3 +41,6 @@ build-container:
       when: always
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
       when: always
+  artifacts:
+    paths:
+      - apidocs

@@ -37,11 +37,11 @@ distcheck:
   rules:
     # If there are changes to .po, never run. We also check
     # BEFORE_SHA to see if it is zeros, in which case we are
-    # running on a manual trigger or scheduled pipeline. In 
+    # running on a manual trigger or scheduled pipeline. In
     # that case, changes resolves to true so we need to check
     # both.
     - if: '$CI_COMMIT_BEFORE_SHA != "0000000000000000000000000000000000000000"'
-      changes: 
+      changes:
       - "po/*.po"
       when: never
     # Otherwise, always run
@@ -50,7 +50,7 @@ distcheck:
 .translation:
   rules:
     # If there are changes to .po, run this job
-    - changes: 
+    - changes:
       - "po/*.po"
       when: always
     # Otherwise, never run
