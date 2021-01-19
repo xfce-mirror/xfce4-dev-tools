@@ -497,15 +497,6 @@ for configure_ac_file in ${CONFIGURE_AC_FILES}; do
   source_dir=$(dirname "${configure_ac_file}")
   echo "Preparing package directory ${source_dir}..."
 
-  # set aclocal flags
-  ACLOCAL_FLAGS="${ACLOCAL_FLAGS} ${XDT_ACLOCAL_FLAGS} -I ${m4macrodir}"
-  if test -d "${source_dir}/m4macros"; then
-    ACLOCAL_DIR_1="${source_dir}/m4macros";
-  fi
-  if test -d "${source_dir}/m4"; then
-    ACLOCAL_DIR_2="${source_dir}/m4";
-  fi
-
   if $EGREP -q "^(AC|IT)_PROG_INTLTOOL" "${configure_ac_file}"; then
     ( echo "Running ${XDT_PROG_INTLTOOLIZE} --automake --copy --force" \
       && cd "${source_dir}" \
@@ -522,6 +513,15 @@ for configure_ac_file in ${CONFIGURE_AC_FILES}; do
     ( echo "Running ${XDT_PROG_GTKDOCIZE} --copy..." \
       && cd "${source_dir}" \
       && ${XDT_PROG_GTKDOCIZE} --copy ) || exit 1
+  fi
+
+  # set aclocal flags
+  ACLOCAL_FLAGS="${ACLOCAL_FLAGS} ${XDT_ACLOCAL_FLAGS} -I ${m4macrodir}"
+  if test -d "${source_dir}/m4macros"; then
+    ACLOCAL_DIR_1="${source_dir}/m4macros";
+  fi
+  if test -d "${source_dir}/m4"; then
+    ACLOCAL_DIR_2="${source_dir}/m4";
   fi
 
   ( echo -n "Running ${XDT_PROG_ACLOCAL}" ${ACLOCAL_FLAGS} \
