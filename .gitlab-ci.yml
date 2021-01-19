@@ -24,7 +24,7 @@ build-container:
     - docker build -t $IMAGE_TAG -t $LATEST_TAG .
     # Export the API docs to the runner so we can publish them
     - docker create --name xfce-docs $IMAGE_TAG
-    - docker cp xfce-docs:/docs apidocs
+    - docker cp xfce-docs:/docs/. apidocs
     - docker rm -f xfce-docs
     # This will push to the branch name tag
     # May eventually want to add some tests before latest is pushed?
