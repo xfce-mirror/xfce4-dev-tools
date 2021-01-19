@@ -43,4 +43,4 @@ build-container:
       when: always
   artifacts:
     paths:
-      - docs
+      - apidocs
