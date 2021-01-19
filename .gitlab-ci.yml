@@ -27,8 +27,7 @@ build-container:
     - docker cp xfce-docs:/docs docs
     - docker rm -f xfce-docs
     # This will push to the branch name tag
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker push $IMAGE_TAG
+    - if [ -z "$CI_REGISTRY_PASSWORD" ]; then docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY && docker push $IMAGE_TAG; else echo Skipping pushing the image; fi
     # May eventually want to add some tests before latest is pushed?
     # In any case, only push latest if we are building master.
     - if [ $CI_COMMIT_BRANCH == "master" ]; then docker push $LATEST_TAG; else echo Skipping latest tag on non-master branch; fi
