@@ -11,7 +11,6 @@ workflow:
 stages:
   - build
   - distcheck
-  - docs
 
 translations:
   extends: .translation
@@ -32,27 +31,17 @@ distcheck:
   script:
     - make distcheck
 
-docs:
-  stage: docs
-  script:
-    - docker create --name xfce/xfce-docs xfce/xfce-build
-    - docker cp xfce/xfce-docs:/docs docs
-    - docker rm -f xfce/xfce-docs
-  artifacts:
-    paths:
-      - docs
-
 .make:
   before_script:
     - env "CFLAGS=-Wall -Wno-deprecated-declarations -Werror=implicit-function-declaration -Werror=return-type" ./autogen.sh
   rules:
     # If there are changes to .po, never run. We also check
     # BEFORE_SHA to see if it is zeros, in which case we are
-    # running on a manual trigger or scheduled pipeline. In 
+    # running on a manual trigger or scheduled pipeline. In
     # that case, changes resolves to true so we need to check
     # both.
     - if: '$CI_COMMIT_BEFORE_SHA != "0000000000000000000000000000000000000000"'
-      changes: 
+      changes:
       - "po/*.po"
       when: never
     # Otherwise, always run
@@ -61,7 +50,7 @@ docs:
 .translation:
   rules:
     # If there are changes to .po, run this job
-    - changes: 
+    - changes:
       - "po/*.po"
       when: always
     # Otherwise, never run
