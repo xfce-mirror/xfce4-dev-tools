@@ -27,10 +27,9 @@ build-container:
     - docker cp xfce-docs:/docs apidocs
     - docker rm -f xfce-docs
     # This will push to the branch name tag
-    - if [ -z "$CI_REGISTRY_PASSWORD" ]; then docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY && docker push $IMAGE_TAG; else echo Skipping pushing the image; fi
     # May eventually want to add some tests before latest is pushed?
     # In any case, only push latest if we are building master.
-    - if [ $CI_COMMIT_BRANCH == "master" ]; then docker push $LATEST_TAG; else echo Skipping latest tag on non-master branch; fi
+    - if [ $CI_COMMIT_BRANCH == "master" ]; then docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY && docker push $IMAGE_TAG && docker push $LATEST_TAG; else echo Skipping pushing the image on non-master branch; fi
   rules:
      # Set to only run on the branches of the official repo and when there
      # are relevant changes
