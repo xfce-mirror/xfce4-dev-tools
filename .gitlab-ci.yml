@@ -23,7 +23,9 @@ build-container:
   script:
     - docker build -t $IMAGE_TAG -t $LATEST_TAG .
     # Export the API docs to the runner so we can publish them
-    - docker cp $IMAGE_TAG:/docs docs
+    - docker create --name xfce-docs $IMAGE_TAG
+    - docker cp xfce-docs:/docs docs
+    - docker rm -f xfce-docs
     # This will push to the branch name tag
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $IMAGE_TAG
