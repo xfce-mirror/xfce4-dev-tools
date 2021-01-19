@@ -11,6 +11,7 @@ workflow:
 stages:
   - build
   - distcheck
+  - docs
 
 translations:
   extends: .translation
