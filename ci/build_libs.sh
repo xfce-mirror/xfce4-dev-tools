@@ -41,6 +41,14 @@ for URL in ${REPOS}; do
     make -j${NPROC:-$(nproc)}
     make install
     echo "$(pwd): $(git describe)" >> /tmp/xfce_build_version_info.txt
+    # Retain HTML docs in /docs
+    if [[ -d "$(pwd)/docs" ]]; then
+      HTMLPATH=$(find "$(pwd)/docs" -name html)
+      if [[ ! -z "$HTMLPATH" ]]; then
+        mkdir -p "/docs/$NAME"
+        cp -a "$HTMLPATH/." "/docs/$NAME"
+      fi
+    fi
 done
 
 # cleanup
