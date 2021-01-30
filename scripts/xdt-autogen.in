@@ -412,6 +412,9 @@ CONFIGURE_FLAGS="${XDT_CONFIGURE_FLAGS} $*"
 ##
 ## Do the real work(TM)
 ##
+# We need to create m4 directory in case it does not exists yet, to avoid any aclocal warnings
+mkdir -p m4
+
 IFS=$special_IFS
 for configure_ac_file in ${CONFIGURE_AC_FILES}; do
   IFS=$default_IFS
