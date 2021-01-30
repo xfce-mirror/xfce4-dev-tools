@@ -413,6 +413,7 @@ CONFIGURE_FLAGS="${XDT_CONFIGURE_FLAGS} $*"
 ## Do the real work(TM)
 ##
 IFS=$special_IFS
+mkdir -p m4
 for configure_ac_file in ${CONFIGURE_AC_FILES}; do
   IFS=$default_IFS
   # figure out the package dir path
