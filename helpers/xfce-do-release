@@ -28,10 +28,12 @@ sanity_checks () {
 		git status --untracked-files=no -s
 		read -n 1 -s -p "Do you really want to continue?"
 	fi
-	if which xfce-build >/dev/null; then
+	if ! which docker &>/dev/null; then
+		echo "INFO: please install docker to support building in a clean environment."
+	elif which xfce-build &>/dev/null; then
 		export TAG="xfce-build"
 		echo "Working with the 'xfce-build' script and container."
-	elif ! which xfce-test >/dev/null; then
+	elif ! which xfce-test &>/dev/null; then
 		echo "INFO: please install xfce-test to support building in a clean environment. See https://github.com/schuellerf/xfce-test"
 	else
 		images=$(docker images|grep -Po "(?<=^schuellerf/xfce-test) +[^ ]+"|tr -d ' ')
