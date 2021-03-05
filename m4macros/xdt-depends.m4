@@ -117,6 +117,18 @@ AC_DEFUN([XDT_CHECK_PACKAGE],
     AC_SUBST([$1_LIBS])
     AC_SUBST([$1_REQUIRED_VERSION])
 
+    ifelse([$1], GLIB, [
+      dnl Report uses of GLib functions newer than $3 as C compiler warnings.
+      dnl XFCE apps&libraries can override this setting after XDT_CHECK_PACKAGE(GLIB)
+      dnl using AC_DEFINE, in which case it is recommended to override both MAX and MIN.
+      AC_MSG_NOTICE([setting GLIB_VERSION_MAX_ALLOWED and GLIB_VERSION_MIN_REQUIRED according to $3])
+      m4_pushdef([SUFFIX], translit($3, `.', `_'))
+      m4_define([SUFFIX], ifelse(regexp(SUFFIX, [[0-9]+_[0-9]+_[0-9]+]), -1, SUFFIX, patsubst(SUFFIX, [_[0-9]+$])))
+      AC_DEFINE(GLIB_VERSION_MAX_ALLOWED, m4_format(GLIB_VERSION_%s, SUFFIX), m4_format(Prevent post %s APIs, SUFFIX))
+      AC_DEFINE(GLIB_VERSION_MIN_REQUIRED, m4_format(GLIB_VERSION_%s, SUFFIX), m4_format(Ignore post %s APIs, SUFFIX))
+      m4_popdef([SUFFIX])
+    ])
+
     ifelse([$4], , , [$4])
   elif $PKG_CONFIG --exists "$2" >/dev/null 2>&1; then
     xdt_cv_version=`$PKG_CONFIG --modversion "$2"`
