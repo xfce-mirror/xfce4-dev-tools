@@ -283,15 +283,6 @@ if test "$1" = "clean"; then
       }
     )
 
-    # determine translations used in this package directory
-#    translations=$(
-#      sed -n -e 's|\\[\\nt]| |g' \
-#             -e 's|.*XDT_I18N(\[\{0,1\}\([a-zA-Z_@ ]\{1,\}\).*|\1|p') \
-#          "${configure_ac_file}"
-#    )
-#    for translation in $translations; do
-#      rm -f "${directory}/po/${translation}.gmo"
-#    done
     rm -f "${directory}"/po/*.gmo;
   done
 
@@ -302,20 +293,19 @@ fi
 ##
 ## Check for autoconf
 ##
-if test -z "${XDT_PROG_AUTOCONF}"; then
-  test -z "${AUTOCONF_VERSION}" && i=autoconf || i=autoconf-${AUTOCONF_VERSION}
-  ${i} --version </dev/null >/dev/null 2>&1 && XDT_PROG_AUTOCONF=${i}
+if test -z "${XDT_PROG_AUTORECONF}"; then
+  test -z "${AUTOCONF_VERSION}" && i=autoreconf || i=autoreconf-${AUTOCONF_VERSION}
+  ${i} --version </dev/null >/dev/null 2>&1 && XDT_PROG_AUTORECONF=${i}
 fi
 
-test -z "${XDT_PROG_AUTOCONF}" && {
+test -z "${XDT_PROG_AUTORECONF}" && {
   cat >&2 <<EOF
 xdt-autogen: You must have "autoconf" installed on your system.
              Download the appropriate package for your distribution,
-             or get the source tarball at ftp://ftp.gnu.org/pub/gnu/.
+             or get the source tarball at https://www.gnu.org/software/autoconf/.
 EOF
   exit 1
 }
-
 
 ##
 ## Check for intltoolize
@@ -329,7 +319,7 @@ for configure_ac_file in $CONFIGURE_AC_FILES; do
       cat >&2 <<EOF
 xdt-autogen: You must have "intltool" installed on your system.
              You can download the source tarball from
-             ftp://ftp.gnome.org/pub/GNOME/.
+             https://launchpad.net/intltool.
 EOF
       exit 1
     }
@@ -356,41 +346,15 @@ done
 ##
 ## Check for libtoolize
 ##
-if test -z "${XDT_PROG_LIBTOOLIZE}"; then
-  if type glibtoolize >/dev/null 2>&1; then
-    XDT_PROG_LIBTOOLIZE="glibtoolize"
-  elif type libtoolize >/dev/null 2>&1; then
-    XDT_PROG_LIBTOOLIZE="libtoolize"
-  fi
-fi
-
+test -z "${XDT_PROG_LIBTOOLIZE}" && XDT_PROG_LIBTOOLIZE="libtoolize"
 IFS=$special_IFS
 for configure_ac_file in $CONFIGURE_AC_FILES; do
   IFS=$default_IFS
-  runlibtoolize=0
-  if grep -q "^AC_PROG_LIBTOOL" "${configure_ac_file}"; then
-  cat >&2 <<EOF
-xdt-autogen: It is recommended to use LT_PREREQ([@VERSION_LIBTOOL@]) and
-             LT_INIT([disable-static]) in your configure.ac
-             file and remove AC_PROG_LIBTOOL and AC_DISABLE_STATIC.
-
-             See https://bugzilla.xfce.org/show_bug.cgi?id=6920 for
-             more information.
-
-EOF
-    runlibtoolize=1
-  fi
-
   if grep -q "^LT_PREREQ" "${configure_ac_file}"; then
-    runlibtoolize=1
-  fi
-
-  if test "$runlibtoolize" -eq 1; then
     ${XDT_PROG_LIBTOOLIZE} --version </dev/null >/dev/null 2>&1 || {
       cat >&2 <<EOF
-xdt-autogen: You must have "libtool" installed on your system.
-             Download the appropriate package for your distribution,
-             or get the source tarball at ftp://ftp.gnu.org/pub/gnu/.
+xdt-autogen: You must have "libtoolize" installed. You can get if from
+             https://www.gnu.org/software/libtool/.
 EOF
       exit 1
     }
@@ -409,51 +373,9 @@ for configure_ac_file in $CONFIGURE_AC_FILES; do
   if grep -q "^GTK_DOC_CHECK" "${configure_ac_file}"; then
     ${XDT_PROG_GTKDOCIZE} --version </dev/null >/dev/null 2>&1 || {
       cat >&2 <<EOF
-xdt-autogen: You must have "gtk-doc" installed. You can get if from
-             http://www.gtk.org/gtk-doc/.
-EOF
-      exit 1
-    }
-    break
-  fi
-done
-
-
-##
-## Check for aclocal
-##
-if test -z "${XDT_PROG_ACLOCAL}"; then
-  test -z "${ACLOCAL_VERSION}" && i=aclocal || i=aclocal-${ACLOCAL_VERSION}
-  ${i} --version </dev/null >/dev/null 2>&1 && XDT_PROG_ACLOCAL=${i}
-fi
-
-test -z "${XDT_PROG_ACLOCAL}" && {
-  cat >&2 <<EOF
-xdt-autogen: You must have "automake" installed (which includes the
-             "aclocal" tool). You can get the source tarball at
-             ftp://ftp.gnu.org/pub/gnu/.
-EOF
-  exit 1
-}
-
-
-##
-## Check for autoheader
-##
-test -z "${XDT_PROG_AUTOHEADER}" &&
-IFS=$special_IFS
-for configure_ac_file in $CONFIGURE_AC_FILES; do
-  IFS=$default_IFS
-  if $EGREP -q "^A(M|C)_CONFIG_HEADER" "${configure_ac_file}"; then
-    test -z "${AUTOHEADER_VERSION}" && i=autoheader \
-                                    || i=autoheader-${AUTOHEADER_VERSION}
-    ${i} --version </dev/null >/dev/null 2>&1 && XDT_PROG_AUTOHEADER=${i}
-
-    test -z "${XDT_PROG_AUTOHEADER}" && {
-      cat >&2 <<EOF
-xdt-autogen: You must have "autoconf" installed (which includes the
-             "autoheader" tool). You can get the source tarball at
-             ftp://ftp.gnu.org/pub/gnu/.
+xdt-autogen: You must have "gtk-doc" installed.
+             Download the appropriate package for your distribution,
+             or get the source tarball at https://www.gtk.org.
 EOF
       exit 1
     }
@@ -474,7 +396,7 @@ test -z "${XDT_PROG_AUTOMAKE}" && {
   cat >&2 <<EOF
 xdt-autogen: You must have "automake" installed on your system.
              You can get the source tarball at
-             ftp://ftp.gnu.org/pub/gnu/.
+             https://www.gnu.org/software/automake/.
 EOF
   exit 1
 }
@@ -490,6 +412,9 @@ CONFIGURE_FLAGS="${XDT_CONFIGURE_FLAGS} $*"
 ##
 ## Do the real work(TM)
 ##
+# We need to create m4 directory in case it does not exists yet, to avoid any aclocal warnings
+mkdir -p m4
+
 IFS=$special_IFS
 for configure_ac_file in ${CONFIGURE_AC_FILES}; do
   IFS=$default_IFS
@@ -497,25 +422,12 @@ for configure_ac_file in ${CONFIGURE_AC_FILES}; do
   source_dir=$(dirname "${configure_ac_file}")
   echo "Preparing package directory ${source_dir}..."
 
-  # set aclocal flags
-  ACLOCAL_FLAGS="${ACLOCAL_FLAGS} ${XDT_ACLOCAL_FLAGS} -I ${m4macrodir}"
-  if test -d "${source_dir}/m4macros"; then
-    ACLOCAL_DIR_1="${source_dir}/m4macros";
-  fi
-  if test -d "${source_dir}/m4"; then
-    ACLOCAL_DIR_2="${source_dir}/m4";
-  fi
-
+  # For autoconf 2.69, we need to run intltool and gtkdocize manually
+  # If we are still using autotools once 2.70 is the minimum version required, we can remove theses run
   if $EGREP -q "^(AC|IT)_PROG_INTLTOOL" "${configure_ac_file}"; then
     ( echo "Running ${XDT_PROG_INTLTOOLIZE} --automake --copy --force" \
       && cd "${source_dir}" \
       && ${XDT_PROG_INTLTOOLIZE} --automake --copy --force ) || exit 1
-  fi
-
-  if grep -q -e "^AC_PROG_LIBTOOL" -e "^LT_PREREQ" "${configure_ac_file}"; then
-    ( echo "Running ${XDT_PROG_LIBTOOLIZE} --force --copy..." \
-      && cd "${source_dir}" \
-      && ${XDT_PROG_LIBTOOLIZE} --force --copy ) || exit 1
   fi
 
   if grep -q "^GTK_DOC_CHECK" "${configure_ac_file}"; then
@@ -524,28 +436,9 @@ for configure_ac_file in ${CONFIGURE_AC_FILES}; do
       && ${XDT_PROG_GTKDOCIZE} --copy ) || exit 1
   fi
 
-  ( echo -n "Running ${XDT_PROG_ACLOCAL}" ${ACLOCAL_FLAGS} \
-            ${ACLOCAL_DIR_1:+-I "${ACLOCAL_DIR_1}"} \
-            ${ACLOCAL_DIR_2:+-I "${ACLOCAL_DIR_2}"} \
-    && echo '...' \
-    && cd "${source_dir}" \
-    && ${XDT_PROG_ACLOCAL} ${ACLOCAL_FLAGS} \
-         ${ACLOCAL_DIR_1:+-I "${ACLOCAL_DIR_1}"} \
-         ${ACLOCAL_DIR_2:+-I "${ACLOCAL_DIR_2}"} ) || exit 1
-
-  if $EGREP -q "^A(M|C)_CONFIG_HEADER" "${configure_ac_file}"; then
-    ( echo "Running ${XDT_PROG_AUTOHEADER}..." \
-      && cd "${source_dir}" \
-      && ${XDT_PROG_AUTOHEADER} ) || exit 1
-  fi
-
-  ( echo "Running ${XDT_PROG_AUTOMAKE} --force-missing --add-missing --copy --gnu..." \
-    && cd "${source_dir}" \
-    && ${XDT_PROG_AUTOMAKE} --force-missing --add-missing --copy --gnu ) || exit 1
-
-  ( echo "Running ${XDT_PROG_AUTOCONF}..." \
-    && cd "${source_dir}" \
-    && ${XDT_PROG_AUTOCONF} ) || exit 1
+  ( echo "Running ${XDT_PROG_AUTORECONF}..." \
+  && cd "${source_dir}" \
+  && ${XDT_PROG_AUTORECONF} --verbose --install --force) || exit 1
 
   echo
 done
