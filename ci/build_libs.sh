@@ -3,6 +3,7 @@
 set -euo pipefail
 
 XFCE_BASE=https://gitlab.xfce.org
+RELEASE=xfce-4.16
 
 : ${libdir:="/usr/lib/x86_64-linux-gnu"}
 : ${libexecdir:="/usr/lib/x86_64-linux-gnu"}
@@ -34,6 +35,7 @@ for URL in ${REPOS}; do
     cd /git
     git clone $URL
     cd $NAME
+    git checkout $RELEASE
     TAG=$(git describe --abbrev=0 --match "$NAME*" 2>/dev/null)
     echo "--- Building $NAME ($TAG) ---"
     git checkout -b build-$TAG $TAG
