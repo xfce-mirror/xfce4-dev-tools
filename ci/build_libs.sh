@@ -3,7 +3,7 @@
 set -euo pipefail
 
 XFCE_BASE=https://gitlab.xfce.org
-RELEASE=xfce-4.16
+RELEASE=xfce-4.14
 
 : ${libdir:="/usr/lib/x86_64-linux-gnu"}
 : ${libexecdir:="/usr/lib/x86_64-linux-gnu"}
