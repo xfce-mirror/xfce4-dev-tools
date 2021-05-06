@@ -7,17 +7,7 @@
 bin_SCRIPTS =								\
 	xdt-autogen
 
-xdt-autogen: Makefile xdt-autogen.in
-	rm -f xdt-autogen xdt-autogen.gen
-	sed -e 's,\@DATADIR\@,$(datadir),g' \
-		xdt-autogen.in \
-		> xdt-autogen.gen
-	mv xdt-autogen.gen xdt-autogen
-
 CLEANFILES =								\
 	xdt-autogen
-
-DISTCLEANFILES =							\
-	xdt-autogen.in
 
 # vi:set ts=8 sw=8 noet ai:

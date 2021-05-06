@@ -1,0 +1,45 @@
+include:
+  - project: 'xfce/xfce4-dev-tools'
+    file: '/ci/build_project.yml'
+
+# In addition to building xfce4-dev-tools itself, we build the xfce-build
+# container and deploy it to DockerHub.
+build-container:
+  variables:
+    CI_REGISTRY: "docker.io"
+    CI_REGISTRY_IMAGE: "index.docker.io/xfce/xfce-build"
+    DOCKER_TLS_CERTDIR: "/certs"
+    # Set secrets in project environment variables as follows:
+    # CI_REGISTRY_USER=your_user
+    # CI_REGISTRY_PASSWORD=********
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    LATEST_TAG: $CI_REGISTRY_IMAGE:latest
+  image: docker:19.03.8
+  # The container build is in the .pre stage in order to ensure it is
+  # subsequently used for the included build.
+  stage: .pre
+  services:
+    - docker:19.03.8-dind
+  script:
+    - docker build -t $IMAGE_TAG -t $LATEST_TAG .
+    # Export the API docs to the runner so we can publish them
+    - docker create --name xfce-docs $IMAGE_TAG
+    - docker cp xfce-docs:/docs/. apidocs
+    - docker rm -f xfce-docs
+    # This will push to the branch name tag
+    # May eventually want to add some tests before latest is pushed?
+    # In any case, only push latest if we are building master.
+    - if [ $CI_COMMIT_BRANCH == "master" ]; then docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY && docker push $IMAGE_TAG && docker push $LATEST_TAG; else echo Skipping pushing the image on non-master branch; fi
+  rules:
+     # Set to only run on the branches of the official repo and when there
+     # are relevant changes
+    - if: '$CI_PROJECT_PATH == "xfce/xfce4-dev-tools"'
+      changes:
+        - "Dockerfile"
+        - "ci/build_libs.sh"
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      when: always
+  artifacts:
+    paths:
+      - apidocs

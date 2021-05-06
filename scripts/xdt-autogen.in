@@ -1,0 +1,460 @@
+#!/bin/sh
+#
+# Copyright (c) 2002-2020
+#         The Xfce development team. All rights reserved.
+#
+# Written for Xfce by Benedikt Meurer <benny@xfce.org>.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+# xdt-autogen - Part of the Xfce developer tools.
+#
+
+VERSION="@VERSION@"
+
+XDT_AUTOGEN_VERSION_MAJOR="@VERSION_MAJOR@"
+XDT_AUTOGEN_VERSION_MINOR="@VERSION_MINOR@"
+XDT_AUTOGEN_VERSION_MICRO="@VERSION_MICRO@"
+XDT_AUTOGEN_VERSION_REVISION="@VERSION_REVISION@"
+
+prefix="@prefix@"
+datarootdir="@datarootdir@"
+m4macrodir="${datarootdir}/aclocal"
+
+##
+## to properly handle whitespaces in filenames,
+## and more generally special characters different from '\1'
+##
+
+default_IFS=$IFS
+special_IFS=$(printf '\1')
+
+##
+## a few portability tests
+##
+
+if test -z "$EGREP"; then
+  if type egrep >/dev/null 2>&1; then
+    EGREP=egrep
+  else
+    EGREP="grep -E"
+  fi
+fi
+
+##
+## figures out any subdirs that should be configured as a part
+## of recursive configure.
+##
+parse_configure_subdirs()
+{
+  test -f "$1" && sed -n -e 's|\\[\\nt]| |g' \
+                         -e 's|.*AC_CONFIG_SUBDIRS(\[\{0,1\}\([[:alnum:]_ @/-]\{1,\}\).*|\1|p' \
+                      "$1"
+}
+
+##
+## Helper function to look up configure.{in,ac} files recursively.
+##
+lookup_configure_ac_files()
+{
+  configure_ac_file=""
+
+  if test -f "$1/configure.ac"; then
+    configure_ac_file="$1/configure.ac";
+  elif test -f "$1/configure.in"; then
+    configure_ac_file="$1/configure.in";
+  else
+    cat >&2 <<EOF
+xdt-autogen: Directory "$1" does not look like a package
+             directory, neither configure.ac nor configure.in is
+             present.
+EOF
+    exit 1
+  fi
+
+  test -n "$configure_ac_file" && printf "%s$special_IFS" "$configure_ac_file"
+
+  subdirs=$(parse_configure_subdirs "${configure_ac_file}")
+  IFS=$special_IFS
+  for subdir in $subdirs; do
+    IFS=$default_IFS
+    lookup_configure_ac_files "$1/$subdir";
+  done
+}
+
+##
+## Helper function to look up configure.{in,ac}.in files recursively.
+##
+lookup_configure_ac_in_files()
+{
+  configure_ac_in_file=""
+
+  if test -f "$1/configure.ac.in"; then
+    configure_ac_in_file="$1/configure.ac.in";
+  elif test -f "$1/configure.in.in"; then
+    configure_ac_in_file="$1/configure.in.in";
+  fi
+
+  test -n "$configure_ac_in_file" && printf "%s$special_IFS" "$configure_ac_in_file"
+
+  subdirs=$(parse_configure_subdirs "${configure_ac_in_file}")
+  IFS=$special_IFS
+  for subdir in $subdirs; do
+    IFS=$default_IFS
+    lookup_configure_ac_in_files "$1/$subdir";
+  done
+}
+
+
+
+##
+## check command-line args
+##
+if test "$1" = "--version" -o "$1" = "-V"; then
+  echo "$(basename "$0") $VERSION"
+  exit 0
+fi
+
+##
+## see if the caller is requesting a minimum version
+##
+do_version_check() {
+  test -z "$XDT_AUTOGEN_REQUIRED_VERSION" && return 0
+
+  major=$(echo "$XDT_AUTOGEN_REQUIRED_VERSION" | cut -d. -f1)
+  test -n "$major" || return 1
+  test "$major" -le "$XDT_AUTOGEN_VERSION_MAJOR" || return 1
+  test "$XDT_AUTOGEN_VERSION_MAJOR" -gt "$major" && return 0
+
+  minor=$(echo "$XDT_AUTOGEN_REQUIRED_VERSION" | cut -d. -f2)
+  test -n "$minor" || return 1
+  test "$minor" -le "$XDT_AUTOGEN_VERSION_MINOR" || return 1
+  test "$XDT_AUTOGEN_VERSION_MINOR" -gt "$minor" && return 0
+
+  micro=$(echo "$XDT_AUTOGEN_REQUIRED_VERSION" | cut -d. -f3)
+  test -n "$micro" || return 1
+  test "$micro" -le "$XDT_AUTOGEN_VERSION_MICRO" || return 1
+  test "$XDT_AUTOGEN_VERSION_MICRO" -gt "$micro" && return 0
+
+  return 0
+}
+
+if ! do_version_check; then
+          cat >&2 <<EOF
+xdt-autogen: This version of xdt-autogen ($VERSION) is too old.
+             Version $XDT_AUTOGEN_REQUIRED_VERSION or greater is required.
+EOF
+
+  exit 1
+fi
+
+##
+## Determine XDG data dirs
+##
+test -z "${XDG_DATA_HOME}" && XDG_DATA_HOME="${HOME}/.local/share"
+test -z "${XDG_DATA_DIRS}" && XDG_DATA_DIRS="/usr/local/share:/usr/share"
+test -d "@datadir@" && XDG_DATA_DIRS="@datadir@:${XDG_DATA_DIRS}"
+XDG_DATA_DIRS="${XDG_DATA_HOME}:${XDG_DATA_DIRS}"
+export XDG_DATA_DIRS XDG_DATA_HOME
+
+
+MASTER_DIR=$PWD; test -z "${MASTER_DIR}" && MASTER_DIR="."
+
+##
+## First we do some substitutions to generate configure.{ac,in} if necessary
+##
+CONFIGURE_AC_IN_FILES=$(lookup_configure_ac_in_files "$MASTER_DIR")
+IFS=$special_IFS
+for configure_ac_in_file in $CONFIGURE_AC_IN_FILES; do
+  IFS=$default_IFS
+  configure_ac_file=${configure_ac_in_file%.in}
+
+  # first generate a revision id
+  if test -d .git; then
+    revision=$(git rev-parse --short HEAD)
+  fi
+
+  if test -z "$revision"; then
+    revision="UNKNOWN"
+  fi
+
+  # and do the substitution
+  # We don't need @LINGUAS@ list anymore because it is generated from xdt-i18n.m4
+  tmp=$(basename "${configure_ac_in_file}")
+  cat >"$configure_ac_file" <<EOF
+dnl
+dnl This file was autogenerated from "${tmp}".
+dnl Edit that file instead!
+dnl
+
+EOF
+  sed -e "s/@REVISION@/${revision}/g" \
+      -e "s/@LINGUAS@//g" \
+      "$configure_ac_in_file" >> "$configure_ac_file"
+
+done
+
+
+##
+## Search for the configure.{ac,in} files
+##
+CONFIGURE_AC_FILES=$(lookup_configure_ac_files "$MASTER_DIR")
+
+
+##
+## Check for a suitable make
+##
+if test -z "${MAKE}"; then
+  if type gmake >/dev/null 2>/dev/null; then
+    MAKE="gmake"
+  elif type make >/dev/null 2>/dev/null; then
+    MAKE="make"
+  else
+    cat >&2 <<EOF
+xdt-autogen: You must have "make" installed on your system.
+EOF
+    exit 1
+  fi
+  export MAKE
+fi
+
+
+##
+## cleanup autogenerated files
+##
+if test "$1" = "clean"; then
+  IFS=$special_IFS
+  for configure_ac_file in $CONFIGURE_AC_FILES; do
+    IFS=$default_IFS
+    directory=$(dirname "${configure_ac_file}")
+    
+    echo "Running ${MAKE} distclean in ${directory}..."
+    ( cd "${directory}" && ${MAKE} distclean ) >/dev/null 2>&1
+
+    echo "Cleaning generated files in ${directory}..."
+
+    # determine the output files used in this package directory
+    output_files=$(
+      sed -n -e 's|\\[\\nt]| |g' \
+             -e 's|.*AC_OUTPUT(\[\{0,1\}\([[:alnum:]_@/\. -]\{1,\}\).*|\1|p' \
+          "${configure_ac_file}"
+    )
+    # we are in the repository here: these filenames don't contain whitespaces
+    # nor special characters: no need to change the IFS
+    for output_file in $output_files; do
+      if test "$(basename "$output_file")" = "Makefile"; then
+        rm -f "${directory}/${output_file}.in"
+        rm -f "${directory}/${output_file}.in.in"
+      fi
+      rm -f "${directory}/${output_file}"
+    done
+
+    (
+      cd "${directory}" && {
+        rm -f config.* configure configure.lineno aclocal.m4
+        rm -f compile depcomp ltmain.sh missing install-sh
+        rm -f po/Makefile.in.in po/stamp-it
+        rm -f stamp-h1 ./*.spec
+        rm -f mkinstalldirs libtool
+        rm -rf autom4te.cache m4 gtk-doc.m4
+        rm -f intltool-* gtk-doc.make
+        rm -f test-driver
+
+        if test -f po/POTFILES.in; then
+          rm -f po/POTFILES
+        fi
+        if test -f configure.ac.in -a -f configure.ac; then
+          rm -f configure.ac
+        elif test -f configure.in.in -a -f configure.in; then
+          rm -f configure.in
+        fi
+      }
+    )
+
+    rm -f "${directory}"/po/*.gmo;
+  done
+
+  exit 0
+fi
+
+
+##
+## Check for autoconf
+##
+if test -z "${XDT_PROG_AUTORECONF}"; then
+  test -z "${AUTOCONF_VERSION}" && i=autoreconf || i=autoreconf-${AUTOCONF_VERSION}
+  ${i} --version </dev/null >/dev/null 2>&1 && XDT_PROG_AUTORECONF=${i}
+fi
+
+test -z "${XDT_PROG_AUTORECONF}" && {
+  cat >&2 <<EOF
+xdt-autogen: You must have "autoconf" installed on your system.
+             Download the appropriate package for your distribution,
+             or get the source tarball at https://www.gnu.org/software/autoconf/.
+EOF
+  exit 1
+}
+
+##
+## Check for intltoolize
+##
+test -z "${XDT_PROG_INTLTOOLIZE}" && XDT_PROG_INTLTOOLIZE="intltoolize"
+IFS=$special_IFS
+for configure_ac_file in $CONFIGURE_AC_FILES; do
+  IFS=$default_IFS
+  if $EGREP -q "^(AC|IT)_PROG_INTLTOOL" "${configure_ac_file}"; then
+    ${XDT_PROG_INTLTOOLIZE} --version </dev/null >/dev/null 2>&1 || {
+      cat >&2 <<EOF
+xdt-autogen: You must have "intltool" installed on your system.
+             You can download the source tarball from
+             https://launchpad.net/intltool.
+EOF
+      exit 1
+    }
+    break
+  fi
+done
+
+IFS=$special_IFS
+for configure_ac_file in $CONFIGURE_AC_FILES; do
+  IFS=$default_IFS
+  if grep -q "^AC_PROG_INTLTOOL" "${configure_ac_file}"; then
+  cat >&2 <<EOF
+xdt-autogen: It is recommended to use IT_PROG_INTLTOOL([0.35.0])
+             in your configure.ac file and remove AC_PROG_INTLTOOL
+
+             See https://bugzilla.xfce.org/show_bug.cgi?id=8930 for
+             more information.
+
+EOF
+  fi
+done
+
+
+##
+## Check for libtoolize
+##
+test -z "${XDT_PROG_LIBTOOLIZE}" && XDT_PROG_LIBTOOLIZE="libtoolize"
+IFS=$special_IFS
+for configure_ac_file in $CONFIGURE_AC_FILES; do
+  IFS=$default_IFS
+  if grep -q "^LT_PREREQ" "${configure_ac_file}"; then
+    ${XDT_PROG_LIBTOOLIZE} --version </dev/null >/dev/null 2>&1 || {
+      cat >&2 <<EOF
+xdt-autogen: You must have "libtoolize" installed. You can get if from
+             https://www.gnu.org/software/libtool/.
+EOF
+      exit 1
+    }
+    break
+  fi
+done
+
+
+##
+## Check for gtkdocize
+##
+test -z "${XDT_PROG_GTKDOCIZE}" && XDT_PROG_GTKDOCIZE="gtkdocize"
+IFS=$special_IFS
+for configure_ac_file in $CONFIGURE_AC_FILES; do
+  IFS=$default_IFS
+  if grep -q "^GTK_DOC_CHECK" "${configure_ac_file}"; then
+    ${XDT_PROG_GTKDOCIZE} --version </dev/null >/dev/null 2>&1 || {
+      cat >&2 <<EOF
+xdt-autogen: You must have "gtk-doc" installed.
+             Download the appropriate package for your distribution,
+             or get the source tarball at https://www.gtk.org.
+EOF
+      exit 1
+    }
+    break
+  fi
+done
+
+
+##
+## Check for automake
+##
+if test -z "${XDT_PROG_AUTOMAKE}"; then
+  test -z "${AUTOMAKE_VERSION}" && i=automake || i=automake-${AUTOMAKE_VERSION}
+  ${i} --version </dev/null >/dev/null 2>&1 && XDT_PROG_AUTOMAKE=${i}
+fi
+
+test -z "${XDT_PROG_AUTOMAKE}" && {
+  cat >&2 <<EOF
+xdt-autogen: You must have "automake" installed on your system.
+             You can get the source tarball at
+             https://www.gnu.org/software/automake/.
+EOF
+  exit 1
+}
+
+
+##
+## Check for configure flags
+##
+test -z "${XDT_CONFIGURE_FLAGS}" && XDT_CONFIGURE_FLAGS="--enable-maintainer-mode"
+CONFIGURE_FLAGS="${XDT_CONFIGURE_FLAGS} $*"
+
+
+##
+## Do the real work(TM)
+##
+# We need to create m4 directory in case it does not exists yet, to avoid any aclocal warnings
+mkdir -p m4
+
+IFS=$special_IFS
+for configure_ac_file in ${CONFIGURE_AC_FILES}; do
+  IFS=$default_IFS
+  # figure out the package dir path
+  source_dir=$(dirname "${configure_ac_file}")
+  echo "Preparing package directory ${source_dir}..."
+
+  # For autoconf 2.69, we need to run intltool and gtkdocize manually
+  # If we are still using autotools once 2.70 is the minimum version required, we can remove theses run
+  if $EGREP -q "^(AC|IT)_PROG_INTLTOOL" "${configure_ac_file}"; then
+    ( echo "Running ${XDT_PROG_INTLTOOLIZE} --automake --copy --force" \
+      && cd "${source_dir}" \
+      && ${XDT_PROG_INTLTOOLIZE} --automake --copy --force ) || exit 1
+  fi
+
+  if grep -q "^GTK_DOC_CHECK" "${configure_ac_file}"; then
+    ( echo "Running ${XDT_PROG_GTKDOCIZE} --copy..." \
+      && cd "${source_dir}" \
+      && ${XDT_PROG_GTKDOCIZE} --copy ) || exit 1
+  fi
+
+  ( echo "Running ${XDT_PROG_AUTORECONF}..." \
+  && cd "${source_dir}" \
+  && ${XDT_PROG_AUTORECONF} --verbose --install --force) || exit 1
+
+  echo
+done
+
+
+##
+## Run configure
+##
+if test -z "${NOCONFIGURE}"; then
+  ( echo "Running ${MASTER_DIR}/configure ${CONFIGURE_FLAGS}..." \
+    && cd "${MASTER_DIR}" \
+    && ./configure ${CONFIGURE_FLAGS} \
+    && echo "Now type \"make\" to compile." ) || exit 1
+else
+  echo "Skipping configure process."
+fi
+
+
+# vi:set ts=2 sw=2 et ai:
