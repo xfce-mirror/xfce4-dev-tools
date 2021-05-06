@@ -9,6 +9,7 @@ config.log
 config.status
 configure
 configure.in
+docs/xdt-csource.1
 install-sh
 missing
 xfce4-dev-tools.spec
@@ -17,11 +18,17 @@ scripts/xdt-autogen.in
 compile
 config.guess
 config.sub
-configure.ac
 depcomp
 libtool
 ltmain.sh
 ChangeLog
+test-driver
+tests/.deps
+tests/test-xdt-csource-data.c
+tests/test_xdt_csource-test-*
+tests/test-xdt-csource
+tests/test-xdt-csource.log
+tests/test-xdt-csource.trs
 xfce4-dev-tools-*.tar.bz2
 xdt-csource/*
 !xdt-csource/Makefile.am

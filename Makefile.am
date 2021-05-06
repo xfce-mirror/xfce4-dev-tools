@@ -4,12 +4,15 @@
 # Written for Xfce by Benedikt Meurer <benny@xfce.org>.
 #
 
-ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+ACLOCAL_AMFLAGS = -I m4 -I m4macros ${ACLOCAL_FLAGS}
 
-SUBDIRS = 								\
-	m4macros							\
-	scripts								\
-	xdt-csource
+SUBDIRS =     \
+  docs        \
+  helpers     \
+  m4macros    \
+  scripts     \
+  xdt-csource \
+  tests
 
 distclean-local:
 	rm -rf *.cache *~
@@ -24,4 +27,5 @@ ChangeLog: Makefile
 dist-hook: ChangeLog
 
 EXTRA_DIST =								\
-	HACKING
+	HACKING \
+	README.md
