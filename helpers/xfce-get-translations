@@ -28,7 +28,7 @@ printf '%s\n' '- Translation Updates:'
 
 LANGUAGES=$(
 for l in $UPDATES; do
-	echo -n "$(grep '^"Language-Team:' po/$l.po | grep -Po '(?<=: ).*' | grep -Po '^(.*)(?= \(http)')"
+	echo -n "$(grep '^"Language-Team:' po/$l.po | sed -e 's/.*: //; s/ (http//;')"
 	echo ","
 done
 )
