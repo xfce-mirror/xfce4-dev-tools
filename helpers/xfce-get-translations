@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Just a small script to get all language updates to a repository since a
 # commit or tag.
