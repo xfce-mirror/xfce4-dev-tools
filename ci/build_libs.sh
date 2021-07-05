@@ -3,7 +3,6 @@
 set -euo pipefail
 
 XFCE_BASE=https://gitlab.xfce.org
-RELEASE=xfce-4.16
 
 : ${libdir:="/usr/lib/x86_64-linux-gnu"}
 : ${libexecdir:="/usr/lib/x86_64-linux-gnu"}
@@ -35,8 +34,8 @@ for URL in ${REPOS}; do
     cd /git
     git clone $URL
     cd $NAME
-    git checkout $RELEASE
-    TAG=$(git describe --abbrev=0 --match "$NAME*" 2>/dev/null)
+    # We build higher version possible tag, whatever branch it comes from
+    TAG=$(git tag --sort=version:refname | grep  "$NAME-" | tail -1)
     echo "--- Building $NAME ($TAG) ---"
     git checkout -b build-$TAG $TAG
     ./autogen.sh $AUTOGEN_OPTIONS
