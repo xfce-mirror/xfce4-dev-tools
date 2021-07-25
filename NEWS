@@ -1,3 +1,27 @@
+4.17.0
+======
+- Try to build higher version available tag
+- xfce-do-release: A review of confirmation prompts
+- helpers: Improve script portability
+- Improve Xfce Developer Center (developer.xfce.org)
+- xdt-features.m4: Always enable compilation warnings
+- g_locale_to_utf8 is misspelled as g_local_to_utf8
+- xfce-build: Always pick the latest stable release
+- Create the m4/ if it does not exists
+- Use autoreconf to bootstrap xfce4-dev-tools itself
+- Use autoreconf to bootstrap autotools
+- xfce-do-release: Check for `docker` installed
+- Add dependencies to build thunarx-python CI
+- Fix location of apidocs
+- xfce-build: Fix conditional in gitlabci
+- Export apidocs as GitLab artifacts
+- Get rid of glib-gettextize usage and XGETTEXT_ARGS custom args
+- Remove obsolete AM_GLIB_GNU_GETTEXT
+- helpers: Fix command-line if git-config core.editor is unset
+- Update obsolete m4 macros
+- helpers: Add 'xfce-build describe' command
+
+
 4.16.0
 ======
 - Bump glib to 2.50 based on xfce4.16 roadmap
