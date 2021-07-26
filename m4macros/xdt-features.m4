@@ -62,16 +62,15 @@ AC_DEFUN([XDT_FEATURE_DEBUG],
 AS_HELP_STRING([--disable-debug],[Include no debugging support]),
                 [enable_debug=$enableval], [enable_debug=m4_default([$1], [minimum])])
 
-  dnl enable most warnings regardless of debug level
-  xdt_cv_additional_CFLAGS="-Wall -Wextra \
-                            -Wno-missing-field-initializers \
-                            -Wno-unused-parameter -Wold-style-definition \
-                            -Wdeclaration-after-statement \
-                            -Wmissing-declarations \
-                            -Wmissing-noreturn -Wpointer-arith \
-                            -Wcast-align -Wformat -Wformat-security -Wformat-y2k \
-                            -Winit-self -Wmissing-include-dirs -Wundef \
-                            -Wnested-externs -Wredundant-decls"
+  dnl Enable most warnings regardless of debug level. Common flags for both C and C++.
+  xdt_cv_additional_COMMON_FLAGS="-Wall -Wextra \
+                                  -Wno-missing-field-initializers \
+                                  -Wno-unused-parameter \
+                                  -Wmissing-declarations \
+                                  -Wmissing-noreturn -Wpointer-arith \
+                                  -Wcast-align -Wformat -Wformat-security -Wformat-y2k \
+                                  -Winit-self -Wmissing-include-dirs -Wundef \
+                                  -Wredundant-decls"
 
   AC_MSG_CHECKING([whether to build with debugging support])
   if test x"$enable_debug" = x"full" -o x"$enable_debug" = x"yes"; then
@@ -80,20 +79,20 @@ AS_HELP_STRING([--disable-debug],[Include no debugging support]),
     CPPFLAGS="$CPPFLAGS"
 
     if test x`uname` = x"Linux"; then
-      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -fstack-protector"
+      xdt_cv_additional_COMMON_FLAGS="$xdt_cv_additional_COMMON_FLAGS -fstack-protector"
     fi
 
     if test x"$enable_debug" = x"full"; then
       AC_DEFINE([DEBUG_TRACE], [1], [Define for tracing support])
-      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -O0 -g"
+      xdt_cv_additional_COMMON_FLAGS="$xdt_cv_additional_COMMON_FLAGS -O0 -g"
       CPPFLAGS="$CPPFLAGS -DG_ENABLE_DEBUG"
       AC_MSG_RESULT([full])
     else
-      xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -g -Wshadow"
+      xdt_cv_additional_COMMON_FLAGS="$xdt_cv_additional_COMMON_FLAGS -g -Wshadow"
       AC_MSG_RESULT([yes])
     fi
   else
-    xdt_cv_additional_CFLAGS="$xdt_cv_additional_CFLAGS -Wshadow"
+    xdt_cv_additional_COMMON_FLAGS="$xdt_cv_additional_COMMON_FLAGS -Wshadow"
     CPPFLAGS="$CPPFLAGS -DNDEBUG"
 
     if test x"$enable_debug" = x"no"; then
@@ -104,18 +103,14 @@ AS_HELP_STRING([--disable-debug],[Include no debugging support]),
     fi
   fi
 
-  XDT_SUPPORTED_FLAGS([supported_CFLAGS], [$xdt_cv_additional_CFLAGS])
+  xdt_cv_additional_CFLAGS="$xdt_cv_additional_COMMON_FLAGS \
+                            -Wdeclaration-after-statement \
+                            -Wnested-externs \
+                            -Wold-style-definition"
+  xdt_cv_additional_CXXFLAGS="$xdt_cv_additional_COMMON_FLAGS"
 
-  ifelse([$CXX], , , [
-    dnl FIXME: should test on c++ compiler, but the following line causes
-    dnl        autoconf errors for projects that don't check for a
-    dnl        c++ compiler at all.
-    dnl AC_LANG_PUSH([C++])
-    dnl XDT_SUPPORTED_FLAGS([supported_CXXFLAGS], [$xdt_cv_additional_CFLAGS])
-    dnl AC_LANG_POP()
-    dnl        instead, just use supported_CFLAGS...
-    supported_CXXFLAGS="$supported_CFLAGS"
-  ])
+  XDT_SUPPORTED_FLAGS([supported_CFLAGS], [$xdt_cv_additional_CFLAGS])
+  XDT_SUPPORTED_FLAGS([supported_CXXFLAGS], [$xdt_cv_additional_CXXFLAGS])
 
   CFLAGS="$CFLAGS $supported_CFLAGS"
   CXXFLAGS="$CXXFLAGS $supported_CXXFLAGS"
