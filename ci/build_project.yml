@@ -11,6 +11,7 @@ workflow:
 stages:
   - build
   - distcheck
+  - release
 
 translations:
   extends: .translation
@@ -26,10 +27,21 @@ build:
     - make
 
 distcheck:
-  extends: .make
+  extends: .distcheck
   stage: distcheck
-  script:
-    - make distcheck
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+
+release:
+  extends: .distcheck
+  stage: release
+  artifacts:
+    paths:
+      - ./*.tar.bz2
+    expire_in: never
+  rules:
+    - if: $CI_COMMIT_TAG
 
 .make:
   before_script:
@@ -46,6 +58,11 @@ distcheck:
       when: never
     # Otherwise, always run
     - when: always
+
+.distcheck:
+  extends: .make
+  script:
+    - make distcheck
 
 .translation:
   rules:
