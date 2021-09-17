@@ -19,7 +19,7 @@ docker_pull () {
 
 docker_run () {
 	# Run the build in the docker container
-	docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) --volume $VOLUME:/tmp --env CFLAGS="${CFLAGS}" --env CONTAINER=$CONTAINER --env VERSION=$VERSION $CONTAINER:$VERSION /bin/bash -c "${BUILD_CMD}"
+	docker run --rm -u $(id -u ${USER}):$(id -g ${USER}) --volume $VOLUME:/tmp:z --env CFLAGS="${CFLAGS}" --env CONTAINER=$CONTAINER --env VERSION=$VERSION $CONTAINER:$VERSION /bin/bash -c "${BUILD_CMD}"
 }
 
 # Parse the commandline arguments
