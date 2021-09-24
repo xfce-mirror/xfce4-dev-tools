@@ -157,6 +157,25 @@ run_command () {
 	fi
 }
 
+update_appdata_file () {
+	local -a files
+	local set_nullglob=$(shopt -p nullglob) set_nocaseglob=$(shopt -p nocaseglob)
+
+	shopt -s nullglob nocaseglob
+	files=(*"$1.appdata.xml.in" data/*"$1.appdata.xml.in")
+	$set_nullglob
+	$set_nocaseglob
+
+	if ((${#files[@]} == 1)); then
+		sed -Ei "s%(\s*)<releases>%&\n\1\1<release date=\"$(date '+%Y-%m-%d')\" version=\"$2\"/>%" "${files[0]}"
+	elif ((${#files[@]} > 1)); then
+		echo " Found several files whose name ends with '$1.appdata.xml.in' (case insensitive, no modification):"
+		printf ' %s\n' "${files[@]}"
+	else
+		echo " Could not find any file whose name ends with '$1.appdata.xml.in' (case insensitive)."
+	fi
+}
+
 edit () {
 	read -n 1 -p " → Accept? ([Y]es, [e]dit) " response
 	if [ "$response" = "e" ]; then
@@ -200,6 +219,9 @@ run_steps () {
 	step "Update NEWS file with changelog? \e[0m(xfce-update-news)"
 	run_command "xfce-update-news $component $version"
 	edit NEWS
+
+	step "Update Appdata file \e[0m(add new release)"
+	run_command "update_appdata_file $component $version"
 
 	step "Build the tarball \e[0m(./autogen.sh && make distcheck)"
 	# either in the xfce-build or xfce-test container or on the local machine
