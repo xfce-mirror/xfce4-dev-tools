@@ -14,7 +14,7 @@ build-container:
     # CI_REGISTRY_PASSWORD=********
     IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     LATEST_TAG: $CI_REGISTRY_IMAGE:latest
-  image: docker:20.10.9-dind
+  image: docker:20.10.9
   # The container build is in the .pre stage in order to ensure it is
   # subsequently used for the included build.
   stage: .pre
