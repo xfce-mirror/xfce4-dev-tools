@@ -197,6 +197,13 @@ update_configure_ac_in () {
 		return 1
 	fi
 
+	if ! grep -zq "AC_COPYRIGHT(\[[^]]*$(date +%Y)[^]]*\])" "$configure_file"; then
+		printf '%b\n' \
+			"\n\e[1mWarning:\e[0m The copyright year of the project does not seem to be up to date." \
+			"This is just a check of '$configure_file' though, you should check this in the" \
+			"whole source code, especially the about dialog and/or its command line counterpart.\n"
+	fi
+
 	if grep -q 'XDT_VERSION_INIT' "$configure_file"; then
 		if [ "$1" = "pre" ]; then
 			sed -i "s/^\(XDT_VERSION_INIT\s*\)(.*/\1([$version])/" "$configure_file"
