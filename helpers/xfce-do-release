@@ -186,25 +186,44 @@ edit () {
 }
 
 update_configure_ac_in () {
+	local configure_file
+
 	if [ -f "configure.ac.in" ]; then
-		if [ "$1" = "pre" ]; then
-			sed -i "s/^\(m4_define(\[.*_version_major\].* \[\)\(.*\)\(\])\)/\1$version_major\3/g" configure.ac.in
-			sed -i "s/^\(m4_define(\[.*_version_minor\].* \[\)\(.*\)\(\])\)/\1$version_minor\3/g" configure.ac.in
-			sed -i "s/^\(m4_define(\[.*_version_micro\].* \[\)\(.*\)\(\])\)/\1$version_patch\3/g" configure.ac.in
-			sed -i 's/^\(m4_define(\[.*_version_tag\], \[\)\(git\)\(\])\)/\1\3/g' configure.ac.in
-		elif [ "$1" = "post" ]; then
-			sed -i 's/\(m4_define(\[.*_version_tag\], \[\)\(.*\)\(\])\)/\1git\3/g' configure.ac.in
-		fi
-		git diff configure.ac.in
+		configure_file="configure.ac.in"
 	elif [ -f "configure.ac" ]; then
-		if [ "$1" = "pre" ]; then
-			sed -i "s/^\(XDT_VERSION_INIT\s*\)(.*/\1([$version])/" configure.ac
-		elif [ "$1" = "post" ]; then
-			sed -i "s/^\(XDT_VERSION_INIT\s*\)(.*/\1([$version], [git])/" configure.ac
-		fi
+		configure_file="configure.ac"
 	else
 		echo "There is no 'configure.ac.in' or 'configure.ac' file."
+		return 1
 	fi
+
+	if ! grep -zq "AC_COPYRIGHT(\[[^]]*$(date +%Y)[^]]*\])" "$configure_file"; then
+		printf '%b\n' \
+			"\n\e[1mWarning:\e[0m The copyright year of the project does not seem to be up to date." \
+			"This is just a check of '$configure_file' though, you should check this in the" \
+			"whole source code, especially the about dialog and/or its command line counterpart.\n"
+	fi
+
+	if grep -q 'XDT_VERSION_INIT' "$configure_file"; then
+		if [ "$1" = "pre" ]; then
+			sed -i "s/^\(XDT_VERSION_INIT\s*\)(.*/\1([$version])/" "$configure_file"
+		elif [ "$1" = "post" ]; then
+			sed -i "s/^\(XDT_VERSION_INIT\s*\)(.*/\1([$version], [git])/" "$configure_file"
+		fi
+	else
+		if [ "$1" = "pre" ]; then
+			sed -i \
+				-e "s/^\(m4_define(\[.*_version_major\].* \[\)\(.*\)\(\])\)/\1$version_major\3/g" \
+				-e "s/^\(m4_define(\[.*_version_minor\].* \[\)\(.*\)\(\])\)/\1$version_minor\3/g" \
+				-e "s/^\(m4_define(\[.*_version_micro\].* \[\)\(.*\)\(\])\)/\1$version_patch\3/g" \
+				-e 's/^\(m4_define(\[.*_version_tag\], \[\)\(git\)\(\])\)/\1\3/g' \
+				"$configure_file"
+		elif [ "$1" = "post" ]; then
+			sed -i 's/\(m4_define(\[.*_version_tag\], \[\)\(.*\)\(\])\)/\1git\3/g' "$configure_file"
+		fi
+	fi
+
+	git diff "$configure_file"
 }
 
 get_sha1_hash () {
