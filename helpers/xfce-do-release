@@ -5,6 +5,7 @@ version=$2
 steps=0
 steps_complete=0
 version_scheme=1
+warning='\e[1;33mWarning:\e[0m'
 
 # Check if the working directory is in the state we expect it to be in
 sanity_checks () {
@@ -18,7 +19,7 @@ sanity_checks () {
 		if [[ "$current_branch" == *"xfce-4"* ]]; then
 			echo "You are on a maintenance branch."
 		else
-			printf "\e[1mWarning:\e[0m You are not on the master branch.\n"
+			printf "$warning You are not on the master branch.\n"
 			read -n 1 -p "Do you really want to continue? ([y]es, [N]o) " response
 			printf "\n"
 			if [ "$response" != "y" ]; then
@@ -29,7 +30,7 @@ sanity_checks () {
 
 	echo "Updating $current_branch to avoid conflicts..."
 	if [ -n "$(git status --untracked-files=no --porcelain)" ]; then
-		printf "\e[1mWarning:\e[0m The working directory is not clean.\nYou have the following unstaged or uncommitted changes:\n"
+		printf "$warning The working directory is not clean.\nYou have the following unstaged or uncommitted changes:\n"
 		git status --untracked-files=no -s
 		read -n 1 -p "Do you really want to continue? ([y]es, [N]o) " response
 		printf "\n"
@@ -111,7 +112,7 @@ test_parameters () {
 	fi
 
 	if [ "$(git tag | grep -c $version\$)" = "1" ]; then
-		printf "\e[1mWarning:\e[0m The version you specified ('$version') exists as a git tag. "
+		printf "$warning The version you specified ('$version') exists as a git tag. "
 		read -n 1 -p "Do you really want to release again? ([y]es, [N]o) " response
 		printf "\n"
 		if [ "$response" != "y" ]; then
@@ -199,7 +200,7 @@ update_configure_ac_in () {
 
 	if ! grep -zq "AC_COPYRIGHT(\[[^]]*$(date +%Y)[^]]*\])" "$configure_file"; then
 		printf '%b\n' \
-			"\n\e[1mWarning:\e[0m The copyright year of the project does not seem to be up to date." \
+			"\n$warning The copyright year of the project does not seem to be up to date." \
 			"This is just a check of '$configure_file' though, you should check this in the" \
 			"whole source code, especially the about dialog and/or its command line counterpart.\n"
 	fi
