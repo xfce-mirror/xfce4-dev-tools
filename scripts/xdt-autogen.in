@@ -41,6 +41,12 @@ m4macrodir="${datarootdir}/aclocal"
 default_IFS=$IFS
 special_IFS=$(printf '\1')
 
+# fallback on '\n' if '\1' isn't well supported: it is POSIX, but e.g. bash 3.2.57
+# on macOS doesn't support it
+IFS=$special_IFS
+[ x$IFS = x ] || special_IFS=$(printf '\n')
+IFS=$default_IFS
+
 ##
 ## a few portability tests
 ##

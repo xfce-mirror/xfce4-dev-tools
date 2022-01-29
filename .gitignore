@@ -14,7 +14,6 @@ install-sh
 missing
 xfce4-dev-tools.spec
 scripts/xdt-autogen
-scripts/xdt-autogen.in
 compile
 config.guess
 config.sub
