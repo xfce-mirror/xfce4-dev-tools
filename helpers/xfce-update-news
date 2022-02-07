@@ -3,21 +3,25 @@
 COMPONENT=$1
 VERSION=$2
 WRITE_TAG=$3
+SEPARATOR=$(printf '=%.s' $(seq -s ' ' 1 ${#VERSION}))
 LAST_TAG=$(git describe --abbrev=0)
 RELEASE_NOTES=$(xfce-get-release-notes "$LAST_TAG" silent)
 TRANSLATIONS=$(xfce-get-translations "$LAST_TAG" "HEAD" silent)
 
 if [ "$WRITE_TAG" = "WRITETAG" ]; then
     # Use release note from NEWS if possible, they may have been edited
-    if [ -f "NEWS" ] && [ "$VERSION" = "$(head -n 1 NEWS)" ]; then
-        sed '/^[[:space:]]*$/q' NEWS | sed 's/======//'
+    if [ -f "NEWS" ] && [ "$VERSION" = "$(sed -n -E '1 s/^([.0-9]+).*/\1/p' NEWS)" ]; then
+        sed -E '/^[[:space:]]*$/q; s/^([.0-9]+).*/\1/; s/^=+$//' NEWS
     else
         printf '%s\n\n%s\n%s\n' $VERSION "$RELEASE_NOTES" "$TRANSLATIONS"
     fi
 elif [ ! -f "NEWS" ]; then
     echo "There is no 'NEWS' file. Changelog since $VERSION:"
-    printf '%s\n======\n%s\n%s\n\n%s' $VERSION "$RELEASE_NOTES" "$TRANSLATIONS"
+    printf '%s (%s)\n%s\n%s\n%s\n\n%s' \
+           $VERSION $(date -I) $SEPARATOR "$RELEASE_NOTES" "$TRANSLATIONS"
 else
-    printf '%s\n======\n%s\n%s\n\n%s\n' $VERSION "$RELEASE_NOTES" "$TRANSLATIONS" "$(cat NEWS)" > NEWS
+    printf '%s (%s)\n%s\n%s\n%s\n\n%s\n' \
+           $VERSION $(date -I) $SEPARATOR "$RELEASE_NOTES" "$TRANSLATIONS" "$(cat NEWS)" \
+           > NEWS
     git diff NEWS
 fi
