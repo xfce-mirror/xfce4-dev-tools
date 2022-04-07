@@ -45,10 +45,17 @@ for URL in ${REPOS}; do
     echo "$(pwd): $(git describe)" >> /tmp/xfce_build_version_info.txt
     # Retain HTML docs in /docs
     if [[ -d "$(pwd)/docs" ]]; then
-      HTMLPATH=$(find "$(pwd)/docs" -name html)
-      if [[ ! -z "$HTMLPATH" ]]; then
-        mkdir -p "/docs/$NAME"
-        cp -a "$HTMLPATH/." "/docs/$NAME"
+      # Special case for thunar because it has docs for thunar and thunarx
+      if [[ "$NAME" == "thunar" ]]; then
+        mkdir -p "/docs/$NAME"{,x}
+        cp -a docs/reference/thunar/html/. "/docs/$NAME"
+        cp -a docs/reference/thunarx/html/. "/docs/$NAME"x
+      else
+        HTMLPATH=$(find "$(pwd)/docs" -name html)
+        if [[ ! -z "$HTMLPATH" ]]; then
+          mkdir -p "/docs/$NAME"
+          cp -a "$HTMLPATH/." "/docs/$NAME"
+        fi
       fi
     fi
 done
