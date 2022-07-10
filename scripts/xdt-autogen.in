@@ -139,11 +139,11 @@ fi
 do_version_check() {
   test -z "$XDT_AUTOGEN_REQUIRED_VERSION" && return 0
 
-  ifs=$IFS IFS=.
-  read major minor micro <<eof
+  IFS=.
+  read major minor micro <<EOF
 $XDT_AUTOGEN_REQUIRED_VERSION
-eof
-  IFS=$ifs
+EOF
+  IFS=$default_IFS
 
   test -n "$major" || return 1
   test "$major" -le "$XDT_AUTOGEN_VERSION_MAJOR" || return 1
