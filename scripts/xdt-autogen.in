@@ -139,17 +139,18 @@ fi
 do_version_check() {
   test -z "$XDT_AUTOGEN_REQUIRED_VERSION" && return 0
 
-  major=$(echo "$XDT_AUTOGEN_REQUIRED_VERSION" | cut -d. -f1)
+  IFS=. read major minor micro <<EOF
+$XDT_AUTOGEN_REQUIRED_VERSION
+EOF
+
   test -n "$major" || return 1
   test "$major" -le "$XDT_AUTOGEN_VERSION_MAJOR" || return 1
   test "$XDT_AUTOGEN_VERSION_MAJOR" -gt "$major" && return 0
 
-  minor=$(echo "$XDT_AUTOGEN_REQUIRED_VERSION" | cut -d. -f2)
   test -n "$minor" || return 1
   test "$minor" -le "$XDT_AUTOGEN_VERSION_MINOR" || return 1
   test "$XDT_AUTOGEN_VERSION_MINOR" -gt "$minor" && return 0
 
-  micro=$(echo "$XDT_AUTOGEN_REQUIRED_VERSION" | cut -d. -f3)
   test -n "$micro" || return 1
   test "$micro" -le "$XDT_AUTOGEN_VERSION_MICRO" || return 1
   test "$XDT_AUTOGEN_VERSION_MICRO" -gt "$micro" && return 0
