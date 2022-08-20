@@ -117,6 +117,15 @@ AC_DEFUN([XDT_CHECK_PACKAGE],
     AC_SUBST([$1_LIBS])
     AC_SUBST([$1_REQUIRED_VERSION])
 
+    if test x"$1" = x"GLIB"; then
+      dnl Use GLib structured logging, see https://docs.gtk.org/glib/logging.html
+      dnl XFCE apps&libraries can override this setting after XDT_CHECK_PACKAGE(GLIB)
+      dnl using AC_DEFINE.
+      dnl Note that it requires GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_56 to work
+      dnl properly in GLib logging macros (not documented, see glib/gmessages.h).
+      AC_DEFINE(G_LOG_USE_STRUCTURED, 1, [Use GLib structured logging])
+    fi
+
     ifelse([$4], , , [$4])
   elif $PKG_CONFIG --exists "$2" >/dev/null 2>&1; then
     xdt_cv_version=`$PKG_CONFIG --modversion "$2"`
