@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update \
   && apt-get -y --no-install-recommends install build-essential git libglib2.0-bin python3-distutils-extra python3-dev python-gi-dev libxss-dev libxml2-utils libgtk-3-dev gtk-doc-tools libx11-dev libglib2.0-dev libwnck-3-dev intltool liburi-perl  x11-xserver-utils libvte-2.91-dev dbus-x11 cmake libpcre2-dev libsoup2.4-dev libtool \
   libgtksourceview-4-dev libgtk-4-dev libgtksourceview-5-dev libtag1-dev xvfb autopoint gir1.2-gstreamer-1.0 libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 libgstreamer-plugins-base1.0-dev libgstreamer1.0-0 libgstreamer1.0-dev \
-  libxss-dev libindicator3-dev libxmu-dev libburn-dev libisofs-dev  libpulse-dev libkeybinder-3.0-dev libmpd-dev valac libvala-0.56-dev gobject-introspection libgirepository1.0-dev librsvg2-dev libtagc0-dev libdbusmenu-gtk3-dev libgtop2-dev libnotify-dev libxklavier-dev libexif-dev libgudev-1.0-dev libupower-glib-dev libclutter-1.0-dev libsensors4-dev \
+  libxss-dev libindicator3-dev libxmu-dev libburn-dev libisofs-dev  libpulse-dev libkeybinder-3.0-dev libmpd-dev valac libvala-0.56-dev gobject-introspection libgirepository1.0-dev librsvg2-dev libtagc0-dev libdbusmenu-gtk3-dev libgtop2-dev libnotify-dev libxklavier-dev libexif-dev libgudev-1.0-dev libupower-glib-dev libclutter-1.0-dev libsensors4-dev libical-dev libgtk-layer-shell-dev \
   && rm -rf /var/lib/apt/lists/*
 
 # Build and install the latest tag for all Xfce core libraries
