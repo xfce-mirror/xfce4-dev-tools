@@ -52,11 +52,7 @@ IFS=$default_IFS
 ##
 
 if test -z "$EGREP"; then
-  if type egrep >/dev/null 2>&1; then
-    EGREP=egrep
-  else
-    EGREP="grep -E"
-  fi
+  EGREP="grep -E"
 fi
 
 ##
