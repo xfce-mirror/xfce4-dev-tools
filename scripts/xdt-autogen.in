@@ -48,18 +48,6 @@ IFS=$special_IFS
 IFS=$default_IFS
 
 ##
-## a few portability tests
-##
-
-if test -z "$EGREP"; then
-  if type egrep >/dev/null 2>&1; then
-    EGREP=egrep
-  else
-    EGREP="grep -E"
-  fi
-fi
-
-##
 ## figures out any subdirs that should be configured as a part
 ## of recursive configure.
 ##
@@ -321,7 +309,7 @@ test -z "${XDT_PROG_INTLTOOLIZE}" && XDT_PROG_INTLTOOLIZE="intltoolize"
 IFS=$special_IFS
 for configure_ac_file in $CONFIGURE_AC_FILES; do
   IFS=$default_IFS
-  if $EGREP -q "^(AC|IT)_PROG_INTLTOOL" "${configure_ac_file}"; then
+  if grep -Eq "^(AC|IT)_PROG_INTLTOOL" "${configure_ac_file}"; then
     ${XDT_PROG_INTLTOOLIZE} --version </dev/null >/dev/null 2>&1 || {
       cat >&2 <<EOF
 xdt-autogen: You must have "intltool" installed on your system.
@@ -431,7 +419,7 @@ for configure_ac_file in ${CONFIGURE_AC_FILES}; do
 
   # For autoconf 2.69, we need to run intltool and gtkdocize manually
   # If we are still using autotools once 2.70 is the minimum version required, we can remove theses run
-  if $EGREP -q "^(AC|IT)_PROG_INTLTOOL" "${configure_ac_file}"; then
+  if grep -Eq "^(AC|IT)_PROG_INTLTOOL" "${configure_ac_file}"; then
     ( echo "Running ${XDT_PROG_INTLTOOLIZE} --automake --copy --force" \
       && cd "${source_dir}" \
       && ${XDT_PROG_INTLTOOLIZE} --automake --copy --force ) || exit 1
