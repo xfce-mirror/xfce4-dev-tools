@@ -1,3 +1,36 @@
+4.17.1 (2022-10-29)
+======
+- Warn about GLib functions newer than the checked GLib version
+- Drop the test altogether
+- xdt-autogen: Fix deprecation warning from grep 3.8
+- Use GLib structured logging
+- xdt-autogen: simplify do_version_check()
+- Add new dependencies to the builder
+- Do not run useless distcheck in CI
+- Add favicon to Xfce API docs
+- Bump our xfce builder to ubuntu 22.04
+- Add autopoint to xfce-build
+- Add a workaround for thunar documentation generation
+- Update COPYING
+- xfce-build: Fix build with SELinux (!58)
+- xfce-update-news: Add release date and adjust separator
+- xfce-do-release: Make warnings more visible
+- xfce-do-release: Check the copyright year in `configure.ac*`
+- xfce-do-release: Extend `configure.ac.in` update to `configure.ac`
+- xdt-autogen: Fallback on `n` as IFS if `1` is not supported
+- Fix exclusion of `xdt-autogen.in` in `.gitignore`
+- Update developer.xfce.org home to add tumbler
+- Add tumbler to xfce-build container
+- Fix "image:" name in .gitlab-ci.yml
+- Add libsensors4-dev to build-container
+- Try to bump docker-dind image
+- xfce-do-release: Update Appdata file
+- gitlabci: Ensure distcheck still runs
+- gitlabci: Add release stage that retains tarballs
+- Add lm-sensors to dependencies, for xfce4-sensors-plugins CI
+- Separate CFLAGS from CXXFLAGS
+
+
 4.17.0
 ======
 - Try to build higher version available tag
