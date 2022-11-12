@@ -1,5 +1,5 @@
 dnl
-dnl Copyright (c) 2002-2021
+dnl Copyright (c) 2002-2022
 dnl         The Xfce development team. All rights reserved.
 dnl
 dnl Written for Xfce by Benedikt Meurer <benny@xfce.org>.
@@ -20,7 +20,7 @@ dnl *** Initialize autoconf ***
 dnl ***************************
 AC_INIT([xfce4-dev-tools], [xdt_version],
         [https://gitlab.xfce.org/xfce/xfce4-dev-tools/])
-AC_COPYRIGHT([Copyright (c) 2002-2021 The Xfce development team. All rights reserved.])
+AC_COPYRIGHT([Copyright (c) 2002-2022 The Xfce development team. All rights reserved.])
 AC_CONFIG_MACRO_DIR([m4])
 AC_REVISION([xdt_version_build])
 
