@@ -1,3 +1,11 @@
+4.17.2 (2022-12-01)
+======
+- Add new libsoup3 to the builder
+- xfce-do-release: unification of update version 'sed' command
+- xfce-do-release: match multiple spaces for git version replace
+- bump copyright year to 2022
+
+
 4.17.1 (2022-10-29)
 ======
 - Warn about GLib functions newer than the checked GLib version
