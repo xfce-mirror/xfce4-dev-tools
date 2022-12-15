@@ -1,3 +1,8 @@
+4.18.0 (2022-12-15)
+======
+- build: Bump requirements for Xfce 4.18
+
+
 4.17.2 (2022-12-01)
 ======
 - Add new libsoup3 to the builder
