@@ -23,6 +23,7 @@ REPOS="${XFCE_BASE}/xfce/xfce4-dev-tools.git
   ${XFCE_BASE}/xfce/libxfce4util.git
   ${XFCE_BASE}/xfce/xfconf.git
   ${XFCE_BASE}/xfce/libxfce4ui.git
+  ${XFCE_BASE}/xfce/libxfce4windowing.git
   ${XFCE_BASE}/xfce/exo.git
   ${XFCE_BASE}/xfce/garcon.git
   ${XFCE_BASE}/xfce/xfce4-panel.git
@@ -50,6 +51,11 @@ for URL in ${REPOS}; do
         mkdir -p "/docs/$NAME"{,x}
         cp -a docs/reference/thunar/html/. "/docs/$NAME"
         cp -a docs/reference/thunarx/html/. "/docs/$NAME"x
+      # Ditto for libxfce4windowing
+      elif [[ "$NAME" == "libxfce4windowing" ]]; then
+        mkdir -p "/docs/$NAME"{,ui}
+        cp -a docs/reference/libxfce4windowing/html/. "/docs/$NAME"
+        cp -a docs/reference/libxfce4windowingui/html/. "/docs/$NAME"ui
       else
         HTMLPATH=$(find "$(pwd)/docs" -name html)
         if [[ ! -z "$HTMLPATH" ]]; then
