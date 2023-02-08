@@ -446,7 +446,7 @@ if test -z "${NOCONFIGURE}"; then
   ( echo "Running ${MASTER_DIR}/configure ${CONFIGURE_FLAGS}..." \
     && cd "${MASTER_DIR}" \
     && ./configure ${CONFIGURE_FLAGS} \
-    && echo "Now type \"make\" to compile." ) || exit 1
+    && echo "Now type \"${MAKE}\" to compile." ) || exit 1
 else
   echo "Skipping configure process."
 fi
