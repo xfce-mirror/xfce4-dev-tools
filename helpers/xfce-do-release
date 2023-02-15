@@ -7,6 +7,23 @@ steps_complete=0
 version_scheme=1
 warning='\e[1;33mWarning:\e[0m'
 
+# Check for a suitable make
+find_make () {
+	if test -z "$MAKE"; then
+		if type gmake >/dev/null 2>/dev/null; then
+			MAKE="gmake"
+		elif type make >/dev/null 2>/dev/null; then
+			MAKE="make"
+		else
+			cat >&2 <<EOF
+xfce-do-release: You must have "make" installed on your system.
+EOF
+			exit 1
+		fi
+		export MAKE
+	fi
+}
+
 # Check if the working directory is in the state we expect it to be in
 sanity_checks () {
 	is_git=$(git rev-parse --is-inside-work-tree)
@@ -243,16 +260,16 @@ run_steps () {
 	step "Update Appdata file \e[0m(add new release)"
 	run_command "update_appdata_file $component $version"
 
-	step "Build the tarball \e[0m(./autogen.sh && make distcheck)"
+	step "Build the tarball \e[0m(./autogen.sh && $MAKE distcheck)"
 	# either in the xfce-build or xfce-test container or on the local machine
 	if [ -n "$TAG" ]; then
 		if [[ "$TAG" == "xfce-build" ]]; then
 			run_command "xfce-build"
 		else
-			run_command "xfce-test call ./autogen.sh" "xfce-test call make distcheck"
+			run_command "xfce-test call ./autogen.sh" "xfce-test call $MAKE distcheck"
 		fi
 	else
-		run_command "./autogen.sh" "make distcheck"
+		run_command "./autogen.sh" "$MAKE distcheck"
 	fi
 
 	step "Commit the changes \e[0m(git add -u; git commit -m 'Updates for release')"
@@ -280,6 +297,7 @@ run_steps () {
 ### Main loop
 
 main () {
+	find_make
 	sanity_checks
 	test_parameters $component $version
 	run_steps
