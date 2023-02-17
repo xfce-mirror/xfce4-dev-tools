@@ -38,6 +38,8 @@ AM_INIT_AUTOMAKE([1.11 dist-bzip2 tar-ustar no-dist-gzip foreign])
 AM_MAINTAINER_MODE()
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
+AC_CANONICAL_HOST
+
 dnl ********************************
 dnl *** Check for basic programs ***
 dnl ********************************
@@ -50,6 +52,26 @@ dnl *** Initialize libtool ***
 dnl **************************
 LT_PREREQ([2.4])
 LT_INIT([disable-static])
+
+dnl ****************************************
+dnl *** Check for host specific programs ***
+dnl ****************************************
+case "${host_os}" in
+    freebsd*)
+      AC_CHECK_PROGS(GSED, [gsed], no)
+      AS_IF([test x"$GSED" = x"no"], [AC_MSG_ERROR([GNU sed (gsed) missing])])
+
+      AC_CHECK_PROGS(GMAKE, [gmake], no)
+      AS_IF([test x"$GMAKE" = x"no"], [AC_MSG_ERROR([GNU make (gmake) missing])])
+      ;;
+    *)
+      GSED="sed"
+      GMAKE="make"
+      ;;
+esac
+
+AC_SUBST(GSED)
+AC_SUBST(GMAKE)
 
 dnl ***************************************
 dnl *** Check for standard header files ***
@@ -67,6 +89,7 @@ dnl **********************
 AC_CONFIG_FILES([
 Makefile
 helpers/Makefile
+helpers/xfce-do-release
 m4macros/Makefile
 scripts/Makefile
 scripts/xdt-autogen
