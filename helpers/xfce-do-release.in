@@ -7,8 +7,8 @@ steps_complete=0
 version_scheme=1
 warning='\e[1;33mWarning:\e[0m'
 
-SED=${SED:-sed}
-MAKE=${MAKE:-make}
+SED=${SED:-@GSED@}
+MAKE=${MAKE:-@GMAKE@}
 
 # Check if the working directory is in the state we expect it to be in
 sanity_checks () {
