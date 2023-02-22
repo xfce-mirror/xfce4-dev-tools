@@ -47,6 +47,12 @@ AC_PROG_CC()
 AM_PROG_CC_C_O()
 AC_PROG_INSTALL()
 
+dnl **********************
+dnl *** Check xsltproc ***
+dnl **********************
+AC_CHECK_PROG([XSLTPROC], [xsltproc],yes)
+AS_IF([test x"$XSLTPROC" != x"yes"], [AC_MSG_ERROR([package 'xsltproc' missing])])
+
 dnl **************************
 dnl *** Initialize libtool ***
 dnl **************************
