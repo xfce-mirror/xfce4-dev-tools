@@ -9,6 +9,7 @@ RUN apt-get update \
   libgtksourceview-4-dev libgtk-4-dev libgtksourceview-5-dev libtag1-dev xvfb autopoint gir1.2-gstreamer-1.0 libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 libgstreamer-plugins-base1.0-dev libgstreamer1.0-0 libgstreamer1.0-dev \
   libxss-dev libindicator3-dev libxmu-dev libburn-dev libisofs-dev  libpulse-dev libkeybinder-3.0-dev libmpd-dev valac libvala-0.56-dev gobject-introspection libgirepository1.0-dev librsvg2-dev libtagc0-dev libdbusmenu-gtk3-dev libgtop2-dev libnotify-dev libxklavier-dev libexif-dev libgudev-1.0-dev libupower-glib-dev libclutter-1.0-dev libsensors4-dev libical-dev \
   libwayland-bin libwayland-dev libgtk-layer-shell-dev \
+  libcurl4-openssl-dev libffmpegthumbnailer-dev libgsf-1-dev libpoppler-glib-dev libopenrawgnome-dev libgepub-0.6-dev \
   && rm -rf /var/lib/apt/lists/*
 
 # Build and install the latest tag for all Xfce core libraries
