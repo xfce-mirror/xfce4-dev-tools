@@ -278,6 +278,46 @@ AS_HELP_STRING([--disable-$2], [Disable support for m4_default($4, $2)]),
 
 
 
+dnl XDT_CHECK_PKG_BINARY(varname, package, pkgvarname, [binname])
+dnl
+dnl Finds a program by looking for a variable named pkgvarname in the
+dnl pkg-config file for package. If found, varname (both a shell variable and
+dnl automake substitution) is set to the name of the binary (and possibly full
+dnl path, if that is how it is specified in the pkg-config file). If not found,
+dnl or not present and executable, configure will exit with an error.
+dnl
+dnl Users can also override this detection by specfying a varname on the
+dnl configure command line. In that case, the provided value is still checked
+dnl to ensure it exists and is executable.
+dnl
+dnl If binname is not provided (for documentation purposes), pkgvarname will be
+dnl used instead.
+dnl
+dnl Example usage:
+dnl
+dnl XDT_CHECK_PACKAGE_BINARY([GLIB_GENMARSHAL], [glib-2.0], [glib_genmarshal], [glib-genmarshal])
+dnl
+AC_DEFUN([XDT_CHECK_PACKAGE_BINARY],
+[
+  AC_REQUIRE([XDT_PROG_PKG_CONFIG])
+
+  AC_ARG_VAR([$1], [Location of program ]m4_default($4, $3))
+  AC_MSG_CHECKING([for m4_default($4, $3)])
+
+  if test x"$$1" = x""; then
+    $1=`$PKG_CONFIG --variable=$3 $2`
+  fi
+  if test x"$$1" != x"" -a -x "$$1"; then
+    AC_MSG_RESULT([$$1])
+  else
+    AC_MSG_ERROR([could not find m4_default($4, $3). You can run:
+./configure $1=/path/to/m4_default($4, $3)
+to provide a custom location for it.])
+  fi
+])
+
+
+
 dnl XDT_CHECK_LIBX11()
 dnl
 dnl Executes various checks for X11. Sets LIBX11_CFLAGS, LIBX11_LDFLAGS
