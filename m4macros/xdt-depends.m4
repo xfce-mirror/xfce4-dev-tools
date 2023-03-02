@@ -221,6 +221,125 @@ AS_HELP_STRING([--disable-$4],[Disable checking for $5]),
 
 
 
+dnl XDT_FEATURE_DEPENDENCY(varname, package, version)
+dnl
+dnl Used only as an argument to XDT_CHECK_OPTIONAL_FEATURE(), this macro
+dnl declares a dependency required for the feature to be enabled.
+dnl
+dnl If the dependency is checked and found, variables and substitutions will be
+dnl created and set as in XDT_CHECK_PACKAGE(), plus varname_FOUND will be set
+dnl to "yes", and HAVE_varname will be set in config.h.
+dnl
+dnl Note that, unlike with XDT_CHECK_OPTIONAL_PACKAGE(), no automake
+dnl conditional is set for this dependency.
+dnl
+dnl See XDT_CHECK_OPTIONAL_FEATURE() for more information.
+dnl
+AC_DEFUN([XDT_FEATURE_DEPENDENCY],
+[
+  AC_REQUIRE([XDT_PROG_PKG_CONFIG])
+
+  if test x"$xdt_feature_deps_check_only" = x"yes"; then
+    if ! $PKG_CONFIG --exists "$2 >= $3" >/dev/null 2>&1; then
+      if test x"$xdt_feature_deps_missing" = x""; then
+        xdt_feature_deps_missing="$2 >= $3"
+      else
+        xdt_feature_deps_missing="$xdt_feature_deps_missing, $2 >= $3"
+      fi
+    fi
+  else
+    XDT_CHECK_PACKAGE([$1], [$2], [$3],
+    [
+      AC_DEFINE([HAVE_$1], [1], [Define if $2 >= $3 present])
+      $1_FOUND="yes"
+    ])
+  fi
+])
+
+
+
+dnl XDT_CHECK_OPTIONAL_FEATURE(varname, optionname, dependency-checks, [helpstring], [default])
+dnl
+dnl Introduces an --enable-optionname/--disable-optionname flag pair for a
+dnl named feature. If neither flag is provided, the feature will be enabled or
+dnl disabled depending on whether or not dependency-checks succeed or fail.
+dnl If --enable-optionname is provided, the configure script will error out if
+dnl the dependencies are not met.  If --disable-optionname is provided, the
+dnl feature will be disabled, and dependencies will not be checked.
+dnl
+dnl The dependency-checks argument should be a series of
+dnl XDT_FEATURE_DEPENDENCY() macro calls, passed as a single quoted argument to
+dnl XDT_CHECK_OPTIONAL_FEATURE().
+dnl
+dnl If helpstring is not provided, optionname is used instead.
+dnl
+dnl The default is "auto", and semantics are as described above. If default is
+dnl set to "yes", then the feature will be required unless --disable-optionname
+dnl is passed to configure.  If default is set to "no", the feature will not be
+dnl built unless --enable-optionname is passed.
+dnl
+dnl If the feature is enabled and dependencies are met, ENABLE_varname will be
+dnl defined in config.h. Additionally, an automake conditional called
+dnl ENABLE_varname will be created, and a shell variable called ENABLE_varname
+dnl will set to "yes" or "no".
+dnl
+dnl Example usage:
+dnl
+dnl XDT_CHECK_OPTIONAL_FEATURE([WAYLAND],
+dnl                            [wayland],
+dnl                            [
+dnl                              XDT_FEATURE_DEPENDENCY([GDK_WAYLAND], [gdk-wayland-3.0], [3.24.0])
+dnl                              XDT_FEATURE_DEPENDENCY([GTK_LAYER_SHELL], [gtk-layer-shell-0], [0.7.0])
+dnl                            ],
+dnl                            [the Wayland windowing system])
+dnl
+dnl Note that there are no commas between the XDT_FEATURE_DEPENDENCY()
+dnl invocations; they should all form a single "argument" to
+dnl XDT_CHECK_OPTIONAL_FEATURE().
+dnl
+dnl Also note that you must quote the dependency-checks argument with square
+dnl brackets, or you will get syntax errors in the generated configure script.
+dnl
+AC_DEFUN([XDT_CHECK_OPTIONAL_FEATURE],
+[
+  AC_ARG_ENABLE([$2],
+AS_HELP_STRING([--enable-$2], [Enable support for m4_default($4, $2) (default=m4_default([$5], [auto]))])
+AS_HELP_STRING([--disable-$2], [Disable support for m4_default($4, $2)]),
+    [xdt_cv_$1_enabled=$enableval], [xdt_cv_$1_enabled=m4_default([$5], [auto])])
+
+  if test x"$xdt_cv_$1_enabled" != x"no"; then
+    xdt_feature_deps_check_only=yes
+    xdt_feature_deps_missing=
+    $3
+    if test x"$xdt_feature_deps_missing" = x""; then
+      xdt_feature_deps_check_only=
+      $3
+      ENABLE_$1="yes"
+      AC_DEFINE([ENABLE_$1], [1], [Define if m4_default($4, $2) is enabled])
+      AC_MSG_CHECKING([if m4_default($4, $2) is enabled])
+      AC_MSG_RESULT([yes])
+    else
+      AC_MSG_CHECKING([if m4_default($4, $2) is enabled])
+      AC_MSG_RESULT([dependencies missing: $xdt_feature_deps_missing])
+      if test x"$xdt_cv_$1_enabled" = x"yes"; then
+        AC_MSG_ERROR([support for m4_default($4, $2) was required, but dependencies were not met])
+      else
+        ENABLE_$1="no"
+      fi
+    fi
+    xdt_feature_deps_check_only=
+    xdt_feature_deps_missing=
+  else
+    ENABLE_$1="no"
+    AC_MSG_CHECKING([if m4_default($4, $2) is enabled])
+    AC_MSG_RESULT([disabled])
+  fi
+
+  AM_CONDITIONAL([ENABLE_$1], [test x"$ENABLE_$1" = x"yes"])
+])
+
+
+
 dnl XDT_CHECK_LIBX11()
 dnl
 dnl Executes various checks for X11. Sets LIBX11_CFLAGS, LIBX11_LDFLAGS
