@@ -221,6 +221,103 @@ AS_HELP_STRING([--disable-$4],[Disable checking for $5]),
 
 
 
+dnl XDT_CHECK_OPTIONAL_FEATURE(varname, optionname, dependencies-met-cond, [helpstring], [default])
+dnl
+dnl Introduces an --enable-optionname/--disable-optionname flag pair for a
+dnl named feature. If neither flag is provided, the feature will be enabled or
+dnl disabled depending on whether or not dependencies-met-cond returns zero
+dnl (met) or non-zero (not met). If --enable-optionname is provided, the
+dnl configure script will error out if the dependencies are not met.
+dnl
+dnl If helpstring is not provided, optionname is used instead.
+dnl
+dnl The "default" is "auto", and semantics are as described above. If "default"
+dnl is set to "yes", then the feature will be required unless
+dnl --disable-optionname is passed to configure.  If "default" is set to "no",
+dnl the feature will not be built unless --enable-optionname is passed.
+dnl
+dnl If the feature is enabled and dependencies are met, ENABLE_varname will be
+dnl defined in config.h. An automake conditional called ENABLE_varname will be
+dnl created, as well as a shell variable called ENABLE_varname, set to "yes" or
+dnl "no".
+dnl
+dnl Example usage:
+dnl
+dnl XDT_CHECK_OPTIONAL_FEATURE([WAYLAND],
+dnl                            [wayland],
+dnl                            [test x"$GDK_WAYLAND_FOUND" = x"yes" -a x"$GTK_LAYER_SHELL_FOUND" = x"yes"],
+dnl                            [Wayland])
+dnl
+dnl Note that this macro does not do any dependency checking itself; the
+dnl example above assumes that XDT_CHECK_OPTIONAL_PACKAGE has been called to
+dnl check for the presence of gdk-wayland and gtk-layer-shell.
+dnl
+AC_DEFUN([XDT_CHECK_OPTIONAL_FEATURE],
+[
+  AC_ARG_ENABLE([$2],
+AS_HELP_STRING([--enable-$2], [Enable support for m4_default($4, $2) (default=m4_default([$5], [auto]))])
+AS_HELP_STRING([--disable-$2], [Disable support for m4_default($4, $2)]),
+    [xdt_cv_$1_enabled=$enableval], [xdt_cv_$1_enabled=m4_default([$5], [auto])])
+
+  AC_MSG_CHECKING([if m4_default($4, $2) is enabled])
+  if test x"$xdt_cv_$1_enabled" != x"no"; then
+    if $3; then
+      ENABLE_$1="yes"
+      AC_DEFINE([ENABLE_$1], [1], [Define if m4_default($4, $2) is enabled])
+      AC_MSG_RESULT([yes])
+    elif test x"$xdt_cv_$1_enabled" = x"yes"; then
+      AC_MSG_ERROR([Feature m4_default($4, $2) was required, but dependencies were not met])
+    fi
+  else
+    ENABLE_$1="no"
+    AC_MSG_RESULT([no])
+  fi
+
+  AM_CONDITIONAL([ENABLE_$1], [test x"$ENABLE_$1" = x"yes"])
+])
+
+
+
+dnl XDT_CHECK_PACKAGE_BINARY(varname, package, pkgvarname, [binname])
+dnl
+dnl Finds a program by looking for a variable named pkgvarname in the
+dnl pkg-config file for package. If found, varname (both a shell variable and
+dnl automake substitution) is set to the name of the binary (and possibly full
+dnl path, if that is how it is specified in the pkg-config file). If not found,
+dnl or not present and executable, configure will exit with an error.
+dnl
+dnl Users can also override this detection by specfying a varname on the
+dnl configure command line. In that case, the provided value is still checked
+dnl to ensure it exists and is executable.
+dnl
+dnl If binname is not provided (for documentation purposes), pkgvarname will be
+dnl used instead.
+dnl
+dnl Example usage:
+dnl
+dnl XDT_CHECK_PACKAGE_BINARY([GLIB_GENMARSHAL], [glib-2.0], [glib_genmarshal], [glib-genmarshal])
+dnl
+AC_DEFUN([XDT_CHECK_PACKAGE_BINARY],
+[
+  AC_REQUIRE([XDT_PROG_PKG_CONFIG])
+
+  AC_ARG_VAR([$1], [Location of program ]m4_default($4, $3))
+  AC_MSG_CHECKING([for m4_default($4, $3)])
+
+  if test x"$$1" = x""; then
+    $1=`$PKG_CONFIG --variable=$3 $2`
+  fi
+  if test x"$$1" != x"" -a -x "$$1"; then
+    AC_MSG_RESULT([$$1])
+  else
+    AC_MSG_ERROR([could not find m4_default($4, $3). You can run:
+./configure $1=/path/to/m4_default($4, $3)
+to provide a custom location for it.])
+  fi
+])
+
+
+
 dnl XDT_CHECK_LIBX11()
 dnl
 dnl Executes various checks for X11. Sets LIBX11_CFLAGS, LIBX11_LDFLAGS
