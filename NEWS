@@ -1,3 +1,16 @@
+4.19.0 (2023-03-05)
+======
+- Add new macro XDT_CHECK_PACKAGE_BINARY
+- Add new macro XDT_CHECK_OPTIONAL_FEATURE
+- Add check for xsltproc (#60)
+- Add Tumbler plugins dependencies to CI build
+- xfce-do-release: added OS dependent sed and make detection
+- xfce-do-release: added user settable sed and make
+- xdt-autogen: Fixed wrong make displayed on FreeBSD
+- Add libxfce4windowing to the API docs HTML index
+- Add libxfce4windowing to CI build
+
+
 4.18.0 (2022-12-15)
 ======
 - build: Bump requirements for Xfce 4.18
