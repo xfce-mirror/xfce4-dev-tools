@@ -32,6 +32,11 @@ XDT_AUTOGEN_VERSION_REVISION="@VERSION_REVISION@"
 prefix="@prefix@"
 datarootdir="@datarootdir@"
 m4macrodir="${datarootdir}/aclocal"
+if [ -z "$ACLOCAL_PATH" ]; then
+  export ACLOCAL_PATH=$m4macrodir
+else
+  export ACLOCAL_PATH=$ACLOCAL_PATH:$m4macrodir
+fi
 
 ##
 ## to properly handle whitespaces in filenames,
