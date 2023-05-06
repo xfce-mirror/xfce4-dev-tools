@@ -32,6 +32,7 @@ XDT_AUTOGEN_VERSION_REVISION="@VERSION_REVISION@"
 prefix="@prefix@"
 datarootdir="@datarootdir@"
 m4macrodir="${datarootdir}/aclocal"
+export ACLOCAL_FLAGS="${ACLOCAL_FLAGS} -I ${m4macrodir}"
 
 ##
 ## to properly handle whitespaces in filenames,
