@@ -6,6 +6,7 @@ steps=0
 steps_complete=0
 version_scheme=1
 warning='\e[1;33mWarning:\e[0m'
+nproc=$(nproc) || nproc=1
 
 SED=${SED:-@GSED@}
 MAKE=${MAKE:-@GMAKE@}
@@ -246,16 +247,16 @@ run_steps () {
 	step "Update Appdata file \e[0m(add new release)"
 	run_command "update_appdata_file $component $version"
 
-	step "Build the tarball \e[0m(./autogen.sh && $MAKE distcheck)"
+  step "Build the tarball \e[0m(./autogen.sh && $MAKE -j$nproc distcheck)"
 	# either in the xfce-build or xfce-test container or on the local machine
 	if [ -n "$TAG" ]; then
 		if [[ "$TAG" == "xfce-build" ]]; then
 			run_command "xfce-build"
 		else
-			run_command "xfce-test call ./autogen.sh" "xfce-test call $MAKE distcheck"
+			run_command "xfce-test call ./autogen.sh" "xfce-test call $MAKE -j$nproc distcheck"
 		fi
 	else
-		run_command "./autogen.sh" "$MAKE distcheck"
+		run_command "./autogen.sh" "$MAKE -j$nproc distcheck"
 	fi
 
 	step "Commit the changes \e[0m(git add -u; git commit -m 'Updates for release')"
