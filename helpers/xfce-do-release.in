@@ -162,6 +162,11 @@ run_command () {
 }
 
 update_appdata_file () {
+	$SED -Ei "s%(\s*)<releases>%&\n\1\1<release date=\"$(date '+%Y-%m-%d')\" version=\"$2\"/>%" "$1"
+	git diff "$1"
+}
+
+get_appdata_file () {
 	local -a files
 	local set_nullglob=$(shopt -p nullglob) set_nocaseglob=$(shopt -p nocaseglob)
 
@@ -170,13 +175,11 @@ update_appdata_file () {
 	$set_nullglob
 	$set_nocaseglob
 
-	if ((${#files[@]} == 1)); then
-		$SED -Ei "s%(\s*)<releases>%&\n\1\1<release date=\"$(date '+%Y-%m-%d')\" version=\"$2\"/>%" "${files[0]}"
-	elif ((${#files[@]} > 1)); then
-		echo " Found several files whose name ends with '$1.appdata.xml.in' (case insensitive, no modification):"
-		printf ' %s\n' "${files[@]}"
+	if ((${#files[@]} > 0)) && grep -q '^\s*<releases>' "${files[0]}"; then
+		echo "${files[0]}"
+		return 0
 	else
-		echo " Could not find any file whose name ends with '$1.appdata.xml.in' (case insensitive)."
+		return 1
 	fi
 }
 
@@ -243,8 +246,10 @@ run_steps () {
 	run_command "xfce-update-news $component $version"
 	edit NEWS
 
-	step "Update Appdata file \e[0m(add new release)"
-	run_command "update_appdata_file $component $version"
+	if appdata_file=$(get_appdata_file "$component"); then
+		step "Update Appdata file \e[0m(add new release)"
+		run_command "update_appdata_file $appdata_file $version"
+	fi
 
 	step "Build the tarball \e[0m(./autogen.sh && $MAKE distcheck)"
 	# either in the xfce-build or xfce-test container or on the local machine
