@@ -227,7 +227,9 @@ update_configure_ac_in () {
 		fi
 	fi
 
-	git diff "$configure_file"
+	if git diff --exit-code "$configure_file"; then
+		printf "$warning No change made to $configure_file, probably a file format issue.\n"
+	fi
 }
 
 get_sha1_hash () {
