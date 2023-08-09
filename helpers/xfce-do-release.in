@@ -197,7 +197,7 @@ update_configure_ac_in () {
 	elif [ -f "configure.ac" ]; then
 		configure_file="configure.ac"
 	else
-		echo "There is no 'configure.ac.in' or 'configure.ac' file."
+		printf "$warning There is no 'configure.ac.in' or 'configure.ac' file.\n"
 		return 1
 	fi
 
@@ -227,7 +227,9 @@ update_configure_ac_in () {
 		fi
 	fi
 
-	git diff "$configure_file"
+	if git diff --exit-code "$configure_file"; then
+		printf "$warning No change made to $configure_file, probably a file format issue.\n"
+	fi
 }
 
 get_sha1_hash () {
