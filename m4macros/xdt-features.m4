@@ -104,7 +104,6 @@ AS_HELP_STRING([--disable-debug],[Include no debugging support]),
   fi
 
   xdt_cv_additional_CFLAGS="$xdt_cv_additional_COMMON_FLAGS \
-                            -Wdeclaration-after-statement \
                             -Wnested-externs \
                             -Wold-style-definition"
   xdt_cv_additional_CXXFLAGS="$xdt_cv_additional_COMMON_FLAGS"
