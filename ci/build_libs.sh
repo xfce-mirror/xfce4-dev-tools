@@ -34,7 +34,7 @@ REPOS="${XFCE_BASE}/xfce/xfce4-dev-tools.git
 for URL in ${REPOS}; do
     NAME=$(basename $URL .git)
     cd /git
-    git clone $URL
+    git clone --recurse-submodules $URL
     cd $NAME
     # We build higher version possible tag, whatever branch it comes from
     TAG=$(git tag --sort=version:refname | grep  "$NAME-" | tail -1)
