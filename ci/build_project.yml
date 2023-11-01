@@ -1,5 +1,8 @@
 image: xfce/xfce-build:latest
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 # Set overall pipeline rules to avoid duplicated pipelines
 # https://docs.gitlab.com/ee/ci/yaml/index.html#exclude-jobs-with-rules-from-certain-pipelines
 workflow:
