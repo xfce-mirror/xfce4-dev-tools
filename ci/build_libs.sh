@@ -7,6 +7,16 @@ XFCE_BASE=https://gitlab.xfce.org
 : ${libdir:="/usr/lib/x86_64-linux-gnu"}
 : ${libexecdir:="/usr/lib/x86_64-linux-gnu"}
 
+MESON_SETUP_OPTIONS="
+  --buildtype=release
+  --prefix=/usr
+  --libdir=$libdir
+  --libexecdir=$libexecdir
+  --sysconfdir=/etc
+  --localstatedir=/var
+  -Dgtk-doc=true
+"
+
 AUTOGEN_OPTIONS="
   --disable-debug
   --enable-maintainer-mode
@@ -40,9 +50,15 @@ for URL in ${REPOS}; do
     TAG=$(git tag --sort=version:refname | grep  "$NAME-" | tail -1)
     echo "--- Building $NAME ($TAG) ---"
     git checkout -b build-$TAG $TAG
-    ./autogen.sh $AUTOGEN_OPTIONS
-    make -j${NPROC:-$(nproc)}
-    make install
+    if [ -f "autogen.sh" ]; then
+        ./autogen.sh $AUTOGEN_OPTIONS
+        make -j${NPROC:-$(nproc)}
+        make install
+    else
+        meson setup $MESON_SETUP_OPTIONS build
+        ninja -Cbuild
+        ninja -Cbuild install
+    fi
     echo "$(pwd): $(git describe)" >> /tmp/xfce_build_version_info.txt
     # Retain HTML docs in /docs
     if [[ -d "$(pwd)/docs" ]]; then
