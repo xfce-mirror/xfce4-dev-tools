@@ -166,6 +166,17 @@ run_command () {
 	fi
 }
 
+build_system_type () {
+	if [ -f "configure.ac" -o -f "configure.ac.in" ]; then
+		echo "autotools"
+	elif [ -f "meson.build" ]; then
+		echo "meson"
+	else
+		printf "$warning Unknown build system.\n"
+		return 1
+	fi
+}
+
 update_appdata_file () {
 	$SED -Ei "s%(\s*)<releases>%&\n\1\1<release date=\"$(date '+%Y-%m-%d')\" version=\"$version\"/>%" "$1"
 	git diff "$1"
@@ -240,14 +251,49 @@ update_configure_ac_in () {
 	fi
 }
 
+update_meson_version () {
+	if [ ! -f "version" ]; then
+		printf "$warning There is no 'version' file.\n"
+		return 1
+	fi
+
+	if [ "$1" = "pre" ]; then
+		printf "$version\n" > version
+	elif [ "$1" = "post" ]; then
+		printf "$version\ngit\n" > version
+	fi
+
+	if git diff --exit-code -- version; then
+		printf "$warning No change made to version file.\n"
+	fi
+}
+
 get_sha1_hash () {
-	sha1sum $component-$version.tar.bz2 | cut -d ' ' -f 1
+	local output
+
+	if [ "$1" = "autotools" ]; then
+		output=$(sha1sum $component-$version.tar.bz2)
+	elif [ "$1" = "meson" ]; then
+		output=$(sha1sum $component-$version.tar.xz)
+	fi
+
+	echo "$output" | cut -d ' ' -f 1
 }
 
 # Playbook for all release steps
 run_steps () {
-	step "Update configure.ac.in \e[0m(add new version and remove git tag)"
-	run_command "update_configure_ac_in pre"
+	local build_type=$(build_system_type)
+	if [ -z "$build_type" ]; then
+		return 1
+	fi
+
+	if [ "$build_type" = "autotools" ]; then
+		step "Update configure.ac.in \e[0m(add new version and remove git tag)"
+		run_command "update_configure_ac_in pre"
+	elif [ "$build_type" = "meson" ]; then
+		step "Update version file \e[0m(add new version and remove git tag)"
+		run_command "update_meson_version pre"
+	fi
 
 	step "Update NEWS file with changelog? \e[0m(xfce-update-news)"
 	run_command "xfce-update-news $component $version"
@@ -258,23 +304,32 @@ run_steps () {
 		run_command "update_appdata_file $appdata_file"
 	fi
 
-	step "Build the tarball \e[0m(./autogen.sh && $MAKE -j$nproc distcheck)"
-	# either in the xfce-build or xfce-test container or on the local machine
-	if [ -n "$TAG" ]; then
-		if [[ "$TAG" == "xfce-build" ]]; then
-			run_command "xfce-build"
-		else
-			run_command "xfce-test call ./autogen.sh" "xfce-test call $MAKE -j$nproc distcheck"
-		fi
-	else
-		run_command "./autogen.sh" "$MAKE -j$nproc distcheck"
-	fi
-
 	step "Commit the changes \e[0m(git add -u; git commit -m 'Updates for release')"
 	run_command "git add -u" "git commit -m 'Updates for release'"
 
 	step "Tag the version \e[0m(git tag -a $component-$version)"
 	run_command 'git tag -a $component-$version -e -m "$(xfce-update-news $component $version WRITETAG)"'
+
+	if [ "$build_type" = "autotools" ]; then
+		step "Build the tarball \e[0m(./autogen.sh && $MAKE -j$nproc distcheck)"
+		# either in the xfce-build or xfce-test container or on the local machine
+		if [ -n "$TAG" ]; then
+			if [[ "$TAG" == "xfce-build" ]]; then
+				run_command "xfce-build"
+			else
+				run_command "xfce-test call ./autogen.sh" "xfce-test call $MAKE -j$nproc distcheck"
+			fi
+		else
+			run_command "./autogen.sh" "$MAKE -j$nproc distcheck"
+		fi
+	elif [ "$build_type" = "meson" ]; then
+		step "Build the tarball \e[0m(meson setup && meson dist)"
+		if [ -n "$TAG" ]; then
+			run_command "xfce-test call meson setup build" "xfce-test call meson dist -C build --include-subprojects"
+		else
+			run_command "meson setup build" "meson dist -C build --include--subprojects"
+		fi
+	fi
 
 	step "Push your changes \e[0m(git push && git push --tags)"
 	run_command "git push" "git push --tags"
@@ -283,10 +338,15 @@ run_steps () {
 	run_command "exo-open 'https://releases.xfce.org/'"
 
 	step "Click on 'Release New Version' \e[0m(https://releases.xfce.org/project/$component/new-release/tarball)"
-	run_command "exo-open 'https://releases.xfce.org/project/$component/new-release/tarball?checksum=$(get_sha1_hash)'"
+	run_command "exo-open 'https://releases.xfce.org/project/$component/new-release/tarball?checksum=$(get_sha1_hash $build_type)'"
 
-	step "Add the git back to version_tag() in configure.ac.in"
-	run_command "update_configure_ac_in post"
+	if [ "$build_type" = "autotools" ]; then
+		step "Add the git back to version_tag() in configure.ac.in"
+		run_command "update_configure_ac_in post"
+	elif [ "$build_type" = "meson" ]; then
+		step "Add the git back to the version file"
+		run_command "update_meson_version post"
+	fi
 
 	step "Commit and push the change \e[0m(git add -u; git commit -m 'Back to development'; git push)"
 	run_command "git add -u" "git commit -m 'Back to development'" "git push"
@@ -297,7 +357,7 @@ run_steps () {
 main () {
 	sanity_checks
 	test_parameters $component $version
-	run_steps
+	run_steps || exit 1
 
 	printf "\nCongrats, you completed $steps_complete of $steps steps of doing a release for Xfce!\n"
 }
