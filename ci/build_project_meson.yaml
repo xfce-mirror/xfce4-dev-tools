@@ -1,0 +1,80 @@
+image: xfce/xfce-build:latest
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+# Set overall pipeline rules to avoid duplicated pipelines
+# https://docs.gitlab.com/ee/ci/yaml/index.html#exclude-jobs-with-rules-from-certain-pipelines
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_MERGE_REQUEST_IID
+
+stages:
+  - build
+  - dist
+  - release
+
+translations:
+  extends: .translation
+  stage: build
+  script:
+    #  Could validate translations, but for now just pass
+    - "true"
+
+build:
+  extends: .ninja
+  stage: build
+  script:
+    - ninja -Cbuild
+
+dist:
+  extends: .dist
+  stage: dist
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+      # We have to reference .make rules to import the rules which skip build
+      # when only po/*.po are modified
+    - !reference [.ninja, rules]
+
+release:
+  extends: .dist
+  stage: release
+  artifacts:
+    paths:
+      - ./*.tar.xz
+    expire_in: never
+  rules:
+    - if: $CI_COMMIT_TAG
+
+.make:
+  before_script:
+    - meson setup build
+  rules:
+    # If there are changes to .po, never run. We also check
+    # BEFORE_SHA to see if it is zeros, in which case we are
+    # running on a manual trigger or scheduled pipeline. In
+    # that case, changes resolves to true so we need to check
+    # both.
+    - if: '$CI_COMMIT_BEFORE_SHA != "0000000000000000000000000000000000000000"'
+      changes:
+      - "po/*.po"
+      when: never
+    # Otherwise, always run
+    - when: always
+
+.dist:
+  extends: .ninja
+  script:
+    - meson dist -C build --include-subprojects
+
+.translation:
+  rules:
+    # If there are changes to .po, run this job
+    - changes:
+      - "po/*.po"
+      when: always
+    # Otherwise, never run
+    - when: never
