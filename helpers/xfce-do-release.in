@@ -310,7 +310,7 @@ run_steps () {
 		build_tarball_prompt="Build the tarball \e[0m(./autogen.sh && $MAKE -j$nproc distcheck)"
 		dist_commands=("./autogen.sh" "$MAKE -j$nproc distcheck")
 	elif [ "$build_type" = "meson" ]; then
-		build_tarball_prompt="Build the tarball \e[0m(meson setup && meson dist --include-subprojects)"
+		build_tarball_prompt="Build the tarball \e[0m(meson setup && meson dist)"
 		dist_commands=("rm -rf build" "meson setup build" "meson dist -C build ")
 	fi
 
