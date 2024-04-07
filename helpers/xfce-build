@@ -11,7 +11,8 @@ CONTAINER="xfce/xfce-build"
 VERSION="latest"
 CFLAGS="-Wall -Wno-deprecated-declarations -Werror=implicit-function-declaration -Werror=return-type"
 VOLUME=$(pwd)
-BUILD_CMD='cd /tmp; ./autogen.sh && make distcheck'
+BUILD_CMD_PRE='cd /tmp; '
+DEFAULT_BUILD_CMD='./autogen.sh && make distcheck'
 
 docker_pull () {
 	docker pull xfce/xfce-build:$VERSION
@@ -25,6 +26,7 @@ docker_run () {
 
 # Parse the commandline arguments
 if [ -z "$1" ]; then
+	BUILD_CMD="$BUILD_CMD_PRE $DEFAULT_BUILD_CMD"
 	VERSION="latest"
 elif [[ "$1" == "pull" ]]; then
 	docker_pull
@@ -36,6 +38,9 @@ elif [[ "$1" == "describe" ]]; then
 	BUILD_CMD='printf "\e[1m$CONTAINER:$VERSION contains:\e[0m\n";cat /git/xfce_build_version_info.txt'
 	docker_run
 	exit 0
+else
+	# All args comprise the build command
+	BUILD_CMD="$BUILD_CMD_PRE $@"
 fi
 
 # Run the local build
