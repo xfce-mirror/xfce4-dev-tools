@@ -41,7 +41,11 @@ gcc-analyzer:
     - if: $GCC_ANALYZER == null
       when: never
     - !reference [.static-analysis, rules]
-  needs: ["build-gcc"]
+  needs:
+    - job: "build-gcc-autotools"
+      optional: true
+    - job: "build-gcc-meson"
+      optional: true
   variables:
     FALSE_POSITIVE_FILE: ".gcc-analyzer-false-positives"
     WARNING_REGEX: 'warning:.+\[-Wanalyzer-.+\]'
@@ -53,7 +57,11 @@ scan-build:
     - if: $SCAN_BUILD == null
       when: never
     - !reference [.static-analysis, rules]
-  needs: ["build-clang"]
+  needs:
+    - job: "build-clang-autotools"
+      optional: true
+    - job: "build-clang-meson"
+      optional: true
   variables:
     FALSE_POSITIVE_FILE: ".scan-build-false-positives"
     WARNING_REGEX: 'warning:.+\[(?!-Wdeprecated-declarations).+\]'
@@ -67,11 +75,24 @@ translations:
     #  Could validate translations, but for now just pass
     - "true"
 
-build-gcc:
+build-gcc-meson:
+  variables:
+    MESON_SETUP_FLAGS: "--buildtype=debug -Dwerror=true"
+  extends:
+    - .build-meson
+    - .build-gcc
+
+build-gcc-autotools:
+  variables:
+    CONFIGURE_FLAGS: "--enable-debug=werror"
+  extends:
+    - .build-autotools
+    - .build-gcc
+
+.build-gcc:
   variables:
     CC: "gcc"
     CXX: "g++"
-    CONFIGURE_FLAGS: "--enable-debug=werror"
   before_script:
     # We can't use shell parameter expansion under the variables keyword above,
     # so let's use a before_script
@@ -79,39 +100,68 @@ build-gcc:
     # so we have to specify the entire list, which depends on the gcc version used.
     # For gcc 13 see https://gcc.gnu.org/onlinedocs/gcc-13.3.0/gcc/Static-Analyzer-Options.html
     - export CPPFLAGS=${GCC_ANALYZER+-fanalyzer -Wno-error=analyzer-allocation-size -Wno-error=analyzer-deref-before-check -Wno-error=analyzer-double-fclose -Wno-error=analyzer-double-free -Wno-error=analyzer-exposure-through-output-file -Wno-error=analyzer-exposure-through-uninit-copy -Wno-error=analyzer-fd-access-mode-mismatch -Wno-error=analyzer-fd-double-close -Wno-error=analyzer-fd-leak -Wno-error=analyzer-fd-phase-mismatch -Wno-error=analyzer-fd-type-mismatch -Wno-error=analyzer-fd-use-after-close -Wno-error=analyzer-fd-use-without-check -Wno-error=analyzer-file-leak -Wno-error=analyzer-free-of-non-heap -Wno-error=analyzer-imprecise-fp-arithmetic -Wno-error=analyzer-infinite-recursion -Wno-error=analyzer-jump-through-null -Wno-error=analyzer-malloc-leak -Wno-error=analyzer-mismatching-deallocation -Wno-error=analyzer-null-argument -Wno-error=analyzer-null-dereference -Wno-error=analyzer-out-of-bounds -Wno-error=analyzer-possible-null-argument -Wno-error=analyzer-possible-null-dereference -Wno-error=analyzer-putenv-of-auto-var -Wno-error=analyzer-shift-count-negative -Wno-error=analyzer-shift-count-overflow -Wno-error=analyzer-stale-setjmp-buffer -Wno-error=analyzer-unsafe-call-within-signal-handler -Wno-error=analyzer-use-after-free -Wno-error=analyzer-use-of-pointer-in-stale-stack-frame -Wno-error=analyzer-use-of-uninitialized-value -Wno-error=analyzer-va-arg-type-mismatch -Wno-error=analyzer-va-list-exhausted -Wno-error=analyzer-va-list-leak -Wno-error=analyzer-va-list-use-after-va-end -Wno-error=analyzer-write-to-const -Wno-error=analyzer-write-to-string-literal}
-  extends: .build
 
-build-clang:
+build-clang-meson:
+  variables:
+    MESON_SETUP_FLAGS: "--buildtype=debug -Dwerror=true"
+  extends:
+    - .build-meson
+    - .build-clang
+
+build-clang-autotools:
+  variables:
+    CONFIGURE_FLAGS: "--enable-debug=werror"
+  extends:
+    - .build-autotools
+    - .build-clang
+
+.build-clang:
   variables:
     CC: "clang"
     CXX: "clang++"
-    CONFIGURE_FLAGS: "--enable-debug=werror"
   before_script:
     - WRAPPER=${SCAN_BUILD+scan-build --use-cc=clang --use-c++=clang++}
-  extends: .build
 
-build-no-x11:
+build-no-x11-meson:
   variables:
-    CONFIGURE_FLAGS: "--enable-debug=werror --disable-x11"
-  extends: .build
+    MESON_SETUP_FLAGS: "--buildtype=debug -Dwerror=true -Dx11=disabled"
+  extends: .build-meson
   rules:
     - if: $X11_FEATURE == null
       when: never
-    - !reference [.configure, rules]
+    - !reference [.setup-meson, rules]
 
-build-no-wayland:
+build-no-x11-autotools:
   variables:
-    CONFIGURE_FLAGS: "--enable-debug=werror --disable-wayland"
-  extends: .build
+    CONFIGURE_FLAGS: "--enable-debug=werror --disable-x11"
+  extends: .build-autotools
+  rules:
+    - if: $X11_FEATURE == null
+      when: never
+    - !reference [.configure-autotools, rules]
+
+build-no-wayland-meson:
+  variables:
+    MESON_SETUP_FLAGS: "--buildtype=debug -Dwerror=true -Dwayland=disabled"
+  extends: .build-meson
   rules:
     - if: $WAYLAND_FEATURE == null
       when: never
-    - !reference [.configure, rules]
+    - !reference [.setup-meson, rules]
 
-distcheck:
+build-no-wayland-autotools:
   variables:
-    CONFIGURE_FLAGS: "--disable-debug"
-  extends: .distcheck
+    CONFIGURE_FLAGS: "--enable-debug=werror --disable-wayland"
+  extends: .build-autotools
+  rules:
+    - if: $WAYLAND_FEATURE == null
+      when: never
+    - !reference [.configure-autotools, rules]
+
+dist-meson:
+  variables:
+    MESON_SETUP_FLAGS: "--buildtype=release"
+  extends: .dist-meson
   stage: distcheck
   interruptible: true
   rules:
@@ -119,10 +169,35 @@ distcheck:
       when: never
       # We have to reference .configure rules to import the rules which skip build
       # when only po/*.po are modified
-    - !reference [.configure, rules]
+    - !reference [.setup-meson, rules]
 
-release:
-  extends: .distcheck
+distcheck-autotools:
+  variables:
+    CONFIGURE_FLAGS: "--disable-debug"
+  extends: .distcheck-autotools
+  stage: distcheck
+  interruptible: true
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+      # We have to reference .configure rules to import the rules which skip build
+      # when only po/*.po are modified
+    - !reference [.configure-autotools, rules]
+
+release-meson:
+  extends: .dist-meson
+  stage: release
+  artifacts:
+    paths:
+      - ./*.tar.xz
+    expire_in: never
+  rules:
+    - if: $CI_COMMIT_TAG
+      exists:
+        - meson.build
+
+release-autotools:
+  extends: .distcheck-autotools
   stage: release
   artifacts:
     paths:
@@ -130,35 +205,74 @@ release:
     expire_in: never
   rules:
     - if: $CI_COMMIT_TAG
+      exists:
+        - autogen.sh
 
-.configure:
+.setup-meson:
+  script:
+    - $WRAPPER meson setup $MESON_SETUP_FLAGS build
+  rules:
+    - !reference [.no-translation, rules]
+      # Otherwise, run if previous stage didn't fail
+    - exists:
+      - meson.build
+      when: on_success
+
+.configure-autotools:
   script:
     - $WRAPPER ./autogen.sh $CONFIGURE_FLAGS
   rules:
     - !reference [.no-translation, rules]
-    # Otherwise, run if previous stage didn't fail
-    - when: on_success
+      # Otherwise, run if previous stage didn't fail
+    - exists:
+        - autogen.sh
+      when: on_success
 
-.build:
-  extends: .configure
+.build-meson:
+  extends:
+    - .setup-meson
+    - .build
   stage: build
   interruptible: true
   script:
-    - !reference [.configure, script]
+    - !reference [.setup-meson, script]
+    - $WRAPPER meson compile -Cbuild 2>&1 | tee build.log
+    - !reference [.build-log-check-deprecation-warnings, script]
+
+.build-autotools:
+  extends: 
+    - .configure-autotools
+    - .build
+  stage: build
+  interruptible: true
+  script:
+    - !reference [.configure-autotools, script]
     - $WRAPPER make 2>&1 | tee build.log
-    # Equivalent to -Werror using grep for deprecation warnings only on glib symbols,
-    # which we care about since we set GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
-    # Subshell is necessary for logical negation to work because of set -e
-    - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
+    - !reference [.build-log-check-deprecation-warnings, script]
+
+.build:
   artifacts:
     paths:
       - build.log
     expire_in: 1 week
 
-.distcheck:
-  extends: .configure
+.build-log-check-deprecation-warnings:
   script:
-    - !reference [.configure, script]
+    # Equivalent to -Werror using grep for deprecation warnings only on glib symbols,
+    # which we care about since we set GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
+    # Subshell is necessary for logical negation to work because of set -e
+    - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
+
+.dist-meson:
+  extends: .setup-meson
+  script:
+    - !reference [.setup-meson, script]
+    - meson dist -Cbuild --include-subprojects
+
+.distcheck-autotools:
+  extends: .configure-autotools
+  script:
+    - !reference [.configure-autotools, script]
     # Projects should use AM_DISTCHECK_CONFIGURE_FLAGS instead of DISTCHECK_CONFIGURE_FLAGS
     # so that the flags set here are not overwritten
     - DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" make distcheck
