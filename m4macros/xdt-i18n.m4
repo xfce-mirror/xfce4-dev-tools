@@ -49,7 +49,9 @@ AC_DEFUN([XDT_I18N],
     [$1])"
 
   dnl This is required on some Linux systems
-  AC_CHECK_FUNC([bind_textdomain_codeset])
+  AC_SEARCH_LIBS([bind_textdomain_codeset], [intl],
+    [AC_DEFINE([HAVE_BIND_TEXTDOMAIN_CODESET], [1], [Define to 1 if you have the 'bind_textdomain_codeset' function.])],
+    [])
 
   dnl Determine where to install locale files
   AC_MSG_CHECKING([for locales directory])
