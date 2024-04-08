@@ -28,30 +28,26 @@ project subdirectories.
 
 ###
 
-## `print-version`
+## `version.sh`
 
 Meson doesn't have a built-in way to dynamically change the package
 version based on the git commit hash (for non-release commits, anyway).
-This simplest way of doing things is to hard-code the version string in
-the root `meson.build` file, which can be cumbersome for release
-automation.
 
-The `print-version` script will read the `version` file and construct an
-appropriate version string.  The line in the `meson.build` template that
-sets the project version is already set up to call this script and
-insert the resulting version.
+The `version.sh` script will use `git describe` to determine the
+version number of the package.  If the current `HEAD` is not a release
+tag, `git-$GIT_SHORT_HASH` will be appended to the version number.
 
-## `version`
+If the project has not been released yet (and has no tags), or is
+completely brand new and has no commits, a fallback version of
+`0.1.0git-$GIT_SHORT_HASH` or `0.1.0git-UNKNOWN` will be used.
 
-This file must be in the root of the project.  It can either be one or
-two lines long.  The first line should be the latest release version (or
-future release version, if the project has never been released yet).
+The line in the `meson.build` template that sets the project version is
+already set up to call this script and insert the resulting version.
 
-The second line is optional, and should either be missing (for a release
-build) or contain the string "git" (for development builds).
-
-The `print-version` script will handle appending a git has to the
-version specified in the first line, if the second line says "git".
+When running `meson dist`, this script will be called by meson to
+rewrite the `version:` field in `meson.build` to hard-code the release
+version.  This way, the release tarball will not depend on a git
+checkout.
 
 # Other Migration Notes
 
