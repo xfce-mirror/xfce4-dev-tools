@@ -257,23 +257,6 @@ update_configure_ac_in () {
 	fi
 }
 
-update_meson_version () {
-	if [ ! -f "version" ]; then
-		printf "$warning There is no 'version' file.\n"
-		return 1
-	fi
-
-	if [ "$1" = "pre" ]; then
-		printf "$version\n" > version
-	elif [ "$1" = "post" ]; then
-		printf "$version\ngit\n" > version
-	fi
-
-	if git diff --exit-code -- version; then
-		printf "$warning No change made to version file.\n"
-	fi
-}
-
 get_sha1_hash () {
 	local output
 
@@ -296,9 +279,6 @@ run_steps () {
 	if [ "$build_type" = "autotools" ]; then
 		step "Update configure.ac.in \e[0m(add new version and remove git tag)"
 		run_command "update_configure_ac_in pre"
-	elif [ "$build_type" = "meson" ]; then
-		step "Update version file \e[0m(add new version and remove git tag)"
-		run_command "update_meson_version pre"
 	fi
 
 	step "Update NEWS file with changelog? \e[0m(xfce-update-news)"
@@ -356,9 +336,6 @@ run_steps () {
 	if [ "$build_type" = "autotools" ]; then
 		step "Add the git back to version_tag() in configure.ac.in"
 		run_command "update_configure_ac_in post"
-	elif [ "$build_type" = "meson" ]; then
-		step "Add the git back to the version file"
-		run_command "update_meson_version post"
 	fi
 
 	step "Commit and push the change \e[0m(git add -u; git commit -m 'Back to development'; git push)"
