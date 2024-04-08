@@ -1,7 +1,7 @@
 project(
   YOUR_PROJECT_NAME_HERE_QUOTED,
   'c',
-  version: run_command(['./print-version'], capture: true, check: true).stdout().strip(),
+  version: run_command(['./version.sh', 'print-version'], capture: true, check: true).stdout().strip(),
   license: 'GPL-2',
   meson_version: '>= 1.0.0',
   default_options: [
@@ -10,6 +10,7 @@ project(
     'warning_level=2',
   ]
 )
+meson.add_dist_script('./version.sh', 'rewrite-version', meson.project_version())
 
 pkgdatadir = get_option('datadir') / meson.project_name()
 
