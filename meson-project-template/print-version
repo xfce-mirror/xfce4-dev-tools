@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+if [ "$MESON_SOURCE_ROOT" ]; then
+    cd "$MESON_SOURCE_ROOT"
+else
+    cd "$(dirname $0)"
+fi
+
+desc=$(git describe 2>/dev/null || true)
+
+if [ -z "$desc" ]; then
+    gitrev=$(git rev-parse --short HEAD 2>/dev/null || echo "UNKNOWN")
+    version="0.1.0git-${gitrev}"
+elif [[ $desc =~ ([0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?)-[0-9]+-g([0-9a-f]+)$ ]]; then
+    version="${BASH_REMATCH[1]}git-${BASH_REMATCH[3]}"
+elif [[ $desc =~ ([0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?)$ ]]; then
+    version="${BASH_REMATCH[1]}"
+else
+    echo "Unable to parse 'git describe' output" >&2
+    exit 1
+fi
+
+echo "$version"
