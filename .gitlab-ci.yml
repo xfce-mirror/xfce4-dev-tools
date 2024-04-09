@@ -14,12 +14,12 @@ build-container:
     # CI_REGISTRY_PASSWORD=********
     IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     LATEST_TAG: $CI_REGISTRY_IMAGE:latest
-  image: docker:20.10.14
+  image: docker:26.0
   # The container build is in the .pre stage in order to ensure it is
   # subsequently used for the included build.
   stage: .pre
   services:
-    - docker:20.10.14-dind
+    - docker:26.0-dind
   script:
     - docker build -t $IMAGE_TAG -t $LATEST_TAG .
     # Export the API docs to the runner so we can publish them
