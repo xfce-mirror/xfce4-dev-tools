@@ -33,3 +33,5 @@ xdt-csource/*
 !xdt-csource/Makefile.am
 !xdt-csource/main.c
 m4
+
+helpers/xfce-do-release
