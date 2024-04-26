@@ -1,3 +1,4 @@
+*~
 *.bak
 .*.swp
 INSTALL
@@ -10,6 +11,7 @@ config.status
 configure
 configure.in
 docs/xdt-csource.1
+helpers/xfce-do-release
 install-sh
 missing
 xfce4-dev-tools.spec
