@@ -12,9 +12,31 @@ workflow:
     - if: $CI_MERGE_REQUEST_IID
 
 stages:
+  - analysis
   - build
   - distcheck
   - release
+
+clang-format:
+  rules:
+    # The job is only run for merge requests and if there is a .clang-format
+    # file at the repository root
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      exists:
+        - .clang-format
+  stage: analysis
+  allow_failure: true
+  script:
+    # The job fails if clang-format's analysis of the merge request diff produces
+    # non-empty output. In this case, the suggested format corrections are displayed
+    # in the job output and can be downloaded for one week.
+    - 'git diff -U0 --no-color "$CI_MERGE_REQUEST_DIFF_BASE_SHA" | clang-format-diff -p1 > format-diff.log || :'
+    - '! test -s format-diff.log || { cat format-diff.log; exit 1; }'
+  artifacts:
+    paths:
+      - format-diff.log
+    when: on_failure
+    expire_in: 1 week
 
 translations:
   extends: .translation
