@@ -48,10 +48,16 @@ translations:
     - "true"
 
 build:
+  variables:
+    CONFIGURE_FLAGS: "--enable-debug=werror"
   extends: .make
   stage: build
   script:
-    - make
+    - make 2>&1 | tee build.log
+    # Equivalent to -Werror using grep for deprecation warnings only on glib symbols,
+    # which we care about since we set GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
+    # Subshell is necessary for logical negation to work because of set -e
+    - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
 
 distcheck:
   extends: .distcheck
@@ -75,7 +81,7 @@ release:
 
 .make:
   before_script:
-    - env "CFLAGS=-Wall -Wno-deprecated-declarations -Werror=implicit-function-declaration -Werror=return-type" ./autogen.sh
+    - ./autogen.sh $CONFIGURE_FLAGS
   rules:
     # If there are changes to .po, never run. We also check
     # BEFORE_SHA to see if it is zeros, in which case we are
