@@ -39,6 +39,7 @@ clang-format:
       - format-diff.log
     when: on_failure
     expire_in: 1 week
+  interruptible: true
 
 translations:
   extends: .translation
@@ -52,6 +53,7 @@ build:
   stage: build
   script:
     - make
+  interruptible: true
 
 distcheck:
   extends: .distcheck
@@ -62,6 +64,7 @@ distcheck:
       # We have to reference .make rules to import the rules which skip build
       # when only po/*.po are modified
     - !reference [.make, rules]
+  interruptible: true
 
 release:
   extends: .distcheck
