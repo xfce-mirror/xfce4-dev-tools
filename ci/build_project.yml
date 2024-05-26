@@ -51,7 +51,14 @@ build:
   extends: .make
   stage: build
   script:
-    - make
+    - make 2>&1 | tee build.log
+    # Equivalent to -Werror using grep for warnings other than deprecation, because setting
+    # -Werror leads to configuration and link errors, at least with autotools
+    # Subshells are necessary for logical negation to work because of set -e
+    - '(! grep -P "warning:.+\[-W(?!deprecated-declarations).+\]" build.log)'
+    # The same for deprecation warnings on glib symbols, which we care about since we set
+    # GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
+    - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
 
 distcheck:
   extends: .distcheck
@@ -75,7 +82,21 @@ release:
 
 .make:
   before_script:
-    - env "CFLAGS=-Wall -Wno-deprecated-declarations -Werror=implicit-function-declaration -Werror=return-type" ./autogen.sh
+    # These warnings should be the same as in m4macros/xdt-features.m4
+    - flags=$(echo -Wall -Wextra
+                   -Wno-missing-field-initializers
+                   -Wno-unused-parameter
+                   -Wmissing-declarations
+                   -Wmissing-noreturn -Wpointer-arith
+                   -Wcast-align -Wformat -Wformat-security -Wformat-y2k
+                   -Winit-self -Wmissing-include-dirs -Wundef
+                   -Wredundant-decls -Wshadow)
+    # Warnings we really want to be errors and/or C/C++ specific
+    - CFLAGS=$(echo $flags
+                    -Werror=return-type -Werror=implicit-function-declaration
+                    -Wnested-externs -Wold-style-definition)
+    - CXXFLAGS="$flags -Werror=return-type"
+    - ./autogen.sh
   rules:
     # If there are changes to .po, never run. We also check
     # BEFORE_SHA to see if it is zeros, in which case we are
