@@ -51,15 +51,25 @@ translations:
 build:
   variables:
     CONFIGURE_FLAGS: "--enable-debug=werror"
-  extends: .make
-  stage: build
-  interruptible: true
-  script:
-    - make 2>&1 | tee build.log
-    # Equivalent to -Werror using grep for deprecation warnings only on glib symbols,
-    # which we care about since we set GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
-    # Subshell is necessary for logical negation to work because of set -e
-    - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
+  extends: .build
+
+build-no-x11:
+  variables:
+    CONFIGURE_FLAGS: "--enable-debug=werror --disable-x11"
+  extends: .build
+  rules:
+    - if: $X11_FEATURE == null
+      when: never
+    - !reference [.make, rules]
+
+build-no-wayland:
+  variables:
+    CONFIGURE_FLAGS: "--enable-debug=werror --disable-wayland"
+  extends: .build
+  rules:
+    - if: $WAYLAND_FEATURE == null
+      when: never
+    - !reference [.make, rules]
 
 distcheck:
   extends: .distcheck
@@ -97,6 +107,17 @@ release:
       when: never
     # Otherwise, always run
     - when: always
+
+.build:
+  extends: .make
+  stage: build
+  interruptible: true
+  script:
+    - make 2>&1 | tee build.log
+    # Equivalent to -Werror using grep for deprecation warnings only on glib symbols,
+    # which we care about since we set GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
+    # Subshell is necessary for logical negation to work because of set -e
+    - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
 
 .distcheck:
   extends: .make
