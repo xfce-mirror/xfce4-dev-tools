@@ -48,8 +48,15 @@ translations:
     #  Could validate translations, but for now just pass
     - "true"
 
-build:
+build-gcc:
   variables:
+    CC: "gcc"
+    CONFIGURE_FLAGS: "--enable-debug=werror"
+  extends: .build
+
+build-clang:
+  variables:
+    CC: "clang"
     CONFIGURE_FLAGS: "--enable-debug=werror"
   extends: .build
 
