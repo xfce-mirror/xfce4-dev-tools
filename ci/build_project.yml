@@ -48,18 +48,17 @@ translations:
     #  Could validate translations, but for now just pass
     - "true"
 
-build:
+build-gcc:
   variables:
+    CC: "gcc"
     CONFIGURE_FLAGS: "--enable-debug=werror"
-  extends: .make
-  stage: build
-  interruptible: true
-  script:
-    - make 2>&1 | tee build.log
-    # Equivalent to -Werror using grep for deprecation warnings only on glib symbols,
-    # which we care about since we set GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
-    # Subshell is necessary for logical negation to work because of set -e
-    - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
+  extends: .build
+
+build-clang:
+  variables:
+    CC: "clang"
+    CONFIGURE_FLAGS: "--enable-debug=werror"
+  extends: .build
 
 distcheck:
   extends: .distcheck
@@ -97,6 +96,17 @@ release:
       when: never
     # Otherwise, always run
     - when: always
+
+.build:
+  extends: .make
+  stage: build
+  interruptible: true
+  script:
+    - make 2>&1 | tee build.log
+    # Equivalent to -Werror using grep for deprecation warnings only on glib symbols,
+    # which we care about since we set GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
+    # Subshell is necessary for logical negation to work because of set -e
+    - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
 
 .distcheck:
   extends: .make
