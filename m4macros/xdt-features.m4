@@ -63,6 +63,7 @@ AS_HELP_STRING([--disable-debug],[Include no debugging support]),
                 [enable_debug=$enableval], [enable_debug=m4_default([$1], [minimum])])
 
   dnl Enable most warnings regardless of debug level. Common flags for both C and C++.
+  dnl These warnings should be the same as in ci/build_project.yml.
   xdt_cv_additional_COMMON_FLAGS="-Wall -Wextra \
                                   -Wno-missing-field-initializers \
                                   -Wno-unused-parameter \
