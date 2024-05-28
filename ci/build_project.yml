@@ -89,8 +89,8 @@ release:
       changes:
       - "po/*.po"
       when: never
-    # Otherwise, always run
-    - when: always
+    # Otherwise, run if previous stage didn't failed
+    - when: on_success
 
 .distcheck:
   extends: .make
