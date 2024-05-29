@@ -1,3 +1,23 @@
+4.19.1 (2024-05-29)
+======
+- ci: Add no-x11 and no-wayland builds
+- ci: Make build stage fail on any compiler warning
+- ci: Make jobs running in merge requests interruptible
+- ci: Add clang-format check
+- Update `.gitignore`
+- Bump CI container to Ubuntu 24.04
+- xdt-autogen: Fix aclocal macro search path
+- Add libjson-c-dev to CI build
+- Clone submodules for current repo in CI template
+- Clone submodules when cloning repo for CI container build
+- xfce-do-release: Skip appdata if file does not exist in right format
+- xfce-do-release: Warn about unmodified configure.ac.in
+- xfce-do-release: Use available proc units for make
+- Add libayatana-indicator3-dev to CI build
+- Remove -Wdeclaration-after-statement from list of enabled warnings
+- Add polkitd to CI build
+
+
 4.19.0 (2023-03-05)
 ======
 - Add new macro XDT_CHECK_PACKAGE_BINARY
