@@ -72,6 +72,8 @@ build-no-wayland:
     - !reference [.make, rules]
 
 distcheck:
+  variables:
+    CONFIGURE_FLAGS: "--disable-debug"
   extends: .distcheck
   stage: distcheck
   interruptible: true
@@ -122,7 +124,7 @@ release:
 .distcheck:
   extends: .make
   script:
-    - make distcheck
+    - DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" make distcheck
 
 .translation:
   rules:
