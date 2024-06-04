@@ -72,6 +72,8 @@ build-no-wayland:
     - !reference [.make, rules]
 
 distcheck:
+  variables:
+    CONFIGURE_FLAGS: "--disable-debug"
   extends: .distcheck
   stage: distcheck
   interruptible: true
@@ -122,7 +124,9 @@ release:
 .distcheck:
   extends: .make
   script:
-    - make distcheck
+    # Projects should use AM_DISTCHECK_CONFIGURE_FLAGS instead of DISTCHECK_CONFIGURE_FLAGS
+    # so that the flags set here are not overwritten
+    - DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" make distcheck
 
 .translation:
   rules:
