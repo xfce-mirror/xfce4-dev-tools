@@ -10,7 +10,7 @@ RUN apt-get update \
   libxss-dev libindicator3-dev libayatana-indicator3-dev libxmu-dev libburn-dev libisofs-dev  libpulse-dev libkeybinder-3.0-dev libmpd-dev valac libvala-0.56-dev gobject-introspection libgirepository1.0-dev librsvg2-dev libtagc0-dev libdbusmenu-gtk3-dev libgtop2-dev libnotify-dev libxklavier-dev libexif-dev libgudev-1.0-dev libupower-glib-dev libclutter-1.0-dev libsensors-dev libical-dev libjson-c-dev \
   libwayland-bin libwayland-dev libgtk-layer-shell-dev \
   libcurl4-openssl-dev libffmpegthumbnailer-dev libgsf-1-dev libpoppler-glib-dev libopenrawgnome-dev libgepub-0.7-dev \
-  polkitd clang-format \
+  polkitd clang-format clang clang-tools \
   libdbus-glib-1-dev \
   && rm -rf /var/lib/apt/lists/*
 
