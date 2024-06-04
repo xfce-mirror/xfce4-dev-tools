@@ -1,5 +1,7 @@
 image: xfce/xfce-build:latest
 
+# Variables not defined here or at job level are supposed to be defined in each
+# project as CI/CD variables, to enable optional jobs
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
@@ -12,8 +14,8 @@ workflow:
     - if: $CI_MERGE_REQUEST_IID
 
 stages:
-  - analysis
   - build
+  - analysis
   - distcheck
   - release
 
@@ -27,6 +29,7 @@ clang-format:
   stage: analysis
   allow_failure: true
   interruptible: true
+  needs: []
   script:
     # The job fails if clang-format's analysis of the merge request diff produces
     # non-empty output. In this case, the suggested format corrections are displayed
@@ -41,6 +44,26 @@ clang-format:
     when: on_failure
     expire_in: 1 week
 
+gcc-analyzer:
+  rules:
+    - if: $GCC_ANALYZER != null
+  needs: ["build-gcc"]
+  variables:
+    FALSE_POSITIVE_FILE: ".gcc-analyzer-false-positives"
+    WARNING_REGEX: 'warning:.+\[-Wanalyzer-.+\]'
+    GREP_OPTIONS: "-E"
+  extends: .static-analysis
+
+scan-build:
+  rules:
+    - if: $SCAN_BUILD != null
+  needs: ["build-clang"]
+  variables:
+    FALSE_POSITIVE_FILE: ".scan-build-false-positives"
+    WARNING_REGEX: 'warning:.+\[(?!-Wdeprecated-declarations).+\]'
+    GREP_OPTIONS: "-P"
+  extends: .static-analysis
+
 translations:
   extends: .translation
   stage: build
@@ -48,9 +71,25 @@ translations:
     #  Could validate translations, but for now just pass
     - "true"
 
-build:
+build-gcc:
   variables:
+    CC: "gcc"
     CONFIGURE_FLAGS: "--enable-debug=werror"
+  before_script:
+    # We can't use shell parameter expansion under the variables keyword above,
+    # so let's use a before_script
+    # We can't disable -Werror for all analyzer warnings at once, e.g. by -Wno-error=analyzer,
+    # so we have to specify the entire list, which depends on the gcc version used.
+    # For gcc 13 see https://gcc.gnu.org/onlinedocs/gcc-13.3.0/gcc/Static-Analyzer-Options.html
+    - export CPPFLAGS=${GCC_ANALYZER+-fanalyzer -Wno-error=analyzer-allocation-size -Wno-error=analyzer-deref-before-check -Wno-error=analyzer-double-fclose -Wno-error=analyzer-double-free -Wno-error=analyzer-exposure-through-output-file -Wno-error=analyzer-exposure-through-uninit-copy -Wno-error=analyzer-fd-access-mode-mismatch -Wno-error=analyzer-fd-double-close -Wno-error=analyzer-fd-leak -Wno-error=analyzer-fd-phase-mismatch -Wno-error=analyzer-fd-type-mismatch -Wno-error=analyzer-fd-use-after-close -Wno-error=analyzer-fd-use-without-check -Wno-error=analyzer-file-leak -Wno-error=analyzer-free-of-non-heap -Wno-error=analyzer-imprecise-fp-arithmetic -Wno-error=analyzer-infinite-recursion -Wno-error=analyzer-jump-through-null -Wno-error=analyzer-malloc-leak -Wno-error=analyzer-mismatching-deallocation -Wno-error=analyzer-null-argument -Wno-error=analyzer-null-dereference -Wno-error=analyzer-out-of-bounds -Wno-error=analyzer-possible-null-argument -Wno-error=analyzer-possible-null-dereference -Wno-error=analyzer-putenv-of-auto-var -Wno-error=analyzer-shift-count-negative -Wno-error=analyzer-shift-count-overflow -Wno-error=analyzer-stale-setjmp-buffer -Wno-error=analyzer-unsafe-call-within-signal-handler -Wno-error=analyzer-use-after-free -Wno-error=analyzer-use-of-pointer-in-stale-stack-frame -Wno-error=analyzer-use-of-uninitialized-value -Wno-error=analyzer-va-arg-type-mismatch -Wno-error=analyzer-va-list-exhausted -Wno-error=analyzer-va-list-leak -Wno-error=analyzer-va-list-use-after-va-end -Wno-error=analyzer-write-to-const -Wno-error=analyzer-write-to-string-literal}
+  extends: .build
+
+build-clang:
+  variables:
+    CC: "clang"
+    CONFIGURE_FLAGS: "--enable-debug=werror"
+  before_script:
+    - WRAPPER=${SCAN_BUILD+scan-build}
   extends: .build
 
 build-no-x11:
@@ -60,7 +99,7 @@ build-no-x11:
   rules:
     - if: $X11_FEATURE == null
       when: never
-    - !reference [.make, rules]
+    - !reference [.configure, rules]
 
 build-no-wayland:
   variables:
@@ -69,7 +108,7 @@ build-no-wayland:
   rules:
     - if: $WAYLAND_FEATURE == null
       when: never
-    - !reference [.make, rules]
+    - !reference [.configure, rules]
 
 distcheck:
   variables:
@@ -80,9 +119,9 @@ distcheck:
   rules:
     - if: $CI_COMMIT_TAG
       when: never
-      # We have to reference .make rules to import the rules which skip build
+      # We have to reference .configure rules to import the rules which skip build
       # when only po/*.po are modified
-    - !reference [.make, rules]
+    - !reference [.configure, rules]
 
 release:
   extends: .distcheck
@@ -94,9 +133,9 @@ release:
   rules:
     - if: $CI_COMMIT_TAG
 
-.make:
-  before_script:
-    - ./autogen.sh $CONFIGURE_FLAGS
+.configure:
+  script:
+    - $WRAPPER ./autogen.sh $CONFIGURE_FLAGS
   rules:
     # If there are changes to .po, never run. We also check
     # BEFORE_SHA to see if it is zeros, in which case we are
@@ -111,19 +150,25 @@ release:
     - when: on_success
 
 .build:
-  extends: .make
+  extends: .configure
   stage: build
   interruptible: true
   script:
-    - make 2>&1 | tee build.log
+    - !reference [.configure, script]
+    - $WRAPPER make 2>&1 | tee build.log
     # Equivalent to -Werror using grep for deprecation warnings only on glib symbols,
     # which we care about since we set GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
     # Subshell is necessary for logical negation to work because of set -e
     - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
+  artifacts:
+    paths:
+      - build.log
+    expire_in: 1 week
 
 .distcheck:
-  extends: .make
+  extends: .configure
   script:
+    - !reference [.configure, script]
     # Projects should use AM_DISTCHECK_CONFIGURE_FLAGS instead of DISTCHECK_CONFIGURE_FLAGS
     # so that the flags set here are not overwritten
     - DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" make distcheck
@@ -136,3 +181,37 @@ release:
       when: always
     # Otherwise, never run
     - when: never
+
+.static-analysis:
+  stage: analysis
+  interruptible: true
+  # This succeeds if and only if the list of warnings from the build and the list of regular
+  # expressions from the false positive file match each other. So:
+  # * if the false positive file doesn't exist or is empty, the build warning list must be empty;
+  # * if the file is not empty:
+  #   * the build warning list filtered by the file patterns must be empty;
+  #   * each file pattern must match at least one build warning.
+  # Empty lines and lines starting with '#' in the false positive file are ignored (so you can
+  # comment on the addition of a false positive).
+  # Patterns added to this file should be as restrictive as possible, so that they normally
+  # match only one warning, allowing it to move around the same source file as changes are made.
+  # For example, for warning
+  # tumbler.c:2543:32: warning: Value stored to 'skeleton' during its initialization is never read [deadcode.DeadStores]
+  # , the added pattern should be
+  # tumbler.c:[0-9]+:[0-9]+: warning: Value stored to 'skeleton' during its initialization is never read \[deadcode.DeadStores\]
+  # (take care to correctly escape the characters that require it).
+  script:
+    - 'warnings=$(grep $GREP_OPTIONS "$WARNING_REGEX" build.log) || true'
+    - 'if [ -z "$warnings" ] && [ ! -f "$FALSE_POSITIVE_FILE" ]; then exit 0; fi'
+    - '[ -f "$FALSE_POSITIVE_FILE" ] || { echo "$warnings"; exit 1; }'
+    - 'filtered_warnings=$(grep -Ev -f <(sed -E "/^#|^$/d" "$FALSE_POSITIVE_FILE") <<< "$warnings" || true)'
+    - '[ -z "$filtered_warnings" ] || { echo "$filtered_warnings"; exit 1; }'
+    - 'while read -r false_positive; do
+         grep -Eq "$false_positive" <<< "$warnings" || orphans=("${orphans[@]}" "$false_positive");
+       done < <(sed -E "/^#|^$/d" "$FALSE_POSITIVE_FILE")'
+    - '[ -z "${orphans[*]}" ] || {
+         printf "%s\n"
+           "These patterns no longer match any warning and should be remove from ''"$FALSE_POSITIVE_FILE"'':"
+           "${orphans[@]}";
+         exit 1;
+       }'
