@@ -105,8 +105,8 @@ release:
       changes:
       - "po/*.po"
       when: never
-    # Otherwise, always run
-    - when: always
+    # Otherwise, run if previous stage didn't fail
+    - when: on_success
 
 .build:
   extends: .make
