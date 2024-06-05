@@ -190,7 +190,8 @@ release:
   # * if the false positive file doesn't exist or is empty, the build warning list must be empty;
   # * if the file is not empty:
   #   * the build warning list filtered by the file patterns must be empty;
-  #   * each file pattern must match at least one build warning.
+  #   * each file pattern must match exactly one build warning; if a pattern is to match several
+  #     warnings, it must be added as many times, consecutively.
   # Empty lines and lines starting with '#' in the false positive file are ignored (so you can
   # comment on the addition of a false positive).
   # Patterns added to this file should be as restrictive as possible, so that they normally
@@ -207,11 +208,26 @@ release:
     - 'filtered_warnings=$(grep -Ev -f <(sed -E "/^#|^$/d" "$FALSE_POSITIVE_FILE") <<< "$warnings" || true)'
     - '[ -z "$filtered_warnings" ] || { echo "$filtered_warnings"; exit 1; }'
     - 'while read -r false_positive; do
-         grep -Eq "$false_positive" <<< "$warnings" || orphans=("${orphans[@]}" "$false_positive");
-       done < <(sed -E "/^#|^$/d" "$FALSE_POSITIVE_FILE")'
+         if [ "$false_positive" = "$previous" ]; then
+           ((--n_warnings > 0)) || orphans=("${orphans[@]}" "$false_positive");
+           continue;
+         elif ((n_warnings > 1)); then
+           missing=("${missing[@]}" "$false_positive");
+         fi;
+         n_warnings=$(grep -Ec "$false_positive" <<< "$warnings") || orphans=("${orphans[@]}" "$false_positive");
+         previous=$false_positive;
+       done < <(sed -E "/^#|^$/d" "$FALSE_POSITIVE_FILE");
+       ((n_warnings <= 1)) || missing=("${missing[@]}" "$previous")'
     - '[ -z "${orphans[*]}" ] || {
          printf "%s\n"
            "These patterns no longer match any warning and should be remove from ''"$FALSE_POSITIVE_FILE"'':"
            "${orphans[@]}";
+         exit 1;
+       }'
+    - '[ -z "${missing[*]}" ] || {
+         printf "%s\n"
+           "These patterns match several warnings, but have either not been added to ''"$FALSE_POSITIVE_FILE"''
+            enough times, or not consecutively, or some of the warnings they match are not false positives:"
+           "${missing[@]}";
          exit 1;
        }'
