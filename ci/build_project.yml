@@ -192,7 +192,8 @@ release:
   # * if the false positive file doesn't exist or is empty, the build warning list must be empty;
   # * if the file is not empty:
   #   * the build warning list filtered by the file patterns must be empty;
-  #   * each file pattern must match at least one build warning.
+  #   * each file pattern must match exactly one build warning; if a pattern is to match several
+  #     warnings, it must be added as many times.
   # Empty lines and lines starting with '#' in the false positive file are ignored (so you can
   # comment on the addition of a false positive).
   # Patterns added to this file should be as restrictive as possible, so that they normally
@@ -208,12 +209,13 @@ release:
     - '[ -f "$FALSE_POSITIVE_FILE" ] || { echo "$warnings"; exit 1; }'
     - 'filtered_warnings=$(grep -Ev -f <(sed -E "/^#|^$/d" "$FALSE_POSITIVE_FILE") <<< "$warnings" || true)'
     - '[ -z "$filtered_warnings" ] || { echo "$filtered_warnings"; exit 1; }'
-    - 'while read -r false_positive; do
-         grep -Eq "$false_positive" <<< "$warnings" || orphans=("${orphans[@]}" "$false_positive");
-       done < <(sed -E "/^#|^$/d" "$FALSE_POSITIVE_FILE")'
-    - '[ -z "${orphans[*]}" ] || {
-         printf "%s\n"
-           "These patterns no longer match any warning and should be remove from ''"$FALSE_POSITIVE_FILE"'':"
-           "${orphans[@]}";
+    - 'n_warnings=$(wc -l <<< "$warnings")'
+    - 'n_patterns=$(sed -E "/^#|^$/d" "$FALSE_POSITIVE_FILE" | wc -l)'
+    - 'if ((n_warnings < n_patterns)); then
+         echo "Some patterns no longer match any warning and should be remove from ''$FALSE_POSITIVE_FILE''";
          exit 1;
-       }'
+       elif ((n_warnings > n_patterns)); then
+         echo "Some patterns match several warnings, but have either not been added to ''$FALSE_POSITIVE_FILE''
+               enough times, or some of the warnings they match are not false positives";
+         exit 1;
+       fi'
