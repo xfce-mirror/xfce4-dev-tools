@@ -89,7 +89,7 @@ build-clang:
     CC: "clang"
     CONFIGURE_FLAGS: "--enable-debug=werror"
   before_script:
-    - WRAPPER=${SCAN_BUILD+scan-build}
+    - WRAPPER=${SCAN_BUILD+scan-build --use-cc=clang --use-c++=clang}
   extends: .build
 
 build-no-x11:
