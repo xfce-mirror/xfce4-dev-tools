@@ -46,7 +46,9 @@ clang-format:
 
 gcc-analyzer:
   rules:
-    - if: $GCC_ANALYZER != null
+    - if: $GCC_ANALYZER == null
+      when: never
+    - !reference [.static-analysis, rules]
   needs: ["build-gcc"]
   variables:
     FALSE_POSITIVE_FILE: ".gcc-analyzer-false-positives"
@@ -56,7 +58,9 @@ gcc-analyzer:
 
 scan-build:
   rules:
-    - if: $SCAN_BUILD != null
+    - if: $SCAN_BUILD == null
+      when: never
+    - !reference [.static-analysis, rules]
   needs: ["build-clang"]
   variables:
     FALSE_POSITIVE_FILE: ".scan-build-false-positives"
@@ -137,15 +141,7 @@ release:
   script:
     - $WRAPPER ./autogen.sh $CONFIGURE_FLAGS
   rules:
-    # If there are changes to .po, never run. We also check
-    # BEFORE_SHA to see if it is zeros, in which case we are
-    # running on a manual trigger or scheduled pipeline. In
-    # that case, changes resolves to true so we need to check
-    # both.
-    - if: '$CI_COMMIT_BEFORE_SHA != "0000000000000000000000000000000000000000"'
-      changes:
-      - "po/*.po"
-      when: never
+    - !reference [.no-translation, rules]
     # Otherwise, run if previous stage didn't fail
     - when: on_success
 
@@ -182,9 +178,24 @@ release:
     # Otherwise, never run
     - when: never
 
+.no-translation:
+  rules:
+    # If there are changes to .po, never run, unless it's a merge request or a manual trigger
+    - if: '$CI_COMMIT_BEFORE_SHA != "0000000000000000000000000000000000000000"'
+      changes:
+        - "po/*.po"
+      when: never
+
 .static-analysis:
   stage: analysis
   interruptible: true
+  rules:
+    - !reference [.no-translation, rules]
+    # Maintaining static analysis on maintenance branches is out of scope: you don't always
+    # want to backport fixes from the defaut branch, and you can't be sure that it will always
+    # be enough to make the job succeed anyway. No need to run this on tags either.
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH
   # This succeeds if and only if the list of warnings from the build and the list of regular
   # expressions from the false positive file match each other. So:
   # * if the false positive file doesn't exist or is empty, the build warning list must be empty;
