@@ -11,6 +11,7 @@ RUN apt-get update \
   libwayland-bin libwayland-dev libgtk-layer-shell-dev \
   libcurl4-openssl-dev libffmpegthumbnailer-dev libgsf-1-dev libpoppler-glib-dev libopenrawgnome-dev libgepub-0.7-dev \
   polkitd clang-format clang clang-tools \
+  meson \
   libdbus-glib-1-dev \
   && rm -rf /var/lib/apt/lists/*
 
