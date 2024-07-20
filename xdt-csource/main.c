@@ -343,6 +343,7 @@ main (int argc, char **argv)
   gboolean toggle = FALSE;
   GError  *error = NULL;
   gchar  **p;
+  gchar   *basename;
   gchar   *filename;
   gchar   *data;
   gsize    length;
@@ -352,7 +353,9 @@ main (int argc, char **argv)
   setlocale (LC_ALL, NULL);
 
   /* set program name */
-  g_set_prgname (g_path_get_basename (argv[0]));
+  basename = g_path_get_basename (argv[0]);
+  g_set_prgname (basename);
+  g_free (basename);
 
   /* parse command line arguments */
   parse_args (&argc, &argv);
