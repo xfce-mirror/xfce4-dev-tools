@@ -1,0 +1,6 @@
+option(
+  'werror',
+  type: 'boolean',
+  value: false,
+  description: 'Whether or not compiler warnings should be treated as errors',
+)
