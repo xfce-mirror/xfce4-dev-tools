@@ -76,8 +76,12 @@ case "${host_os}" in
       ;;
 esac
 
+AC_CHECK_PROGS(MESON, [meson], no)
+AS_IF([test x"$MESON" = x"no"], [AC_MSG_ERROR([meson missing])])
+
 AC_SUBST(GSED)
 AC_SUBST(GMAKE)
+AC_SUBST(MESON)
 
 dnl ***************************************
 dnl *** Check for standard header files ***
