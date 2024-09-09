@@ -1,0 +1,51 @@
+#
+# If your project uses gtk-doc, uncomment this, and guard the gtk-doc
+# build directives by checking this option.
+#
+#option(
+#  'gtk-doc',
+#  type: 'boolean',
+#  value: false,
+#  description: 'Build gtk-doc HTML',
+#)
+
+#
+# If your project builds a library and you want to distribute
+# gobject-introspection files with it, uncomment this, and guard the gir
+# build directives by checking this option.
+#
+#option(
+#  'introspection',
+#  type: 'boolean',
+#  value: true,
+#  description: 'Build gobject-introspection files',
+#)
+
+#
+# If your project has X11- or Wayland-specific features, uncomment
+# these, and use these feature checks in the meson.build files to guard
+# dependency checks and anything else needed.
+#
+#option(
+#  'x11',
+#  type: 'feature',
+#  value: 'auto',
+#  description: 'Support for the X11 windowing system'
+#)
+#option(
+#  'wayland',
+#  type: 'feature',
+#  value: 'auto',
+#  description: 'Support for the Wayland windowing system',
+#)
+
+#
+# If your project includes test programs, uncomment this, and guard the
+# test program build by checking this option.
+#
+#option(
+#  'tests',
+#  type: 'boolean',
+#  value: false,
+#  description: 'Build some small test programs',
+#)
