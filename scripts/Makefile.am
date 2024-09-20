@@ -4,10 +4,21 @@
 # Written for Xfce by Benedikt Meurer <benny@xfce.org>.
 #
 
-bin_SCRIPTS =								\
+generated_scripts = \
 	xdt-autogen
 
-CLEANFILES =								\
-	xdt-autogen
+scripts = \
+	xdt-check-abi \
+	xdt-gen-visibility
+
+bin_SCRIPTS = \
+	$(scripts) \
+	$(generated_scripts)
+
+CLEANFILES = $(generated_scripts)
+
+EXTRA_DIST = \
+	README.md \
+	$(scripts)
 
 # vi:set ts=8 sw=8 noet ai:
