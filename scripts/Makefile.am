@@ -5,7 +5,9 @@
 #
 
 bin_SCRIPTS =								\
-	xdt-autogen
+	xdt-autogen							\
+	xdt-check-abi							\
+	xdt-gen-visibility
 
 CLEANFILES =								\
 	xdt-autogen
