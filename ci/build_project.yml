@@ -68,6 +68,32 @@ scan-build:
     GREP_OPTIONS: "-P"
   extends: .static-analysis
 
+abi-check:
+  rules:
+    - if: $ABI_CHECK == null
+      when: never
+    - !reference [.static-analysis, rules]
+  needs:
+    - job: "build-clang-autotools"
+      optional: true
+    - job: "build-clang-meson"
+      optional: true
+  extends: .static-analysis
+  script:
+    - |
+      for libpair in $ABI_CHECK; do
+          symfile=$(echo "$libpair" | cut -d: -f1)
+          libfilename=$(echo "$libpair" | cut -d: -f2)
+          libfile=$(find . -type f -name "$libfilename")
+          if [ -z "$libfile" ]; then
+              echo "Unable to find built artifact for library '$libfilename'" >&2
+              has_errors=yes
+          fi
+          echo "Checking ABI of $libfile against $symfile"
+          xdt-check-abi "$symfile" "$libfile" || has_errors=yes
+      done
+      [ "$has_errors" != "yes" ]
+
 translations:
   extends: .translation
   stage: build
