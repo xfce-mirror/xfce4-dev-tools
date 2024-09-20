@@ -5,9 +5,16 @@
 #
 
 bin_SCRIPTS =								\
-	xdt-autogen
+	xdt-autogen							\
+	xdt-check-abi							\
+	xdt-gen-visibility
 
 CLEANFILES =								\
 	xdt-autogen
+
+EXTRA_DIST =								\
+	README.md							\
+	xdt-check-abi							\
+	xdt-gen-visibility
 
 # vi:set ts=8 sw=8 noet ai:
