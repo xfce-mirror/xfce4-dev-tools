@@ -238,6 +238,7 @@ release-autotools:
     - !reference [.setup-meson, script]
     - $WRAPPER meson compile -Cbuild 2>&1 | tee build.log
     - !reference [.build-log-check-deprecation-warnings, script]
+    - !reference [.build-abi-check, script]
 
 .build-autotools:
   extends: 
@@ -249,6 +250,7 @@ release-autotools:
     - !reference [.configure-autotools, script]
     - $WRAPPER make 2>&1 | tee build.log
     - !reference [.build-log-check-deprecation-warnings, script]
+    - !reference [.build-abi-check, script]
 
 .build:
   artifacts:
@@ -262,6 +264,48 @@ release-autotools:
     # which we care about since we set GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
     # Subshell is necessary for logical negation to work because of set -e
     - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
+
+# Since this block is used by !reference, and runs as a final step of an
+# unconditional build, we can't use 'rules:' to determine when it should run.
+# We only run this for merge requests going to the default branch, or for
+# commits pushed directly to the default branch, since the (new style) ABI
+# checking is probably not set up on old branches.  However, it will probably
+# be desirable to run this for stable branches that are created in the future,
+# so this logic will need to be revisited.
+#
+# To use this, projects should set a CI variable in the respoitory config
+# called ABI_CHECK.  It should be a space-separated list of
+# $SYMBOL_PATH:$LIBRARY_FILENAME pairs.  Note that the symbol path should be a
+# full path, relative to the project root, but the library filename should be
+# just the filename.  The CI job will do its best to find it inside the
+# project.  See the README.md file in xfce4-dev-tools/scripts/ for the format
+# of the symbols file.
+.build-abi-check:
+  script:
+    - |
+      if [ "$ABI_CHECK" ] \
+        && [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" \
+             -o "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" = "$CI_DEFAULT_BRANCH" ]
+      then
+          unset has_errors
+
+          for libpair in $ABI_CHECK; do
+              symfile=$(echo "$libpair" | cut -d: -f1)
+              libfilename=$(echo "$libpair" | cut -d: -f2)
+              libfile=$(find . -type f -name "$libfilename")
+              if [ -z "$libfile" ]; then
+                  echo "Unable to find built artifact for library '$libfilename'" >&2
+                  has_errors=yes
+              else
+                  echo "Checking ABI of $libfile against $symfile"
+                  xdt-check-abi "$symfile" "$libfile" || has_errors=yes
+              fi
+          done
+
+          if [ "$has_errors" != "yes" ]; then
+              exit 1
+          fi
+      fi
 
 .dist-meson:
   extends: .setup-meson
