@@ -21,7 +21,8 @@ gnome = import('gnome')
 i18n = import('i18n')
 
 dependency_versions = {
-  'glib': '>= 2.66.0',
+  'gir': '>= 1.72.0',
+  'glib': '>= 2.72.0',
   'gtk': '>= 3.24.0',
   'libx11': '>= 1.6.7',
   'xfce4': '>= 4.18.0',
@@ -37,6 +38,10 @@ libxfce4panel = dependency('libxfce4panel-2.0', version: dependency_versions['xf
 garcon = dependency('garcon-1', version: dependency_versions['xfce4'])
 garcon_gtk3 = dependency('garcon-gtk3-1', version: dependency_versions['xfce4'])
 exo = dependency('exo-2', version: dependency_versions['xfce4'])
+
+# Uncomment if you use gobject-introspection (and uncomment the corresponding
+# option in meson_options.txt).
+#gir = dependency('gobject-introspection-1.0', version: dependency_versions['gir'], required: get_option('introspection'))
 
 extra_cflags = []
 extra_cflags_check = [
