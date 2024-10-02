@@ -126,6 +126,8 @@ build-no-x11-meson:
   variables:
     MESON_SETUP_FLAGS: "--buildtype=debug --werror -Dx11=disabled"
   extends: .build-meson
+  before_script:
+    - 'unset ABI_CHECK'
   rules:
     - if: $X11_FEATURE == null
       when: never
@@ -135,6 +137,8 @@ build-no-x11-autotools:
   variables:
     CONFIGURE_FLAGS: "--enable-debug=werror --disable-x11"
   extends: .build-autotools
+  before_script:
+    - 'unset ABI_CHECK'
   rules:
     - if: $X11_FEATURE == null
       when: never
@@ -144,6 +148,8 @@ build-no-wayland-meson:
   variables:
     MESON_SETUP_FLAGS: "--buildtype=debug --werror -Dwayland=disabled"
   extends: .build-meson
+  before_script:
+    - 'unset ABI_CHECK'
   rules:
     - if: $WAYLAND_FEATURE == null
       when: never
@@ -153,6 +159,8 @@ build-no-wayland-autotools:
   variables:
     CONFIGURE_FLAGS: "--enable-debug=werror --disable-wayland"
   extends: .build-autotools
+  before_script:
+    - 'unset ABI_CHECK'
   rules:
     - if: $WAYLAND_FEATURE == null
       when: never
