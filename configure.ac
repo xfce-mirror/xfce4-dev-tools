@@ -91,7 +91,7 @@ AC_CHECK_HEADERS([libintl.h locale.h memory.h stdio.h stdlib.h string.h])
 dnl ***********************************
 dnl *** Check for required packages ***
 dnl ***********************************
-PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.66.0])
+PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.72.0])
 
 dnl **********************
 dnl *** Generate files ***
