@@ -337,7 +337,7 @@ run_steps () {
 	if [[ "$TAG" == "xfce-build" ]]; then
 		# turn the array into a single argument to pass to 'xfce-build',
 		# stripping any '-j' arguments
-		dist_commands=("xfce-build $(join_by ' \&\& ' "${dist_commands[@]}" | sed -e 's/-j[0-9]*//')")
+		dist_commands=("xfce-build \"$(join_by ' \&\& ' "${dist_commands[@]}" | sed -e 's/-j[0-9]*//')\"")
 	elif [ -n "$TAG" ]; then
 		# prefix each element with 'xfce-test call '
 		dist_commands=("${dist_commands[@]/#/xfce-test call }")
