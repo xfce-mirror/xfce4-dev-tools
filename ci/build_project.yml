@@ -256,7 +256,7 @@ release-autotools:
   interruptible: true
   script:
     - !reference [.configure-autotools, script]
-    - $WRAPPER make 2>&1 | tee build.log
+    - $WRAPPER make -j$(nproc) 2>&1 | tee build.log
     - !reference [.build-log-check-deprecation-warnings, script]
     - !reference [.build-abi-check, script]
 
@@ -327,7 +327,7 @@ release-autotools:
     - !reference [.configure-autotools, script]
     # Projects should use AM_DISTCHECK_CONFIGURE_FLAGS instead of DISTCHECK_CONFIGURE_FLAGS
     # so that the flags set here are not overwritten
-    - DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" make distcheck
+    - DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" make -j$(nproc) distcheck
 
 .translation:
   rules:
