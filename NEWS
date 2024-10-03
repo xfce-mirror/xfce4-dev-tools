@@ -1,3 +1,13 @@
+4.19.3 (2024-10-03)
+======
+- xfce-do-release: fix quoting for xfce-build command
+- Add a couple more compiler flags to the meson template
+- Bump glib dependency in meson template
+- Add gobject-introspection example check to meson template
+- build: Bump requirements for Xfce 4.20
+- Disable ABI_CHECK for no-x11 and no-wayland builds
+
+
 4.19.2 (2024-10-01)
 ======
 - Add optional ABI check to the CI build stage
