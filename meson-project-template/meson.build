@@ -50,6 +50,7 @@ extra_cflags_check = [
   '-Wold-style-definition',
   '-Wredundant-decls',
   '-Wpointer-arith',
+  '-Wcast-align',
   '-Winit-self',
   '-Wshadow',
   '-Wmissing-include-dirs',
@@ -61,6 +62,7 @@ extra_cflags_check = [
   '-Wno-unused-parameter',
   '-Wno-declaration-after-statement',
   '-Werror=implicit-function-declaration',
+  '-Wno-error=deprecated-declarations',
 ]
 
 buildtype = get_option('buildtype')
