@@ -325,6 +325,9 @@ release-autotools:
   extends: .configure-autotools
   script:
     - !reference [.configure-autotools, script]
+    # Work around a bug in gettext when doing parallel make.  See:
+    # https://lists.gnu.org/archive/html/bug-gettext/2024-05/msg00014.html
+    - if [ -d po ]; then DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" make -j1 -C po || exit 1; fi
     # Projects should use AM_DISTCHECK_CONFIGURE_FLAGS instead of DISTCHECK_CONFIGURE_FLAGS
     # so that the flags set here are not overwritten
     - DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" make -j$(nproc) distcheck
