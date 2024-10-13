@@ -256,7 +256,10 @@ release-autotools:
   interruptible: true
   script:
     - !reference [.configure-autotools, script]
-    - $WRAPPER make -j$(nproc) 2>&1 | tee build.log
+      # Work around a bug in gettext when doing parallel make.  See:
+      # https://lists.gnu.org/archive/html/bug-gettext/2024-05/msg00014.html
+    - if [ -d po ]; then $WRAPPER make -j1 -C po 2>&1 | tee build.log || exit 1; fi
+    - $WRAPPER make -j$(nproc) 2>&1 | tee -a build.log
     - !reference [.build-log-check-deprecation-warnings, script]
     - !reference [.build-abi-check, script]
 
