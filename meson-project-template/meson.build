@@ -43,6 +43,13 @@ exo = dependency('exo-2', version: dependency_versions['xfce4'])
 # option in meson_options.txt).
 #gir = dependency('gobject-introspection-1.0', version: dependency_versions['gir'], required: get_option('introspection'))
 
+# Uncomment if you are generating Vala API bindings
+#vapigen = find_program('vapigen', required: get_option('vala'))
+#if get_option('vala').enabled()
+#  assert(get_option('introspection'), 'Building Vala bindings requires building GObject introspection data')
+#endif
+#generate_vala = not get_option('vala').disabled() and vapigen.found()
+
 extra_cflags = []
 extra_cflags_check = [
   '-Wmissing-declarations',
