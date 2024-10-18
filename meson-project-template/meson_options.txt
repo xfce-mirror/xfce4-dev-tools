@@ -22,6 +22,20 @@
 #)
 
 #
+# If your project builds a library, and you distribute
+# gobject-introspection files with it, you may also want to generate an
+# API bindings file for the Vala language.  If so, uncomment this.
+# See further comments in the meson.build template for feature
+# detection.
+#
+#option(
+#  'vala',
+#  type: 'feature',
+#  value: 'auto',
+#  description: 'Build Vala language bindings',
+#)
+
+#
 # If your project has X11- or Wayland-specific features, uncomment
 # these, and use these feature checks in the meson.build files to guard
 # dependency checks and anything else needed.
