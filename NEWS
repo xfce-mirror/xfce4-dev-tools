@@ -1,3 +1,13 @@
+4.19.4 (2024-11-01)
+======
+- xfce-do-release: Do not warn when using main instead of master
+- Add libgspell-1-dev to CI build
+- Add more details to the meson template and its README
+- Work around parallel 'make distcheck' bug in gettext
+- Don't quote the filename args passed to 'git diff'
+- ci: Parallelize autotools builds
+
+
 4.19.3 (2024-10-03)
 ======
 - xfce-do-release: fix quoting for xfce-build command
