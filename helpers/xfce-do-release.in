@@ -278,15 +278,16 @@ update_project_version () {
 }
 
 get_sha1_hash () {
-	local suffix
+	local dirname suffix
 
 	if [ "$1" = "autotools" ]; then
 		suffix=bz2
 	elif [ "$1" = "meson" ]; then
+		dirname="build/meson-dist/"
 		suffix=xz
 	fi
 
-	sha1sum "$component-$version.tar.$suffix" | cut -d ' ' -f 1
+	sha1sum "$dirname$component-$version.tar.$suffix" | cut -d ' ' -f 1
 }
 
 join_by () {
