@@ -167,11 +167,17 @@ build-no-wayland-autotools:
     - !reference [.configure-autotools, rules]
 
 dist-meson:
-  variables:
-    MESON_SETUP_FLAGS: "--buildtype=release"
   extends: .dist-meson
   stage: distcheck
   interruptible: true
+  before_script:
+    - |
+      if [ -e meson_options.txt ] && grep -q "'gtk-doc'," meson_options.txt; then
+          MESON_SETUP_FLAGS="-Dgtk-doc=true"
+      else
+          MESON_SETUP_FLAGS=""
+      fi
+      MESON_SETUP_FLAGS="--buildtype=release $MESON_SETUP_FLAGS"
   rules:
     - if: $CI_COMMIT_TAG
       when: never
