@@ -77,6 +77,8 @@ file, are below.
 In `configure.ac`:
 
 ```autoconf
+AC_PATH_PROG([XDT_GEN_VISIBILITY], [xdt-gen-visibility])
+
 AC_ARG_ENABLE([visibility],
               AS_HELP_STRING([--disable-visibility],
                              [Do not use ELF visibility attributes]),
@@ -123,10 +125,10 @@ libexample_la_SOURCES = \
 	libexample-visibilty.h
 
 %-visibility.h: %.symbols Makefile
-	$(AM_V_GEN) xdt-gen-visibility --kind=header $< $@
+	$(AM_V_GEN) $(XDT_GEN_VISIBILITY) --kind=header $< $@
 
 %-visibility.c: %.symbols Makefile
-	$(AM_V_GEN) xdt-gen-visibility --kind=source $< $@
+	$(AM_V_GEN) $(XDT_GEN_VISIBILITY) --kind=source $< $@
 
 BUILT_SOURCES = \
 	libexample-visibility.c \
