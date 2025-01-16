@@ -224,7 +224,7 @@ release-autotools:
 
 .setup-meson:
   script:
-    - $WRAPPER meson setup $MESON_SETUP_FLAGS build
+    - $WRAPPER meson setup --auto-features=enabled $MESON_SETUP_FLAGS build
   rules:
     - !reference [.no-translation, rules]
       # Otherwise, run if previous stage didn't fail
