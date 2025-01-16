@@ -68,6 +68,7 @@ extra_cflags_check = [
   '-Wnested-externs',
   '-Wno-unused-parameter',
   '-Wno-declaration-after-statement',
+  '-Wno-missing-field-initializers',
   '-Werror=implicit-function-declaration',
   '-Wno-error=deprecated-declarations',
 ]
