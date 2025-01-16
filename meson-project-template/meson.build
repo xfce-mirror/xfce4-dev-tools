@@ -3,7 +3,7 @@ project(
   'c',
   version: PUT YOUR INITIAL VERSION NUMBER HERE, QUOTED, WITH '-dev' APPENDED TO IT,
   license: 'GPL-2',
-  meson_version: '>= 0.54.0',
+  meson_version: '>= 0.56.0',
   default_options: [
     'c_std=gnu11',
     'buildtype=debugoptimized',
@@ -68,6 +68,7 @@ extra_cflags_check = [
   '-Wnested-externs',
   '-Wno-unused-parameter',
   '-Wno-declaration-after-statement',
+  '-Wno-missing-field-initializers',
   '-Werror=implicit-function-declaration',
   '-Wno-error=deprecated-declarations',
 ]
