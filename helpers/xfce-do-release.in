@@ -11,6 +11,7 @@ nproc=$( \
 	|| getconf _NPROCESSORS_ONLN 2>/dev/null \
 	|| getconf NPROCESSORS_ONLN 2>/dev/null \
 ) || nproc=1
+current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 SED=${SED:-@GSED@}
 MAKE=${MAKE:-@GMAKE@}
@@ -23,7 +24,6 @@ sanity_checks () {
 		exit 1
 	fi
 
-	current_branch=$(git rev-parse --abbrev-ref HEAD)
 	if [[ "$current_branch" != @(master|main) ]]; then
 		if [[ "$current_branch" == *"xfce-4"* ]]; then
 			echo "You are on a maintenance branch."
@@ -173,13 +173,18 @@ run_command () {
 }
 
 build_system_type () {
-	if [ -f "configure.ac" -o -f "configure.ac.in" ]; then
-		echo "autotools"
-	elif [ -f "meson.build" ]; then
-		echo "meson"
+	if [[ "$current_branch" == @(master|main) ]]; then
+		if [ -f "meson.build" ]; then
+			echo "meson"
+		elif [ -f "configure.ac" -o -f "configure.ac.in" ]; then
+			echo "autotools"
+		fi
 	else
-		printf "$warning Unknown build system.\n"
-		return 1
+		if [ -f "configure.ac" -o -f "configure.ac.in" ]; then
+			echo "autotools"
+		elif [ -f "meson.build" ]; then
+			echo "meson"
+		fi
 	fi
 }
 
@@ -305,6 +310,7 @@ run_steps () {
 
 	build_type=$(build_system_type)
 	if [ -z "$build_type" ]; then
+		printf "$warning Unknown build system.\n"
 		return 1
 	fi
 
