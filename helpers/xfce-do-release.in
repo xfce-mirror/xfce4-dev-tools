@@ -145,11 +145,20 @@ step () {
 
 # Ask whether the step should be executed
 run_command () {
+	local response abort arg
+	local -i success=1
+
 	let steps++
 	read -n 1 -p " → Do it? ([y]es, [N]o, [s]kip) " response
 	printf "\n"
 	if [ "$response" = "y" ]; then
-		if eval $1 && eval $2 && eval $3; then
+		for arg in "$@"; do
+			eval "$arg" || {
+				success=0
+				break
+			}
+		done
+		if ((success)); then
 			printf "\n ✓ Done."
 			let steps_complete++
 			return 0
@@ -289,7 +298,9 @@ get_sha1_hash () {
 		suffix=bz2
 	elif [ "$1" = "meson" ]; then
 		dirname="build/meson-dist/"
-		suffix=xz
+		# not currently supported by moka, so converted to bz2
+		#suffix=xz
+		suffix=bz2
 	fi
 
 	sha1sum "$dirname$component-$version.tar.$suffix" | cut -d ' ' -f 1
@@ -337,7 +348,12 @@ run_steps () {
 		dist_commands=("./autogen.sh" "$MAKE -j$nproc distcheck")
 	elif [ "$build_type" = "meson" ]; then
 		build_tarball_prompt="Build the tarball \e[0m(meson setup && meson dist)"
-		dist_commands=("rm -rf build" "meson setup build" "meson dist -C build --include-subprojects")
+		dist_commands=(
+			"rm -rf build"
+			"meson setup build"
+			"meson dist -C build --include-subprojects"
+			"xzcat build/meson-dist/$component-$version.tar.xz | bzip2 -c > build/meson-dist/$component-$version.tar.bz2"
+		)
 	fi
 
 	# either in the xfce-build or xfce-test container or on the local machine
