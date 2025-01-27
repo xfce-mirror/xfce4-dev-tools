@@ -305,6 +305,7 @@ release-autotools:
 
           for libpair in $ABI_CHECK; do
               symfile=$(echo "$libpair" | cut -d: -f1)
+              [ -f "$symfile" ] || symfile="build/$symfile"
               libfilename=$(echo "$libpair" | cut -d: -f2)
               libfile=$(find . '(' -type f -o -type l ')' -name "$libfilename")
               if [ -z "$libfile" ]; then
