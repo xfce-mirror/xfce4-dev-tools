@@ -73,23 +73,23 @@ extra_cflags_check = [
   '-Wno-error=deprecated-declarations',
 ]
 
-buildtype = get_option('buildtype')
-if buildtype == 'debug' or buildtype == 'debugoptimized'
+optimization = get_option('optimization')
+if get_option('debug') and optimization in ['0', 'g']
   extra_cflags_check += '-fstack-protector-strong'
-  extra_cflags += '-DDEBUG=1'
+  extra_cflags += [
+    '-DDEBUG=1',
+    '-DDEBUG_TRACE=1',
+    '-DG_ENABLE_DEBUG',
+  ]
+else
+  extra_cflags += '-DNDEBUG'
 
-  if buildtype == 'debug'
+  if optimization in ['3', 'minsize']
     extra_cflags += [
-      '-DG_ENABLE_DEBUG',
-      '-DDEBUG_TRACE=1',
+      '-DG_DISABLE_CAST_CHECKS',
+      '-DG_DISABLE_ASSERT',
     ]
   endif
-elif buildtype == 'minsize'
-  extra_cflags += [
-    '-DNDEBUG',
-    '-DG_DISABLE_CAST_CHECKS',
-    '-DG_DISABLE_ASSERT',
-  ]
 endif
 
 if dependency_versions.has_key('glib')
