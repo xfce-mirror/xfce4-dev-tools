@@ -73,18 +73,15 @@ extra_cflags_check = [
   '-Wno-error=deprecated-declarations',
 ]
 
-buildtype = get_option('buildtype')
-if buildtype == 'debug' or buildtype == 'debugoptimized'
+optimization = get_option('optimization')
+if get_option('debug') and optimization in ['0', 'g']
   extra_cflags_check += '-fstack-protector-strong'
-  extra_cflags += '-DDEBUG=1'
-
-  if buildtype == 'debug'
-    extra_cflags += [
-      '-DG_ENABLE_DEBUG',
-      '-DDEBUG_TRACE=1',
-    ]
-  endif
-elif buildtype == 'minsize'
+  extra_cflags += [
+    '-DDEBUG=1',
+    '-DDEBUG_TRACE=1',
+    '-DG_ENABLE_DEBUG',
+  ]
+elif optimization in ['3', 'minsize']
   extra_cflags += [
     '-DNDEBUG',
     '-DG_DISABLE_CAST_CHECKS',
