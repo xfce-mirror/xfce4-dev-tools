@@ -52,8 +52,7 @@ for URL in ${REPOS}; do
     if [ -f meson.build ]; then
       BUILDDIR_PREFIX=build
       # Passing unknown options to 'meson setup' is a fatal error
-      if ( [ -f meson_options.txt ] && grep -q "'gtk-doc'" meson_options.txt ) || \
-         ( [ -f meson.options ] && grep -q "'gtk-doc'" meson.options );
+      if meson configure 2>/dev/null | grep -q '\<gtk-doc\>'
       then
         GTK_DOC_OPT='-Dgtk-doc=true'
       else
