@@ -49,12 +49,7 @@ for URL in ${REPOS}; do
     TAG=$(git tag --sort=version:refname | grep  "$NAME-" | tail -1)
     echo "--- Building $NAME ($TAG) ---"
     git checkout -b build-$TAG $TAG
-    if [ -x autogen.sh ]; then
-      BUILDDIR_PREFIX=.
-      ./autogen.sh $AUTOGEN_OPTIONS
-      make -j${NPROC:-$(nproc)}
-      make install
-    elif [ -f meson.build ]; then
+    if [ -f meson.build ]; then
       BUILDDIR_PREFIX=build
       # Passing unknown options to 'meson setup' is a fatal error
       if ( [ -f meson_options.txt ] && grep -q "'gtk-doc'" meson_options.txt ) || \
@@ -67,6 +62,11 @@ for URL in ${REPOS}; do
       meson setup $MESON_SETUP_OPTIONS $GTK_DOC_OPT "$BUILDDIR_PREFIX"
       meson compile -C"$BUILDDIR_PREFIX"
       meson install -C"$BUILDDIR_PREFIX" --skip-subprojects
+    elif [ -x autogen.sh ]; then
+      BUILDDIR_PREFIX=.
+      ./autogen.sh $AUTOGEN_OPTIONS
+      make -j${NPROC:-$(nproc)}
+      make install
     else
       echo "No supported build system found for $NAME" >&2
       exit 1
