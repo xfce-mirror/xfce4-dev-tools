@@ -173,13 +173,18 @@ run_command () {
 }
 
 build_system_type () {
-	if [ -f "configure.ac" -o -f "configure.ac.in" ]; then
-		echo "autotools"
-	elif [ -f "meson.build" ]; then
-		echo "meson"
+	if [[ $BUILD_SYSTEM != "autotools" && ($BUILD_SYSTEM == "meson" || $version == 4.21.*) ]]; then
+		if [ -f "meson.build" ]; then
+			echo "meson"
+		elif [ -f "configure.ac" -o -f "configure.ac.in" ]; then
+			echo "autotools"
+		fi
 	else
-		printf "$warning Unknown build system.\n"
-		return 1
+		if [ -f "configure.ac" -o -f "configure.ac.in" ]; then
+			echo "autotools"
+		elif [ -f "meson.build" ]; then
+			echo "meson"
+		fi
 	fi
 }
 
@@ -305,6 +310,7 @@ run_steps () {
 
 	build_type=$(build_system_type)
 	if [ -z "$build_type" ]; then
+		printf "$warning Unknown build system.\n"
 		return 1
 	fi
 
