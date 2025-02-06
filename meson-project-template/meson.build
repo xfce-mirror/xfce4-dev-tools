@@ -2,8 +2,8 @@ project(
   YOUR_PROJECT_NAME_HERE_QUOTED,
   'c',
   version: PUT YOUR INITIAL VERSION NUMBER HERE, QUOTED, WITH '-dev' APPENDED TO IT,
-  license: 'GPL-2',
-  meson_version: '>= 0.54.0',
+  license: 'GPL-2.0-or-later',
+  meson_version: '>= 0.57.0',
   default_options: [
     'c_std=gnu11',
     'buildtype=debugoptimized',
@@ -136,4 +136,11 @@ xfce_revision_h = vcs_tag(
   input: 'xfce-revision.h.in',
   output: 'xfce-revision.h',
   replace_string: '@REVISION@',
+)
+
+# Add subdirs here, before gnome.post_install()
+subdir('po')
+
+gnome.post_install(
+  gtk_update_icon_cache: true,
 )
