@@ -2,7 +2,7 @@ project(
   YOUR_PROJECT_NAME_HERE_QUOTED,
   'c',
   version: PUT YOUR INITIAL VERSION NUMBER HERE, QUOTED, WITH '-dev' APPENDED TO IT,
-  license: 'GPL-2',
+  license: 'GPL-2.0-or-later',
   meson_version: '>= 0.54.0',
   default_options: [
     'c_std=gnu11',
