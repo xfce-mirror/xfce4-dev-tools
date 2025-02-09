@@ -73,21 +73,22 @@ for URL in ${REPOS}; do
     echo "$(pwd): $(git describe)" >> /tmp/xfce_build_version_info.txt
     # Retain HTML docs in /docs
     if [[ -d "$(pwd)/docs" ]]; then
+      echo "--- Copying docs for $NAME ($TAG) ---"
       # Special case for thunar because it has docs for thunar and thunarx
       if [[ "$NAME" == "thunar" ]]; then
-        mkdir -p "/docs/$NAME"{,x}
-        cp -a "$BUILDDIR_PREFIX/docs/reference/thunar/html/." "/docs/$NAME"
-        cp -a "$BUILDDIR_PREFIX/docs/reference/thunarx/html/." "/docs/$NAME"x
+        mkdir -v -p "/docs/$NAME"{,x}
+        cp -v -a "$BUILDDIR_PREFIX/docs/reference/thunar/html/." "/docs/$NAME"
+        cp -v -a "$BUILDDIR_PREFIX/docs/reference/thunarx/html/." "/docs/$NAME"x
       # Ditto for libxfce4windowing
       elif [[ "$NAME" == "libxfce4windowing" ]]; then
-        mkdir -p "/docs/$NAME"{,ui}
-        cp -a "$BUILDDIR_PREFIX/docs/reference/libxfce4windowing/html/." "/docs/$NAME"
-        cp -a "$BUILDDIR_PREFIX/docs/reference/libxfce4windowingui/html/." "/docs/$NAME"ui
+        mkdir -v -p "/docs/$NAME"{,ui}
+        cp -v -a "$BUILDDIR_PREFIX/docs/reference/libxfce4windowing/html/." "/docs/$NAME"
+        cp -v -a "$BUILDDIR_PREFIX/docs/reference/libxfce4windowingui/html/." "/docs/$NAME"ui
       else
         HTMLPATH=$(find "$(pwd)/$BUILDDIR_PREFIX/docs" -name html)
         if [[ ! -z "$HTMLPATH" ]]; then
-          mkdir -p "/docs/$NAME"
-          cp -a "$HTMLPATH/." "/docs/$NAME"
+          mkdir -v -p "/docs/$NAME"
+          cp -v -a "$HTMLPATH/." "/docs/$NAME"
         fi
       fi
     fi
