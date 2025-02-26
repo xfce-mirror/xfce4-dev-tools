@@ -222,6 +222,7 @@ edit () {
 update_project_version () {
 	local configure_file
 	local meson_build_file
+	local year=$(date +%Y)
 
 	if [ -f "configure.ac.in" ]; then
 		configure_file="configure.ac.in"
@@ -239,12 +240,13 @@ update_project_version () {
 	fi
 
 	if [ "$configure_file" ]; then
-		if ! grep -zq "AC_COPYRIGHT(\[[^]]*$(date +%Y)[^]]*\])" "$configure_file"; then
+		if ! grep -Ezq "AC_COPYRIGHT\(\[[^]]*($year|copyright_year\(\))[^]]*\]\)" "$configure_file"; then
 			printf '%b\n' \
 				"\n$warning The copyright year of the project does not seem to be up to date." \
 				"This is just a check of '$configure_file' though, you should check this in the" \
 				"whole source code, especially the about dialog and/or its command line counterpart.\n"
 		fi
+		$SED -E -i "s/^m4_define\(\[copyright_year\], *\[[0-9]+\]\)/m4_define([copyright_year], [$year])/" "$configure_file"
 
 		if grep -q 'XDT_VERSION_INIT' "$configure_file"; then
 			if [ "$1" = "pre" ]; then
@@ -268,6 +270,8 @@ update_project_version () {
 
 	if [ "$meson_build_file" ]; then
 		local meson_version_string
+
+		$SED -E -i "s/^copyright_year *= *[0-9]+/copyright_year = $year/" "$meson_build_file"
 
 		meson_version_string="$version_major.$version_minor.$version_patch"
 		if [ "$1" = "post" ]; then
