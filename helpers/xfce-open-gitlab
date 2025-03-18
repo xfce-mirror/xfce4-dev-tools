@@ -21,6 +21,8 @@ APPS="xfce4-screensaver
 	gigolo
 	catfish
 	"
+OPEN_CMD='xfce-open'
+type "$OPEN_CMD" &>/dev/null || OPEN_CMD='exo-open'
 
 # Check if we're in a git repo and get the name
 is_git=$(git rev-parse --is-inside-work-tree)
@@ -51,4 +53,4 @@ fi
 URL="$GITLAB/$GROUP/$REPO/$SLUG"
 
 echo "Opening $URL in your browser..."
-exo-open $URL
+"$OPEN_CMD" "$URL"

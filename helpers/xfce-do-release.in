@@ -15,6 +15,8 @@ nproc=$( \
 SED=${SED:-@GSED@}
 MAKE=${MAKE:-@GMAKE@}
 MESON=${MESON:-@MESON@}
+OPEN_CMD='xfce-open'
+type "$OPEN_CMD" &>/dev/null || OPEN_CMD='exo-open'
 
 # Check if the working directory is in the state we expect it to be in
 sanity_checks () {
@@ -366,10 +368,10 @@ run_steps () {
 	run_command "git push" "git push --tags"
 
 	step "Log in to the release manager \e[0m(https://releases.xfce.org/)"
-	run_command "exo-open 'https://releases.xfce.org/'"
+	run_command "$OPEN_CMD 'https://releases.xfce.org/'"
 
 	step "Click on 'Release New Version' \e[0m(https://releases.xfce.org/project/$component/new-release/tarball)"
-	run_command "exo-open 'https://releases.xfce.org/project/$component/new-release/tarball?checksum=$(get_sha1_hash $build_type)'"
+	run_command "$OPEN_CMD 'https://releases.xfce.org/project/$component/new-release/tarball?checksum=$(get_sha1_hash $build_type)'"
 
 	step "Post-update project version \e[0m(add back git tag)"
 	run_command "update_project_version post"
