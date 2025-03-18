@@ -37,7 +37,6 @@ xfconf = dependency('libxfconf-0', version: dependency_versions['xfce4'])
 libxfce4panel = dependency('libxfce4panel-2.0', version: dependency_versions['xfce4'])
 garcon = dependency('garcon-1', version: dependency_versions['xfce4'])
 garcon_gtk3 = dependency('garcon-gtk3-1', version: dependency_versions['xfce4'])
-exo = dependency('exo-2', version: dependency_versions['xfce4'])
 
 # Uncomment if you use gobject-introspection (and uncomment the corresponding
 # option in meson_options.txt).
