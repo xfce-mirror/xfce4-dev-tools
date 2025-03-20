@@ -212,6 +212,26 @@ get_appdata_file () {
 	fi
 }
 
+get_extra_source_files () {
+	local build_file
+	local -a files
+	local -i n_files=0
+
+	[ -f 'configure.ac' ] && build_file='configure.ac' || build_file='meson.build'
+
+	if grep -q 'xdt-gen-visibility' "$build_file"; then
+		files+=("$(which 'xdt-gen-visibility')")
+		((n_files++))
+	fi
+
+	# One file not found implies failure
+	((${#files[@]} == n_files)) || files=()
+
+	# These are system files, so separating them with spaces shouldn't be a problem
+	echo "${files[*]}"
+	((n_files > 0))
+}
+
 edit () {
 	read -n 1 -p " → Accept? ([Y]es, [e]dit) " response
 	if [ "$response" = "e" ]; then
@@ -313,6 +333,8 @@ run_steps () {
 	local build_type
 	local dist_commands
 	local build_tarball_prompt
+	local -a extra_source_files
+	local -i has_extra_source_files=0
 
 	build_type=$(build_system_type)
 	if [ -z "$build_type" ]; then
@@ -330,6 +352,17 @@ run_steps () {
 	if appdata_file=$(get_appdata_file); then
 		step "Update Appdata file \e[0m(add new release)"
 		run_command "update_appdata_file $appdata_file"
+	fi
+
+	if extra_source_files=($(get_extra_source_files)); then
+		if [ -z "${extra_source_files[*]}" ]; then
+			printf "\nExtra source files should be added but could not be found.\n"
+			return 1
+		fi
+
+		step "Add extra source files \e[0m(cp ${extra_source_files[*]} ./ && git add ${extra_source_files[*]##*/})"
+		run_command "cp ${extra_source_files[*]} ./" "git add ${extra_source_files[*]##*/}"
+		has_extra_source_files=1
 	fi
 
 	step "Commit the changes \e[0m(git add -u; git commit -m 'Updates for release')"
@@ -375,6 +408,11 @@ run_steps () {
 
 	step "Post-update project version \e[0m(add back git tag)"
 	run_command "update_project_version post"
+
+	if ((has_extra_source_files)); then
+		step "Remove extra source files \e[0m(git rm ${extra_source_files[*]##*/})"
+		run_command "git rm ${extra_source_files[*]##*/}"
+	fi
 
 	step "Commit and push the change \e[0m(git add -u; git commit -m 'Back to development'; git push)"
 	run_command "git add -u" "git commit -m 'Back to development'" "git push"
