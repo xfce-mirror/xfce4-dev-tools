@@ -74,13 +74,8 @@ for URL in ${REPOS}; do
     # Retain HTML docs in /docs
     if [[ -d "$(pwd)/docs" ]]; then
       echo "--- Copying docs for $NAME ($TAG) ---"
-      # Special case for thunar because it has docs for thunar and thunarx
-      if [[ "$NAME" == "thunar" ]]; then
-        mkdir -v -p "/docs/$NAME"{,x}
-        cp -v -a "$BUILDDIR_PREFIX/docs/reference/thunar/html/." "/docs/$NAME"
-        cp -v -a "$BUILDDIR_PREFIX/docs/reference/thunarx/html/." "/docs/$NAME"x
-      # Ditto for libxfce4windowing
-      elif [[ "$NAME" == "libxfce4windowing" ]]; then
+      # Special case for libxfce4windowing because it has docs for libxfce4windowing and libxfce4windowingui
+      if [[ "$NAME" == "libxfce4windowing" ]]; then
         mkdir -v -p "/docs/$NAME"{,ui}
         cp -v -a "$BUILDDIR_PREFIX/docs/reference/libxfce4windowing/html/." "/docs/$NAME"
         cp -v -a "$BUILDDIR_PREFIX/docs/reference/libxfce4windowingui/html/." "/docs/$NAME"ui
