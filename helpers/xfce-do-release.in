@@ -296,8 +296,15 @@ update_project_version () {
 		$SED -E -i "s/^copyright_year *= *'?[0-9]+'?/copyright_year = '$year'/" "$meson_build_file"
 
 		meson_version_string="$version_major.$version_minor.$version_patch"
-		if [ "$1" = "post" ]; then
+		if [ "$1" = "pre" ]; then
+			$SED -E -i 's/#define VERSION_FULL VERSION "-" REVISION/#define VERSION_FULL VERSION/' xfce-revision.h.in
+		elif [ "$1" = "post" ]; then
+			$SED -E -i 's/#define VERSION_FULL VERSION/#define VERSION_FULL VERSION "-" REVISION/' xfce-revision.h.in
 			meson_version_string+="-dev"
+		fi
+
+		if git diff --quiet xfce-revision.h.in; then
+			printf "$warning No change made to xfce-revision.h.in, probably a file format issue.\n"
 		fi
 
 		$MESON rewrite kwargs set project / version "$meson_version_string"
