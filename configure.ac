@@ -20,7 +20,7 @@ dnl *** Initialize autoconf ***
 dnl ***************************
 AC_INIT([xfce4-dev-tools], [xdt_version],
         [https://gitlab.xfce.org/xfce/xfce4-dev-tools/])
-AC_COPYRIGHT([Copyright (c) 2002-2024 The Xfce development team. All rights reserved.])
+AC_COPYRIGHT([Copyright (c) 2002-2025 The Xfce development team. All rights reserved.])
 AC_CONFIG_MACRO_DIR([m4])
 AC_REVISION([xdt_version_build])
 
