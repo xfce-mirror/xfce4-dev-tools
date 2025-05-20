@@ -1,3 +1,39 @@
+4.21.0 (2025-05-20)
+======
+- Update copyright year
+- ci: Add python3-psutil to CI build
+- ci: Add libasound2-dev and libsndio-dev to CI build
+- ci: Add libapr1-dev and libaprutil1-dev to CI build
+- ci: Add libaccountsservice-dev to CI build
+- xfce-do-release: Add xfce-revision.h.in to tarball without REVISION
+- ci: Update build_libs.sh after thunar dropped half its doc
+- xfce-do-release: Copy extra source files to the working tree
+- ci: Add libxnvctrl-dev to CI build
+- ci: Be more verbose when copying docs
+- Replace deprecated exo with libxfce4ui 4.21.0
+- ci: Add libxpresent-dev to CI build
+- meson-template: Add copyright year management
+- Automate copyright year management
+- Add libutempter-dev to CI build
+- Add libqrencode-dev to CI build
+- meson-template: Use SPDX license expression
+- ci: Fix random pipefail in container build
+- Add libpolkit-gobject-1-dev to CI build
+- Review debug mode management in the meson template
+- xfce-do-release: Prioritize meson for dev releases
+- ci: Use same gtk-doc detection for container and project build
+- ci: Prioritize meson for container build
+- Add libcolord-dev to CI build
+- Add xserver-xorg-input-libinput-dev to CI build
+- ci: Support generated symbols file in meson builds
+- Add libgladeui-dev to CI build
+- Add -Wno-missing-field-initializers to meson template
+- Add libcanberra-gtk3-dev to the build container
+- ci: Use --auto-features=enabled in meson builds
+- scripts: Complete visibility doc
+- Build gtk-doc during meson dist if docs present
+- xfce-do-release: Fix tarball path with meson
+
 4.20.0 (2024-12-15)
 ======
 
