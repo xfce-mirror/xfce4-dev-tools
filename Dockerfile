@@ -9,8 +9,8 @@ RUN apt-get update \
   libgtksourceview-4-dev libgtk-4-dev libgtksourceview-5-dev libtag1-dev xvfb autopoint gir1.2-gstreamer-1.0 libgstreamer-gl1.0-0 libgstreamer-plugins-base1.0-0 libgstreamer-plugins-base1.0-dev libgstreamer1.0-0 libgstreamer1.0-dev \
   libxss-dev libindicator3-dev libayatana-indicator3-dev libxmu-dev libburn-dev libisofs-dev  libpulse-dev libkeybinder-3.0-dev libmpd-dev valac libvala-0.56-dev gobject-introspection libgirepository1.0-dev librsvg2-dev libtagc0-dev libdbusmenu-gtk3-dev libgtop2-dev libnotify-dev libxklavier-dev libexif-dev libgexiv2-dev libgudev-1.0-dev libupower-glib-dev libclutter-1.0-dev libsensors-dev libical-dev libjson-c-dev \
   libwayland-bin libwayland-dev libgtk-layer-shell-dev \
-  libcurl4-openssl-dev libffmpegthumbnailer-dev libgsf-1-dev libpoppler-glib-dev libopenrawgnome-dev libgepub-0.7-dev libgspell-1-dev \
-  polkitd clang-format clang clang-tools meson python3-dbus python3-pexpect python3-psutil desktop-file-utils \
+  libcurl4-openssl-dev libffmpegthumbnailer-dev libgsf-1-dev libpoppler-glib-dev libopenrawgnome-dev libgepub-0.7-dev libgspell-1-dev libsystemd-dev \
+  polkitd clang-format clang clang-tools meson python3-dbus python3-pexpect python3-psutil desktop-file-utils xmlto \
   libdbus-glib-1-dev libdisplay-info-dev libyaml-dev libcanberra-gtk3-dev libgladeui-dev xserver-xorg-input-libinput-dev libcolord-dev libpolkit-gobject-1-dev libqrencode-dev libutempter-dev libxpresent-dev libxnvctrl-dev libaccountsservice-dev libasound2-dev libsndio-dev \
   && rm -rf /var/lib/apt/lists/*
 
