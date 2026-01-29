@@ -224,6 +224,7 @@ release-autotools:
 
 .setup-meson:
   script:
+    - '[ -z "$PACKAGES" ] || apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install $PACKAGES'
     - $WRAPPER meson setup --auto-features=enabled $MESON_SETUP_FLAGS build
   rules:
     - !reference [.no-translation, rules]
