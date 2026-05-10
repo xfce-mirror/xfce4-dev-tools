@@ -68,6 +68,25 @@ scan-build:
     GREP_OPTIONS: "-P"
   extends: .static-analysis
 
+cppcheck:
+  rules:
+    - if: $CPPCHECK == null
+      when: never
+    - !reference [.static-analysis, rules]
+  needs: []
+  variables:
+    FALSE_POSITIVE_FILE: ".cppcheck-false-positives"
+    CONFIG_FILE: ".cppcheck.cfg"
+  script:
+    - 'if [ -f "$FALSE_POSITIVE_FILE" ]; then SUPPRESSIONS_LIST=--suppressions-list=$FALSE_POSITIVE_FILE; fi'
+    - 'if [ -f "$CONFIG_FILE" ]; then LIBRARY=--library=$CONFIG_FILE; fi'
+    - 'cppcheck
+         --library=gtk --library=xfce $LIBRARY $SUPPRESSIONS_LIST
+         --enable=style --suppress=constParameterPointer --suppress=variableScope --suppress=constVariablePointer --suppress=constParameterCallback
+         --enable=information --check-level=exhaustive
+         --enable=warning,performance,portability --error-exitcode=1 --quiet -j $(nproc) $CPPCHECK_ARGS .'
+  extends: .static-analysis
+
 translations:
   extends: .translation
   stage: build

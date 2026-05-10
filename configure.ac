@@ -104,6 +104,7 @@ m4macros/Makefile
 scripts/Makefile
 scripts/xdt-autogen
 xdt-csource/Makefile
+ci/Makefile
 docs/Makefile
 tests/Makefile
 tests/data/Makefile
