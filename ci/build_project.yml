@@ -68,6 +68,21 @@ scan-build:
     GREP_OPTIONS: "-P"
   extends: .static-analysis
 
+cppcheck:
+  rules:
+    - if: $CPPCHECK == null
+      when: never
+    - !reference [.static-analysis, rules]
+  needs: []
+  variables:
+    FALSE_POSITIVE_FILE: ".cppcheck-false-positives"
+    WARNING_REGEX: '(warning|error).+\[.+\]'
+    GREP_OPTIONS: "-E"
+  before_script:
+    - 'if [ -f ".${CI_PROJECT_NAME}.cfg" ]; then PROJECT_CFG=--library=.${CI_PROJECT_NAME}.cfg; fi'
+    - 'cppcheck --library=gtk --library=xfce $PROJECT_CFG --quiet . 2>&1 | tee build.log'
+  extends: .static-analysis
+
 translations:
   extends: .translation
   stage: build
