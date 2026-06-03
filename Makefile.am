@@ -7,6 +7,7 @@
 ACLOCAL_AMFLAGS = -I m4 -I m4macros ${ACLOCAL_FLAGS}
 
 SUBDIRS =     \
+  ci          \
   docs        \
   helpers     \
   m4macros    \

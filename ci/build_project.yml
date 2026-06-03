@@ -68,6 +68,53 @@ scan-build:
     GREP_OPTIONS: "-P"
   extends: .static-analysis
 
+cppcheck:
+  rules:
+    - if: $CPPCHECK == null
+      when: never
+    - !reference [.static-analysis, rules]
+  needs: []
+  variables:
+    FALSE_POSITIVE_FILE: ".cppcheck-false-positives"
+    CONFIG_FILE: ".cppcheck.cfg"
+    OPTIONS: "--library=gtk --library=xfce
+              --enable=style --suppress=variableScope --suppress=constParameterPointer --suppress=constVariablePointer --suppress=constParameterCallback
+              --enable=information --check-level=exhaustive
+              --enable=warning,performance,portability --error-exitcode=1 --quiet $CPPCHECK_ARGS"
+  script:
+    - |
+      OPTIONS="-j $(nproc) $OPTIONS"
+      if [ -f "$CONFIG_FILE" ]; then
+        OPTIONS="--library=$CONFIG_FILE $OPTIONS"
+      fi
+      if [ -f "$FALSE_POSITIVE_FILE" ]; then
+        if ! cppcheck $OPTIONS --template={id}:{file}:{line}:{severity} \
+            --exitcode-suppressions=<(awk -F : '{print $1 ":" $2}' "$FALSE_POSITIVE_FILE" | sort -u) . 2>&1 \
+            | awk -F : '$4 != "information"{print $1 ":" $2}' >cppcheck.log \
+          || ! git diff --no-index --ignore-all-space --ignore-blank-lines \
+            --src-prefix=[cppcheck.log]/ --dst-prefix=["$FALSE_POSITIVE_FILE"]/ \
+            <(sort cppcheck.log) <(awk -F : '{print $1 ":" $2}' "$FALSE_POSITIVE_FILE" | sort)
+        then
+          echo
+          # If there is a false-positive file, and either cppcheck or the comparison of its
+          # formatted output with the false-positive file failed, we need to run cppcheck
+          # again to obtain usable logs. For the above to work properly, the false-positive
+          # file should follow the syntax [error id]:[filename]:[line] as specified in the
+          # cppcheck manual, but without wildcard characters and where all fields are mandatory,
+          # so there is one line per false-positive. 'line' is actually filtered out above, so
+          # the false-positive file remains valid even if the code is modified and the warning
+          # moves to a different line. It could therefore be omitted, but including it is the
+          # simplest and most natural way to have one line per false positive while avoiding
+          # duplicates in the false-positive file, which would break the local execution of
+          # cppcheck.
+          cppcheck $OPTIONS .
+          exit 1
+        fi
+      else
+        cppcheck $OPTIONS .
+      fi
+  extends: .static-analysis
+
 translations:
   extends: .translation
   stage: build
