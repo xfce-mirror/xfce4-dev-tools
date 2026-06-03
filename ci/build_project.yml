@@ -70,6 +70,10 @@ scan-build:
   variables:
     FALSE_POSITIVE_FILE: ".scan-build-false-positives"
     WARNING_REGEX: 'warning:.+\[(?!-Wdeprecated-declarations).+\]'
+    # With clang 21.1.6, scan-build keeps reporting bugs from gobject-introspection generated files,
+    # but they're not the same as with previous version. So let's exlude them all here in one go with
+    # 'build/tmp-introspect' regex, which should be safe.
+    EXCLUDE_REGEX: 'build/tmp-introspect'
     GREP_OPTIONS: "-P"
   extends: .static-analysis
 
@@ -435,7 +439,7 @@ release-autotools:
   # tumbler.c:[0-9]+:[0-9]+: warning: Value stored to 'skeleton' during its initialization is never read \[deadcode.DeadStores\]
   # (take care to correctly escape the characters that require it).
   script:
-    - 'warnings=$(grep $GREP_OPTIONS "$WARNING_REGEX" build.log | grep -v "${EXCLUDE_REGEX:-$^}") || true'
+    - 'warnings=$(grep $GREP_OPTIONS "$WARNING_REGEX" build.log | grep -E -v "${EXCLUDE_REGEX:-$^}") || true'
     - 'if [ -z "$warnings" ] && [ ! -f "$FALSE_POSITIVE_FILE" ]; then exit 0; fi'
     - '[ -f "$FALSE_POSITIVE_FILE" ] || { echo "$warnings"; exit 1; }'
     - 'filtered_warnings=$(grep -Ev -f <(sed -E "/^#|^$/d" "$FALSE_POSITIVE_FILE") <<< "$warnings" || true)'
