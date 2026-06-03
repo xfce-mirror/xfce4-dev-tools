@@ -1,4 +1,4 @@
-cppcheckdir = $(datarootdir)/cppcheck/cfg
+cppcheckdir = $(CPPCHECK_CFG_PREFIX)/cppcheck/cfg
 
 cppcheck_DATA = \
 	xfce.cfg

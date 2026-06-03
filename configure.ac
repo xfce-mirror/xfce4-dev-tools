@@ -83,6 +83,14 @@ AC_SUBST(GSED)
 AC_SUBST(GMAKE)
 AC_SUBST(MESON)
 
+dnl cppcheck cfg files are installed in $libdir on ubuntu and $datadir on arch, so let's add this option
+AC_ARG_WITH([cppcheck-cfg-prefix],
+            [AS_HELP_STRING([--with-cppcheck-cfg-prefix=PATH],
+                            [Path prefix under which the xfce.cfg file will be installed (default: $libdir)])],
+            [CPPCHECK_CFG_PREFIX="$withval"],
+            [CPPCHECK_CFG_PREFIX="$libdir"])
+AC_SUBST([CPPCHECK_CFG_PREFIX])
+
 dnl ***************************************
 dnl *** Check for standard header files ***
 dnl ***************************************
