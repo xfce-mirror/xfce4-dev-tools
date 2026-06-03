@@ -49,6 +49,11 @@ gcc-analyzer:
   variables:
     FALSE_POSITIVE_FILE: ".gcc-analyzer-false-positives"
     WARNING_REGEX: 'warning:.+\[-Wanalyzer-.+\]'
+    # With gcc 15.2.0 and glib 2.88.0, -fanalyzer spams e.g. with this (from g_error()):
+    # /usr/include/glib-2.0/glib/gmessages.h:357:25: warning: infinite loop [CWE-835] [-Wanalyzer-infinite-loop]
+    # So let's exclude this kind of warning here for all projects.
+    # We can't simply exclude all warnings beginning with '/', as some of them are of interest.
+    EXCLUDE_REGEX: '/usr/include/glib-2.0/glib/gmessages.h:357:25: warning: infinite loop \[CWE-835\] \[-Wanalyzer-infinite-loop\]'
     GREP_OPTIONS: "-E"
   extends: .static-analysis
 
@@ -145,8 +150,8 @@ build-gcc-autotools:
     # so let's use a before_script
     # We can't disable -Werror for all analyzer warnings at once, e.g. by -Wno-error=analyzer,
     # so we have to specify the entire list, which depends on the gcc version used.
-    # For gcc 13 see https://gcc.gnu.org/onlinedocs/gcc-13.3.0/gcc/Static-Analyzer-Options.html
-    - export CPPFLAGS=${GCC_ANALYZER+-fanalyzer -Wno-error=analyzer-allocation-size -Wno-error=analyzer-deref-before-check -Wno-error=analyzer-double-fclose -Wno-error=analyzer-double-free -Wno-error=analyzer-exposure-through-output-file -Wno-error=analyzer-exposure-through-uninit-copy -Wno-error=analyzer-fd-access-mode-mismatch -Wno-error=analyzer-fd-double-close -Wno-error=analyzer-fd-leak -Wno-error=analyzer-fd-phase-mismatch -Wno-error=analyzer-fd-type-mismatch -Wno-error=analyzer-fd-use-after-close -Wno-error=analyzer-fd-use-without-check -Wno-error=analyzer-file-leak -Wno-error=analyzer-free-of-non-heap -Wno-error=analyzer-imprecise-fp-arithmetic -Wno-error=analyzer-infinite-recursion -Wno-error=analyzer-jump-through-null -Wno-error=analyzer-malloc-leak -Wno-error=analyzer-mismatching-deallocation -Wno-error=analyzer-null-argument -Wno-error=analyzer-null-dereference -Wno-error=analyzer-out-of-bounds -Wno-error=analyzer-possible-null-argument -Wno-error=analyzer-possible-null-dereference -Wno-error=analyzer-putenv-of-auto-var -Wno-error=analyzer-shift-count-negative -Wno-error=analyzer-shift-count-overflow -Wno-error=analyzer-stale-setjmp-buffer -Wno-error=analyzer-unsafe-call-within-signal-handler -Wno-error=analyzer-use-after-free -Wno-error=analyzer-use-of-pointer-in-stale-stack-frame -Wno-error=analyzer-use-of-uninitialized-value -Wno-error=analyzer-va-arg-type-mismatch -Wno-error=analyzer-va-list-exhausted -Wno-error=analyzer-va-list-leak -Wno-error=analyzer-va-list-use-after-va-end -Wno-error=analyzer-write-to-const -Wno-error=analyzer-write-to-string-literal}
+    # For gcc 15.2.0 see https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Static-Analyzer-Options.html
+    - export CPPFLAGS=${GCC_ANALYZER+-fanalyzer -Wno-error=analyzer-allocation-size -Wno-error=analyzer-deref-before-check -Wno-error=analyzer-double-fclose -Wno-error=analyzer-double-free -Wno-error=analyzer-exposure-through-output-file -Wno-error=analyzer-exposure-through-uninit-copy -Wno-error=analyzer-fd-access-mode-mismatch -Wno-error=analyzer-fd-double-close -Wno-error=analyzer-fd-leak -Wno-error=analyzer-fd-phase-mismatch -Wno-error=analyzer-fd-type-mismatch -Wno-error=analyzer-fd-use-after-close -Wno-error=analyzer-fd-use-without-check -Wno-error=analyzer-file-leak -Wno-error=analyzer-free-of-non-heap -Wno-error=analyzer-imprecise-fp-arithmetic -Wno-error=analyzer-infinite-loop -Wno-error=analyzer-infinite-recursion -Wno-error=analyzer-jump-through-null -Wno-error=analyzer-malloc-leak -Wno-error=analyzer-mismatching-deallocation -Wno-error=analyzer-null-argument -Wno-error=analyzer-null-dereference -Wno-error=analyzer-out-of-bounds -Wno-error=analyzer-overlapping-buffers -Wno-error=analyzer-possible-null-argument -Wno-error=analyzer-possible-null-dereference -Wno-error=analyzer-putenv-of-auto-var -Wno-error=analyzer-shift-count-negative -Wno-error=analyzer-shift-count-overflow -Wno-error=analyzer-stale-setjmp-buffer -Wno-error=analyzer-tainted-allocation-size -Wno-error=analyzer-tainted-array-index -Wno-error=analyzer-tainted-assertion -Wno-error=analyzer-tainted-divisor -Wno-error=analyzer-tainted-offset -Wno-error=analyzer-tainted-size -Wno-error=analyzer-undefined-behavior-ptrdiff -Wno-error=analyzer-undefined-behavior-strtok -Wno-error=analyzer-unsafe-call-within-signal-handler -Wno-error=analyzer-use-after-free -Wno-error=analyzer-use-of-pointer-in-stale-stack-frame -Wno-error=analyzer-use-of-uninitialized-value -Wno-error=analyzer-va-arg-type-mismatch -Wno-error=analyzer-va-list-exhausted -Wno-error=analyzer-va-list-leak -Wno-error=analyzer-va-list-use-after-va-end -Wno-error=analyzer-write-to-const -Wno-error=analyzer-write-to-string-literal}
 
 build-clang-meson:
   variables:
@@ -430,7 +435,7 @@ release-autotools:
   # tumbler.c:[0-9]+:[0-9]+: warning: Value stored to 'skeleton' during its initialization is never read \[deadcode.DeadStores\]
   # (take care to correctly escape the characters that require it).
   script:
-    - 'warnings=$(grep $GREP_OPTIONS "$WARNING_REGEX" build.log) || true'
+    - 'warnings=$(grep $GREP_OPTIONS "$WARNING_REGEX" build.log | grep -v "${EXCLUDE_REGEX:-$^}") || true'
     - 'if [ -z "$warnings" ] && [ ! -f "$FALSE_POSITIVE_FILE" ]; then exit 0; fi'
     - '[ -f "$FALSE_POSITIVE_FILE" ] || { echo "$warnings"; exit 1; }'
     - 'filtered_warnings=$(grep -Ev -f <(sed -E "/^#|^$/d" "$FALSE_POSITIVE_FILE") <<< "$warnings" || true)'
