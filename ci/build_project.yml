@@ -124,6 +124,39 @@ cppcheck:
       fi
   extends: .static-analysis
 
+rustfmt:
+  script:
+    - cargo fmt --check --all
+  stage: analysis
+  interruptible: true
+  rules:
+    - exists:
+      - Cargo.toml
+      when: on_success
+
+clippy:
+  script:
+    - cargo clippy --no-deps -- -D warnings
+  stage: analysis
+  interruptible: true
+  rules:
+    - exists:
+      - Cargo.toml
+      when: on_success
+
+cargo-deny:
+  script:
+    - |
+      if grep -q '^\[licenses\]' deny.toml; then
+          cargo deny check licenses
+      fi
+  stage: analysis
+  interruptible: true
+  rules:
+    - exists:
+      - deny.toml
+      when: on_success
+
 translations:
   extends: .translation
   stage: build
