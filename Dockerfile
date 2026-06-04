@@ -18,8 +18,8 @@ RUN apt-get update \
 # Set up rust build tools
 RUN mkdir -p ~/.cargo/bin \
     && ln -s /usr/bin/rustup ~/.cargo/bin/rustup \
-    && rustup toolchain install 1.88.0 --profile minimal --component clippy --component rustfmt \
-    && rustup default 1.88.0 \
+    && rustup toolchain install 1.90.0 --profile minimal --component clippy --component rustfmt \
+    && rustup default 1.90.0 \
     && cargo install --locked cargo-deny \
     && rm -rf ~/.rustup/downloads/* ~/.rustup/tmp/* ~/.cargo/registry ~/.cargo/git
 ENV PATH=/root/.cargo/bin:$PATH
