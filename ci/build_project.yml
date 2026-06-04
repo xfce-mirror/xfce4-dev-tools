@@ -150,6 +150,9 @@ cargo-deny:
       if grep -q '^\[licenses\]' deny.toml; then
           cargo deny check licenses
       fi
+      if grep -q '^\[advisories\]' deny.toml; then
+          cargo deny check advisories
+      fi
   stage: analysis
   interruptible: true
   rules:
@@ -305,6 +308,18 @@ distcheck-autotools:
       # We have to reference .configure rules to import the rules which skip build
       # when only po/*.po are modified
     - !reference [.configure-autotools, rules]
+
+publish-cargo-dry-run:
+  stage: distcheck
+  interruptible: true
+  script:
+    - cargo publish --workspace --all-features --dry-run
+  rules:
+    - exists:
+      - meson.build
+      when: never
+    - exists:
+      - Cargo.toml
 
 release-meson:
   extends: .dist-meson
