@@ -1,3 +1,22 @@
+4.21.1 (2026-06-04)
+======
+- Update copyright year
+- Add rust & xfwl4 deps
+- ci: Make cppcheck cfg prefix configurable
+- ci: scan-build related updates after switching to ubuntu 26.04
+- ci: gcc-analyzer related updates after switching to ubuntu 26.04
+- ci: Add cppcheck job
+- Upgrade xfce-build container to Ubuntu 26.04 LTS
+- xfce-build: add libxkbregistry-dev to container
+- Update docker/docker-dind images for CI
+- doc: Update developer.xfce.org index
+- gst-plugin-gtk: New dependency for video wallpapers in xfdesktop
+- meson: Fix typo in optimization level
+- ci: Add docbook-xml to CI build
+- ci: Add libpam0g-dev to CI build
+- ci: Add libsystemd-dev, xmlto to CI build
+- ci: Add libgexiv2-dev to CI build
+
 4.21.0 (2025-05-20)
 ======
 - Update copyright year
