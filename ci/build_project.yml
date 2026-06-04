@@ -124,6 +124,39 @@ cppcheck:
       fi
   extends: .static-analysis
 
+rustfmt:
+  script:
+    - cargo fmt --check --all
+  stage: analysis
+  interruptible: true
+  rules:
+    - exists:
+      - Cargo.toml
+      when: on_success
+
+clippy:
+  script:
+    - cargo clippy --no-deps -- -D warnings
+  stage: analysis
+  interruptible: true
+  rules:
+    - exists:
+      - Cargo.toml
+      when: on_success
+
+cargo-deny:
+  script:
+    - |
+      if grep -q '^\[licenses\]' deny.toml; then
+          cargo deny check licenses
+      fi
+  stage: analysis
+  interruptible: true
+  rules:
+    - exists:
+      - deny.toml
+      when: on_success
+
 translations:
   extends: .translation
   stage: build
@@ -163,6 +196,11 @@ build-clang-meson:
   extends:
     - .build-meson
     - .build-clang
+  rules:
+    - exists:
+      - Cargo.toml
+      when: never
+    - !reference [.setup-meson, rules]
 
 build-clang-autotools:
   variables:
@@ -221,6 +259,20 @@ build-no-wayland-autotools:
     - if: $WAYLAND_FEATURE == null
       when: never
     - !reference [.configure-autotools, rules]
+
+build-cargo:
+  extends:
+    - .build
+  stage: build
+  interruptible: true
+  script:
+    - cargo test --workspace --all-features 2>&1 | tee build.log
+  rules:
+    - exists:
+      - meson.build
+      when: never
+    - exists:
+      - Cargo.toml
 
 dist-meson:
   extends: .dist-meson
