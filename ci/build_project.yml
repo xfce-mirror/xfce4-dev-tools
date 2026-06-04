@@ -306,7 +306,13 @@ release-autotools:
   interruptible: true
   script:
     - !reference [.setup-meson, script]
-    - $WRAPPER meson compile -Cbuild 2>&1 | tee build.log
+    - |
+      if [ "$BUILD_RUN_TESTS" = "true" ]; then
+          MESON_COMPILE_TARGET=test
+      else
+          MESON_COMPILE_TARGET=compile
+      fi
+      $WRAPPER meson $MESON_COMPILE_TARGET -Cbuild 2>&1 | tee build.log
     - !reference [.build-log-check-deprecation-warnings, script]
     - !reference [.build-abi-check, script]
 
