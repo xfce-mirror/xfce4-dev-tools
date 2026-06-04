@@ -306,6 +306,18 @@ distcheck-autotools:
       # when only po/*.po are modified
     - !reference [.configure-autotools, rules]
 
+publish-cargo-dry-run:
+  stage: distcheck
+  interruptible: true
+  script:
+    - cargo publish --workspace --all-features --dry-run
+  rules:
+    - exists:
+      - meson.build
+      when: never
+    - exists:
+      - Cargo.toml
+
 release-meson:
   extends: .dist-meson
   stage: release
