@@ -196,6 +196,11 @@ build-clang-meson:
   extends:
     - .build-meson
     - .build-clang
+  rules:
+    - exists:
+      - Cargo.toml
+      when: never
+    - !reference [.setup-meson, rules]
 
 build-clang-autotools:
   variables:
