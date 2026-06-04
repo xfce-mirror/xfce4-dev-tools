@@ -260,6 +260,20 @@ build-no-wayland-autotools:
       when: never
     - !reference [.configure-autotools, rules]
 
+build-cargo:
+  extends:
+    - .build
+  stage: build
+  interruptible: true
+  script:
+    - cargo test --workspace --all-features 2>&1 | tee build.log
+  rules:
+    - exists:
+      - meson.build
+      when: never
+    - exists:
+      - Cargo.toml
+
 dist-meson:
   extends: .dist-meson
   stage: distcheck
