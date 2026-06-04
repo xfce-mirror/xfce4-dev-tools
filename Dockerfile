@@ -12,7 +12,17 @@ RUN apt-get update \
   libcurl4-openssl-dev libffmpegthumbnailer-dev libgsf-1-dev libpoppler-glib-dev libopenrawgnome-dev libgepub-0.7-dev libgspell-1-dev libsystemd-dev libpam0g-dev \
   polkitd clang-format clang clang-tools meson python3-dbus python3-pexpect python3-psutil desktop-file-utils xmlto docbook-xml cppcheck \
   libdbus-glib-1-dev libdisplay-info-dev libyaml-dev libcanberra-gtk3-dev xserver-xorg-input-libinput-dev libcolord-dev libpolkit-gobject-1-dev libqrencode-dev libutempter-dev libxpresent-dev libxnvctrl-dev libaccountsservice-dev libasound2-dev libsndio-dev \
+  rustup libdrm-dev libgbm-dev libinput-dev libpixman-1-dev libseat-dev libudev-dev libxkbcommon-dev \
   && rm -rf /var/lib/apt/lists/*
+
+# Set up rust build tools
+RUN mkdir -p ~/.cargo/bin \
+    && ln -s /usr/bin/rustup ~/.cargo/bin/rustup \
+    && rustup toolchain install 1.88.0 --profile minimal --component clippy --component rustfmt \
+    && rustup default 1.88.0 \
+    && cargo install --locked cargo-deny \
+    && rm -rf ~/.rustup/downloads/* ~/.rustup/tmp/* ~/.cargo/registry ~/.cargo/git
+ENV PATH=/root/.cargo/bin:$PATH
 
 # Build and install the latest tag for all Xfce core libraries
 RUN mkdir /git
