@@ -86,7 +86,7 @@ cppcheck:
   variables:
     FALSE_POSITIVE_FILE: ".cppcheck-false-positives"
     CONFIG_FILE: ".cppcheck.cfg"
-    OPTIONS: "--library=gtk --library=xfce
+    OPTIONS: "--library=gtk --library=xfce -I .
               --enable=style --suppress=variableScope --suppress=constParameterPointer --suppress=constVariablePointer --suppress=constParameterCallback
               --enable=information --check-level=exhaustive
               --enable=warning,performance,portability --error-exitcode=1 --quiet $CPPCHECK_ARGS"
