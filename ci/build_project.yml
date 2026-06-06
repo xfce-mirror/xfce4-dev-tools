@@ -88,7 +88,7 @@ cppcheck:
     CONFIG_FILE: ".cppcheck.cfg"
     OPTIONS: "--library=gtk --library=xfce -I .
               --enable=style --suppress=variableScope --suppress=constParameterPointer --suppress=constVariablePointer --suppress=constParameterCallback
-              --enable=information --check-level=exhaustive --suppress=unmatchedSuppression
+              --enable=information --check-level=exhaustive --force --suppress=unmatchedSuppression
               --enable=warning,performance,portability --error-exitcode=1 --quiet $CPPCHECK_ARGS"
   script:
     - |
