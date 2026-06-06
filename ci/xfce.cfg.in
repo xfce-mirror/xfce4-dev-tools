@@ -36,7 +36,7 @@
   <define name="TUMBLER_CHECK_VERSION(major, minor, micro)" value="1"/>
   <define name="XFCE_PANEL_DEFINE_PLUGIN(TypeName, type_name, args...)" value=""/>
   <define name="XFCE_PANEL_DEFINE_PLUGIN_RESIDENT(TypeName, type_name, args...)" value=""/>
-  <!-- missing in gtk.cfg: gio/gfileinfo.h -->
+  <!-- missing in gtk.cfg: added in 2.21.0 -->
   <define name="G_FILE_ATTRIBUTE_STANDARD_TYPE" value="&quot;standard::type&quot;"/>
   <define name="G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN" value="&quot;standard::is-hidden&quot;"/>
   <define name="G_FILE_ATTRIBUTE_STANDARD_IS_BACKUP" value="&quot;standard::is-backup&quot;"/>
@@ -116,11 +116,6 @@
   <define name="G_FILE_ATTRIBUTE_TRASH_ORIG_PATH" value="&quot;trash::orig-path&quot;"/>
   <define name="G_FILE_ATTRIBUTE_TRASH_DELETION_DATE" value="&quot;trash::deletion-date&quot;"/>
   <define name="G_FILE_ATTRIBUTE_RECENT_MODIFIED" value="&quot;recent::modified&quot;"/>
-  <!-- missing in gtk.cfg: version check only available in 2.20 -->
-  <define name="GLIB_CHECK_VERSION(major, minor, micro)" value="1"/>
-  <define name="ATK_CHECK_VERSION(major, minor, micro)" value="1"/>
-  <define name="GTK_CHECK_VERSION(major, minor, micro)" value="1"/>
-  <!-- missing in gtk.cfg: miscellaneous -->
   <define name="G_DIR_SEPARATOR_S" value="&quot;/&quot;"/>
   <define name="G_GINT32_FORMAT" value="&quot;i&quot;"/>
   <define name="G_GINT32_MODIFIER" value="&quot;&quot;"/>
@@ -138,4 +133,8 @@
   <define name="GTK_LEVEL_BAR_OFFSET_FULL" value="&quot;full&quot;"/>
   <define name="GTK_LEVEL_BAR_OFFSET_HIGH" value="&quot;high&quot;"/>
   <define name="GTK_LEVEL_BAR_OFFSET_LOW" value="&quot;low&quot;"/>
+  <!-- missing in gtk.cfg: added in 2.20.0 -->
+  <define name="GLIB_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="ATK_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="GTK_CHECK_VERSION(major, minor, micro)" value="1"/>
 </def>

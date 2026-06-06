@@ -46,6 +46,7 @@ dnl ********************************
 AC_PROG_CC()
 AM_PROG_CC_C_O()
 AC_PROG_INSTALL()
+AC_PROG_SED()
 
 dnl **********************
 dnl *** Check xsltproc ***
@@ -90,6 +91,20 @@ AC_ARG_WITH([cppcheck-cfg-prefix],
             [CPPCHECK_CFG_PREFIX="$withval"],
             [CPPCHECK_CFG_PREFIX="$libdir"])
 AC_SUBST([CPPCHECK_CFG_PREFIX])
+
+dnl Parts of "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg" were added only after version 2.19, which is the
+dnl version we use in CI, so don't add them for users if they use cppcheck >= 2.20, as it would conflict
+CPPCHECK_VERSION="0"
+if test -f "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg"; then
+    dnl https://github.com/cppcheck-opensource/cppcheck/commit/40f6f6ad90c987ca6ffcd72881128acab9ed8997
+    if grep -q '<define name="G_FILE_ATTRIBUTE_STANDARD_TYPE' "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg"; then
+        CPPCHECK_VERSION="2.21.0"
+    dnl https://github.com/cppcheck-opensource/cppcheck/commit/8c762adcdd9e63e89ddeeb90ccfee5a225ae8a77
+    elif grep -q '<define name="GLIB_CHECK_VERSION' "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg"; then
+        CPPCHECK_VERSION="2.20.0"
+    fi
+fi
+AC_SUBST([CPPCHECK_VERSION])
 
 dnl ***************************************
 dnl *** Check for standard header files ***
