@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<!-- based on /usr/share/cppcheck/cfg/gtk.cfg -->
+<def format="2">
+  <!-- xfce macros: from meson.build -->
+  <define name="BINDIR" value="&quot;/usr/bin&quot;"/>
+  <define name="COPYRIGHT_YEAR" value="&quot;0000&quot;"/>
+  <define name="DATADIR" value="&quot;/usr/share&quot;"/>
+  <define name="GETTEXT_PACKAGE" value="&quot;name&quot;"/>
+  <define name="INCLUDEDIR" value="&quot;/usr/include&quot;"/>
+  <define name="LIBDIR" value="&quot;/usr/lib&quot;"/>
+  <define name="LIBEXECDIR" value="&quot;/usr/lib&quot;"/>
+  <define name="LOCALEDIR" value="&quot;/usr/share/locale&quot;"/>
+  <define name="LOCALSTATEDIR" value="&quot;/var&quot;"/>
+  <define name="PACKAGE_BUGREPORT" value="&quot;https://gitlab.xfce.org/group/name/-/issues&quot;"/>
+  <define name="PACKAGE_DATADIR" value="&quot;/usr/share/name&quot;"/>
+  <define name="PACKAGE_LOCALE_DIR" value="&quot;/usr/share/locale&quot;"/>
+  <define name="PACKAGE_NAME" value="&quot;name&quot;"/>
+  <define name="PACKAGE_STRING" value="&quot;name 0.0.0&quot;"/>
+  <define name="PACKAGE" value="&quot;name&quot;"/>
+  <define name="PACKAGE_VERSION" value="&quot;0.0.0&quot;"/>
+  <define name="PREFIX" value="&quot;/usr&quot;"/>
+  <define name="SBINDIR" value="&quot;/usr/sbin&quot;"/>
+  <define name="SYSCONFDIR" value="&quot;/etc&quot;"/>
+  <define name="VERSION" value="&quot;0.0.0&quot;"/>
+  <define name="VERSION_FULL" value="&quot;0.0.0-dev-0000000&quot;"/>
+  <define name="VERSION_SHORT" value="&quot;0.0&quot;"/>
+  <!-- xfce macros: version check and type declaration/definiton -->
+  <define name="GARCON_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="LIBXFCE4PANEL_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="LIBXFCE4UI_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="LIBXFCE4UTIL_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="LIBXFCE4WINDOWING_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="THUNARX_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="THUNARX_DEFINE_TYPE(TN, t_n, T_P)" value=""/>
+  <define name="THUNARX_DEFINE_TYPE_WITH_CODE(TN, t_n, T_P, _C_)" value=""/>
+  <define name="TUMBLER_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="XFCE_PANEL_DEFINE_PLUGIN(TypeName, type_name, args...)" value=""/>
+  <define name="XFCE_PANEL_DEFINE_PLUGIN_RESIDENT(TypeName, type_name, args...)" value=""/>
+  <!-- missing in gtk.cfg: added in 2.21.0 -->
+  <define name="G_FILE_ATTRIBUTE_STANDARD_TYPE" value="&quot;standard::type&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN" value="&quot;standard::is-hidden&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_IS_BACKUP" value="&quot;standard::is-backup&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK" value="&quot;standard::is-symlink&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_IS_VIRTUAL" value="&quot;standard::is-virtual&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_IS_VOLATILE" value="&quot;standard::is-volatile&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_NAME" value="&quot;standard::name&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME" value="&quot;standard::display-name&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME" value="&quot;standard::edit-name&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_COPY_NAME" value="&quot;standard::copy-name&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_DESCRIPTION" value="&quot;standard::description&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_ICON" value="&quot;standard::icon&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON" value="&quot;standard::symbolic-icon&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE" value="&quot;standard::content-type&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE" value="&quot;standard::fast-content-type&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_SIZE" value="&quot;standard::size&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_ALLOCATED_SIZE" value="&quot;standard::allocated-size&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET" value="&quot;standard::symlink-target&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_TARGET_URI" value="&quot;standard::target-uri&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_STANDARD_SORT_ORDER" value="&quot;standard::sort-order&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_ETAG_VALUE" value="&quot;etag::value&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_ID_FILE" value="&quot;id::file&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_ID_FILESYSTEM" value="&quot;id::filesystem&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_ACCESS_CAN_READ" value="&quot;access::can-read&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE" value="&quot;access::can-write&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE" value="&quot;access::can-execute&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE" value="&quot;access::can-delete&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH" value="&quot;access::can-trash&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME" value="&quot;access::can-rename&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_MOUNTABLE_CAN_MOUNT" value="&quot;mountable::can-mount&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT" value="&quot;mountable::can-unmount&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT" value="&quot;mountable::can-eject&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE" value="&quot;mountable::unix-device&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE_FILE" value="&quot;mountable::unix-device-file&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_MOUNTABLE_HAL_UDI" value="&quot;mountable::hal-udi&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_MODIFIED" value="&quot;time::modified&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC" value="&quot;time::modified-usec&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_MODIFIED_NSEC" value="&quot;time::modified-nsec&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_ACCESS" value="&quot;time::access&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_ACCESS_USEC" value="&quot;time::access-usec&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_ACCESS_NSEC" value="&quot;time::access-nsec&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_CHANGED" value="&quot;time::changed&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_CHANGED_USEC" value="&quot;time::changed-usec&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_CHANGED_NSEC" value="&quot;time::changed-nsec&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_CREATED" value="&quot;time::created&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_CREATED_USEC" value="&quot;time::created-usec&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TIME_CREATED_NSEC" value="&quot;time::created-nsec&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_UNIX_DEVICE" value="&quot;unix::device&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_UNIX_INODE" value="&quot;unix::inode&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_UNIX_MODE" value="&quot;unix::mode&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_UNIX_NLINK" value="&quot;unix::nlink&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_UNIX_UID" value="&quot;unix::uid&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_UNIX_GID" value="&quot;unix::gid&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_UNIX_RDEV" value="&quot;unix::rdev&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_UNIX_BLOCK_SIZE" value="&quot;unix::block-size&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_UNIX_BLOCKS" value="&quot;unix::blocks&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_UNIX_IS_MOUNTPOINT" value="&quot;unix::is-mountpoint&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_DOS_IS_ARCHIVE" value="&quot;dos::is-archive&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_DOS_IS_SYSTEM" value="&quot;dos::is-system&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_DOS_IS_MOUNTPOINT" value="&quot;dos::is-mountpoint&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_DOS_REPARSE_POINT_TAG" value="&quot;dos::reparse-point-tag&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_OWNER_USER" value="&quot;owner::user&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_OWNER_USER_REAL" value="&quot;owner::user-real&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_OWNER_GROUP" value="&quot;owner::group&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_THUMBNAIL_PATH" value="&quot;thumbnail::path&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_THUMBNAILING_FAILED" value="&quot;thumbnail::failed&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_PREVIEW_ICON" value="&quot;preview::icon&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_FILESYSTEM_SIZE" value="&quot;filesystem::size&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_FILESYSTEM_FREE" value="&quot;filesystem::free&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_FILESYSTEM_TYPE" value="&quot;filesystem::type&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_FILESYSTEM_READONLY" value="&quot;filesystem::readonly&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_FILESYSTEM_USE_PREVIEW" value="&quot;filesystem::use-preview&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_FILESYSTEM_REMOTE" value="&quot;filesystem::remote&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_GVFS_BACKEND" value="&quot;gvfs::backend&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_SELINUX_CONTEXT" value="&quot;selinux::context&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TRASH_ITEM_COUNT" value="&quot;trash::item-count&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TRASH_ORIG_PATH" value="&quot;trash::orig-path&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_TRASH_DELETION_DATE" value="&quot;trash::deletion-date&quot;"/>
+  <define name="G_FILE_ATTRIBUTE_RECENT_MODIFIED" value="&quot;recent::modified&quot;"/>
+  <define name="G_DIR_SEPARATOR_S" value="&quot;/&quot;"/>
+  <define name="G_GINT32_FORMAT" value="&quot;i&quot;"/>
+  <define name="G_GINT32_MODIFIER" value="&quot;&quot;"/>
+  <define name="G_GINT64_FORMAT" value="&quot;li&quot;"/>
+  <define name="G_GINT64_MODIFIER" value="&quot;l&quot;"/>
+  <define name="G_GNUC_CHECK_VERSION(major, minor)" value="1"/>
+  <define name="G_GNUC_DEPRECATED" value="__attribute__((__deprecated__))"/>
+  <define name="G_GNUC_DEPRECATED_FOR(f)" value="__attribute__((deprecated(&quot;Use &quot; #f &quot; instead&quot;)))"/>
+  <define name="G_GSIZE_FORMAT" value="&quot;lu&quot;"/>
+  <define name="G_GSIZE_MODIFIER" value="&quot;l&quot;"/>
+  <define name="G_GSSIZE_FORMAT" value="&quot;li&quot;"/>
+  <define name="G_GSSIZE_MODIFIER" value="&quot;l&quot;"/>
+  <define name="G_GUINT32_FORMAT" value="&quot;u&quot;"/>
+  <define name="G_GUINT64_FORMAT" value="&quot;lu&quot;"/>
+  <define name="GTK_LEVEL_BAR_OFFSET_FULL" value="&quot;full&quot;"/>
+  <define name="GTK_LEVEL_BAR_OFFSET_HIGH" value="&quot;high&quot;"/>
+  <define name="GTK_LEVEL_BAR_OFFSET_LOW" value="&quot;low&quot;"/>
+  <!-- missing in gtk.cfg: added in 2.20.0 -->
+  <define name="GLIB_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="ATK_CHECK_VERSION(major, minor, micro)" value="1"/>
+  <define name="GTK_CHECK_VERSION(major, minor, micro)" value="1"/>
+</def>
