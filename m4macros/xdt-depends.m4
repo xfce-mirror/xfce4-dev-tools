@@ -364,14 +364,22 @@ AC_DEFUN([XDT_CHECK_PACKAGE_BINARY],
   AC_REQUIRE([XDT_PROG_PKG_CONFIG])
 
   AC_ARG_VAR([$1], [Location of program ]m4_default($4, $3))
-  AC_MSG_CHECKING([for m4_default($4, $3)])
 
   if test x"$$1" = x""; then
-    $1=`$PKG_CONFIG --variable=$3 $2`
+    $1=`$PKG_CONFIG --variable=$3 $2 2>/dev/null`
   fi
-  if test x"$$1" != x"" -a -x "$$1"; then
-    AC_MSG_RESULT([$$1])
+  if test x"$$1" != x""; then
+    if test -x "$$1"; then
+      AC_MSG_CHECKING([for m4_default($4, $3)])
+      AC_MSG_RESULT([$$1])
+    else
+      AC_PATH_PROG([$1], [$$1], [])
+    fi
   else
+    AC_PATH_PROG([$1], [m4_default($4, $3)], [])
+  fi
+
+  if test x"$$1" = x""; then
     AC_MSG_ERROR([could not find m4_default($4, $3). You can run:
 ./configure $1=/path/to/m4_default($4, $3)
 to provide a custom location for it.])
