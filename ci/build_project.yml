@@ -116,7 +116,7 @@ cppcheck:
           # simplest and most natural way to have one line per false positive while avoiding
           # duplicates in the false-positive file, which would break the local execution of
           # cppcheck.
-          cppcheck $OPTIONS .
+          cppcheck $OPTIONS --suppressions-list=<(awk -F : '{print $1 ":" $2}' "$FALSE_POSITIVE_FILE" | sort -u) .
           exit 1
         fi
       else
