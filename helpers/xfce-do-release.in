@@ -6,6 +6,7 @@ steps=0
 steps_complete=0
 version_scheme=1
 warning='\e[1;33mWarning:\e[0m'
+error='\e[1;31mError:\e[0m'
 nproc=$( \
 	nproc 2>/dev/null \
 	|| getconf _NPROCESSORS_ONLN 2>/dev/null \
@@ -23,6 +24,13 @@ sanity_checks () {
 	is_git=$(git rev-parse --is-inside-work-tree)
 	if [ "$is_git" != "true" ]; then
 		exit 1
+	fi
+
+	if [ -f "Cargo.toml" ]; then
+		if ! which cargo-release &>/dev/null; then
+			printf "$error 'cargo-release' not found; install it with 'cargo install cargo-release'\n" >&2
+			exit 1
+		fi
 	fi
 
 	current_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -180,12 +188,16 @@ build_system_type () {
 			echo "meson"
 		elif [ -f "configure.ac" -o -f "configure.ac.in" ]; then
 			echo "autotools"
+		elif [ -f "Cargo.toml" ]; then
+			echo "cargo"
 		fi
 	else
 		if [ -f "configure.ac" -o -f "configure.ac.in" ]; then
 			echo "autotools"
 		elif [ -f "meson.build" ]; then
 			echo "meson"
+		elif [ -f "Cargo.toml" ]; then
+			echo "cargo"
 		fi
 	fi
 }
@@ -244,6 +256,8 @@ edit () {
 update_project_version () {
 	local configure_file
 	local meson_build_file
+	local cargo_build_file
+	local cargo_build_files
 	local year=$(date +%Y)
 
 	if [ -f "configure.ac.in" ]; then
@@ -256,8 +270,12 @@ update_project_version () {
 		meson_build_file="meson.build"
 	fi
 
-	if [ -z "$configure_file" -a -z "$meson_build_file" ]; then
-		printf "$warning There is no 'configure.ac.in', 'configure.ac', or 'meson.build' file.\n"
+	if [ -f "Cargo.toml" ]; then
+		cargo_build_file="Cargo.toml"
+	fi
+
+	if [ -z "$configure_file" -a -z "$meson_build_file" -a -z "$cargo_build_file" ]; then
+		printf "$warning There is no 'configure.ac.in', 'configure.ac', 'meson.build', or 'Cargo.toml' file.\n"
 		return 1
 	fi
 
@@ -310,7 +328,19 @@ update_project_version () {
 		$MESON rewrite kwargs set project / version "$meson_version_string"
 	fi
 
-	if git diff --exit-code $configure_file $meson_build_file; then
+	if [ -n "$cargo_build_file" ]; then
+		local cargo_version_string="$version_major.$version_minor.$version_patch"
+		if [ "$1" = "post" ]; then
+			cargo_version_string+="-dev"
+		fi
+
+		cargo release version --execute --no-confirm "$cargo_version_string" || return 1
+
+		cargo_build_files=$(find . -name Cargo.toml)
+		cargo_build_files+=" Cargo.lock"
+	fi
+
+	if git diff --exit-code $configure_file $meson_build_file $cargo_build_files; then
 		printf "$warning No project version change, probably a file format issue.\n"
 	fi
 }
@@ -323,6 +353,8 @@ get_sha1_hash () {
 	elif [ "$1" = "meson" ]; then
 		dirname="build/meson-dist/"
 		suffix=xz
+	elif [ "$1" = "cargo" ]; then
+		suffix=xz
 	fi
 
 	sha1sum "$dirname$component-$version.tar.$suffix" | cut -d ' ' -f 1
@@ -333,6 +365,13 @@ join_by () {
 	if shift 2; then
 		printf '%s' "$first" "${@/#/$delim}"
 	fi
+}
+
+do_rollback () {
+	local tag=$1
+	printf "\n\nDeleting tag and rolling back release commit.\n"
+	git tag -d "$tag"
+	git reset --hard HEAD^
 }
 
 # Playbook for all release steps
@@ -384,6 +423,14 @@ run_steps () {
 	elif [ "$build_type" = "meson" ]; then
 		build_tarball_prompt="Build the tarball \e[0m(meson setup && meson dist)"
 		dist_commands=("rm -rf build" "meson setup build" "meson dist -C build --include-subprojects")
+	elif [ "$build_type" = "cargo" ]; then
+		build_tarball_prompt="Test the crate(s) and build the tarball \e[0m(cargo test && git archive)"
+		dist_commands=(
+			"cargo clean"
+			"cargo test --release --workspace --all-features"
+			"git config --global tar.tar.xz.command 'xz -c'"
+			"git archive --prefix=$component-$version/ --output=$component-$version.tar.xz $component-$version"
+		)
 	fi
 
 	# either in the xfce-build or xfce-test container or on the local machine
@@ -398,10 +445,18 @@ run_steps () {
 
 	step "$build_tarball_prompt"
 	if ! run_command "${dist_commands[@]}"; then
-		printf "\n\nDeleting tag and rolling back release commit.\n"
-		git tag -d $component-$version
-		git reset --hard HEAD^
+		do_rollback "$component-$version"
 		return 1
+	fi
+
+	if [ "$build_type" = "cargo" ]; then
+		# We have to run 'cargo publish' outside the build container so it can
+		# find credentials.
+		step "Publish the crates(s) to crates.io \e[0m(cargo publish)"
+		if ! run_command "cargo publish --workspace --all-features"; then
+			do_rollback "$component-$version"
+			return 1
+		fi
 	fi
 
 	step "Push your changes \e[0m(git push && git push --tags)"
