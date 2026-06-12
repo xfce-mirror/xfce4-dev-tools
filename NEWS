@@ -1,3 +1,23 @@
+4.21.2 (2026-06-12)
+======
+- Add cargo support to xfce-do-release
+- ci: Show only useful logs in case of cppcheck job failure
+- ci: Add --force to cppcheck command line
+- ci: Add --suppress=unmatchedSuppression to cppcheck command line
+- ci: Remove parts of xfce.cfg depending on cppcheck guessed version
+- ci: add systemd-dev to build container
+- ci: Add glib/gtk version check to cppcheck config file
+- ci: Add `-I .` to cppcheck command line
+- ci: install rust toolchain/binaries to system location
+- ci: run `cargo deny check advisories` for rust projects that use it
+- ci: add dry-run publish step for cargo projects
+- Update rust to 1.90.0
+- ci: add build step for cargo-only projects
+- ci: only run one meson build for rust projects
+- ci: add analysis for rust
+- ci: Loosen exclusion regex for gcc-analyzer a bit
+- ci: Add missing macro to cppcheck config file
+
 4.21.1 (2026-06-04)
 ======
 - Update copyright year
