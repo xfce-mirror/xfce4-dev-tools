@@ -1,5 +1,5 @@
 FROM ubuntu:26.04
-LABEL org.opencontainers.image.authors=" Xfce Development Team"
+LABEL org.opencontainers.image.authors="Xfce Development Team"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
