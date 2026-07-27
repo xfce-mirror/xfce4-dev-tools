@@ -5,6 +5,8 @@
   <define name="BINDIR" value="&quot;/usr/bin&quot;"/>
   <define name="COPYRIGHT_YEAR" value="&quot;0000&quot;"/>
   <define name="DATADIR" value="&quot;/usr/share&quot;"/>
+  <define name="ENABLE_WAYLAND" value="1"/>
+  <define name="ENABLE_X11" value="1"/>
   <define name="GETTEXT_PACKAGE" value="&quot;name&quot;"/>
   <define name="INCLUDEDIR" value="&quot;/usr/include&quot;"/>
   <define name="LIBDIR" value="&quot;/usr/lib&quot;"/>
