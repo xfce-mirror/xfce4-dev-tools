@@ -27,8 +27,8 @@ sanity_checks () {
 	fi
 
 	if [ -f "Cargo.toml" ]; then
-		if ! which cargo-release &>/dev/null; then
-			printf "$error 'cargo-release' not found; install it with 'cargo install cargo-release'\n" >&2
+		if ! which cargo-set-version &>/dev/null; then
+			printf "$error 'cargo set-version' not found; install it with 'cargo install cargo-edit'\n" >&2
 			exit 1
 		fi
 	fi
@@ -330,16 +330,24 @@ update_project_version () {
 
 	if [ -n "$cargo_build_file" ]; then
 		local cargo_version_string="$version_major.$version_minor.$version_patch"
-		if [ "$1" = "post" ]; then
-			# cargo uses SemVer v2, which considers anything following a dash
-			# to be a pre-release identifier, so we can't bump to the same
-			# version with "-dev", as that implies we're _downgrading_ the
-			# version number. But a "+" is ignored by version comparisons and
-			# indicates build metadata or any other arbitrary information.
-			cargo_version_string+="+dev"
-		fi
 
-		cargo release version --execute --no-confirm "$cargo_version_string" || return 1
+		# cargo uses SemVer v2, which considers anything following a dash
+		# to be a pre-release identifier, so we can't bump to the same
+		# version with "-dev", as that implies we're _downgrading_ the
+		# version number. But a "+" is ignored by version comparisons and
+		# indicates build metadata or any other arbitrary information.
+		if [ "$1" = "pre" ]; then
+			# `cargo set-version`'s behavior is a little odd: if we want to
+			# clear out the "+dev", we need to actively clear the semver
+			# metadata; otherwise the new version will keep the metadata.
+			cargo set-version --workspace --metadata "" "$cargo_version_string" || return 1
+		elif [ "$1" = "post" ]; then
+			# ... but if we want`cargo set-version` to add the metadata part to
+			# something that has the same version stem, we have to provide it
+			# as a part of the version string; if we use `--metadata`, it
+			# doesn't update.
+			cargo set-version --workspace "$cargo_version_string+dev" || return 1
+		fi
 
 		cargo_build_files=$(find . -name Cargo.toml)
 		cargo_build_files+=" Cargo.lock"
