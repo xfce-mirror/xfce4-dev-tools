@@ -136,7 +136,7 @@ rustfmt:
 
 clippy:
   script:
-    - cargo clippy --no-deps --workspace --all-features -- -D warnings
+    - cargo clippy --no-deps --workspace $RUST_CARGO_CLIPPY_ARGS -- -D warnings $RUST_CLIPPY_ARGS
   stage: analysis
   interruptible: true
   rules:
