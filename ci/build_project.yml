@@ -160,19 +160,13 @@ cargo-deny:
       - deny.toml
       when: on_success
 
-translations:
-  extends: .translation
-  stage: build
-  script:
-    #  Could validate translations, but for now just pass
-    - "true"
-
 build-gcc-meson:
   variables:
     MESON_SETUP_FLAGS: "--buildtype=debug --werror"
   extends:
     - .build-meson
     - .build-gcc
+    - .potfile-meson
 
 build-gcc-autotools:
   variables:
@@ -180,6 +174,7 @@ build-gcc-autotools:
   extends:
     - .build-autotools
     - .build-gcc
+    - .potfile-autotools
 
 .build-gcc:
   variables:
@@ -461,6 +456,14 @@ release-autotools:
     # Projects should use AM_DISTCHECK_CONFIGURE_FLAGS instead of DISTCHECK_CONFIGURE_FLAGS
     # so that the flags set here are not overwritten
     - DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" make -j$(nproc) distcheck
+
+.potfile-meson:
+  after_script:
+    - if [ -d po ]; then meson compile -Cbuild $CI_PROJECT_NAME-pot; fi
+
+.potfile-autotools:
+  after_script:
+    - if [ -d po ]; then make po/$CI_PROJECT_NAME.pot; fi
 
 .translation:
   rules:
