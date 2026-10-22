@@ -460,15 +460,6 @@ release-autotools:
   after_script:
     - if [ -d po ]; then meson compile -Cbuild $CI_PROJECT_NAME-pot; fi
 
-.translation:
-  rules:
-    # If there are changes to .po, run this job
-    - changes:
-      - "po/*.po"
-      when: always
-    # Otherwise, never run
-    - when: never
-
 .no-translation:
   rules:
     # If there are changes to .po, never run, unless it's a merge request or a manual trigger
