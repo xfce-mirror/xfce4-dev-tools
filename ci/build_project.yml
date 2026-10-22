@@ -472,7 +472,7 @@ release-autotools:
 .no-translation:
   rules:
     # If there are changes to .po, never run, unless it's a merge request or a manual trigger
-    - if: '$CI_COMMIT_BEFORE_SHA != "0000000000000000000000000000000000000000"'
+    - if: '$CI_PIPELINE_SOURCE != "merge_request_event" && $CI_PIPELINE_SOURCE != "web"'
       changes:
         - "po/*.po"
       when: never
