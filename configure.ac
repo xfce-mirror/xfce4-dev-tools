@@ -96,8 +96,11 @@ dnl Parts of "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg" were added only after v
 dnl version we use in CI, so don't add them for users if they use cppcheck >= 2.20, as it would conflict
 CPPCHECK_VERSION="0"
 if test -f "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg"; then
+    dnl https://github.com/cppcheck-opensource/cppcheck/commit/8df3087f48aa70a2e0e54ec05324f7147ec3e0b6
+    if grep -q '<define name="G_DEFINE_ENUM_TYPE' "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg"; then
+        CPPCHECK_VERSION="2.22.1"
     dnl https://github.com/cppcheck-opensource/cppcheck/commit/40f6f6ad90c987ca6ffcd72881128acab9ed8997
-    if grep -q '<define name="G_FILE_ATTRIBUTE_STANDARD_TYPE' "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg"; then
+    elif grep -q '<define name="G_FILE_ATTRIBUTE_STANDARD_TYPE' "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg"; then
         CPPCHECK_VERSION="2.21.0"
     dnl https://github.com/cppcheck-opensource/cppcheck/commit/8c762adcdd9e63e89ddeeb90ccfee5a225ae8a77
     elif grep -q '<define name="GLIB_CHECK_VERSION' "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg"; then
