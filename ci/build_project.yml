@@ -394,7 +394,7 @@ release-autotools:
     # Equivalent to -Werror using grep for deprecation warnings only on glib symbols,
     # which we care about since we set GLIB_VERSION_MIN_REQUIRED and GLIB_VERSION_MAX_ALLOWED
     # Subshell is necessary for logical negation to work because of set -e
-    - '(! grep -E "warning: ''.*\b[gG]_.+\b.*''.+\[-Wdeprecated-declarations\]" build.log)'
+    - '(! grep -E "warning: .+\b[gG]_.+\b.+\[-Wdeprecated-declarations\]" build.log)'
 
 # Since this block is used by !reference, and runs as a final step of an
 # unconditional build, we can't use 'rules:' to determine when it should run.
