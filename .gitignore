@@ -35,6 +35,7 @@ xfce4-dev-tools-*.tar.bz2
 xdt-csource/*
 !xdt-csource/Makefile.am
 !xdt-csource/main.c
+!xdt-csource/meson.build
 m4
 
 helpers/xfce-do-release
