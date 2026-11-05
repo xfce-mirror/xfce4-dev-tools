@@ -23,6 +23,7 @@ AC_INIT([xfce4-dev-tools], [xdt_version],
 AC_COPYRIGHT([Copyright (c) 2002-2026 The Xfce development team. All rights reserved.])
 AC_CONFIG_MACRO_DIR([m4])
 AC_REVISION([xdt_version_build])
+AC_DEFINE([VERSION_FULL], [PACKAGE_VERSION], [Alias for VERSION and PACKAGE_VERSION for meson compatibility])
 
 dnl substitute version info
 AC_SUBST([VERSION_MAJOR], [xdt_version_major])
@@ -114,7 +115,7 @@ AC_CHECK_HEADERS([libintl.h locale.h memory.h stdio.h stdlib.h string.h])
 dnl ***********************************
 dnl *** Check for required packages ***
 dnl ***********************************
-PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.72.0])
+PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.80.0])
 
 dnl **********************
 dnl *** Generate files ***

@@ -1,0 +1,6 @@
+option(
+  'cppcheck-cfg-prefix',
+  type: 'string',
+  value: '',
+  description: 'Path prefix under which the xfce.cfg file will be installed (default: $libdir)',
+)

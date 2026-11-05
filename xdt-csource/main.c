@@ -20,6 +20,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifdef HAVE_XFCE_REVISION_H
+#include "xfce-revision.h"
+#endif
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -324,13 +328,13 @@ print_usage (void)
 static void
 print_version (void)
 {
-  g_print ("%s %s\n\n", G_LOG_DOMAIN, PACKAGE_VERSION);
+  g_print ("%s %s\n\n", G_LOG_DOMAIN, VERSION_FULL);
   g_print ("Copyright (c) 2005-2019\n");
   g_print ("\tThe Xfce development team. All rights reserved.\n\n");
   g_print ("%s comes with ABSOLUTELY NO WARRANTY,\n"
            "You may redistribute copies of %s under the terms of\n"
            "the GNU General Public License which can be found in the\n"
-           "%s source package.\n\n", g_get_prgname (), g_get_prgname (), PACKAGE_TARNAME);
+           "%s source package.\n\n", g_get_prgname (), g_get_prgname (), PACKAGE_NAME);
   g_print ("Please report bugs to <%s>.", PACKAGE_BUGREPORT);
   g_print ("\n");
 }
