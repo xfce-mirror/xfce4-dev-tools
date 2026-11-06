@@ -13,6 +13,7 @@ RUN apt-get update \
   polkitd clang-format clang clang-tools meson python3-dbus python3-pexpect python3-psutil desktop-file-utils xmlto docbook-xml cppcheck \
   libdbus-glib-1-dev libdisplay-info-dev libyaml-dev libcanberra-gtk3-dev xserver-xorg-input-libinput-dev libcolord-dev libpolkit-gobject-1-dev libqrencode-dev libutempter-dev libxpresent-dev libxnvctrl-dev libaccountsservice-dev libasound2-dev libsndio-dev \
   rustup libdrm-dev libgbm-dev libinput-dev libpixman-1-dev libseat-dev libudev-dev libxkbcommon-dev \
+  curl \
   && rm -rf /var/lib/apt/lists/*
 
 # Set up rust build tools
@@ -30,3 +31,19 @@ COPY ci/build_libs.sh /git/build_libs.sh
 RUN chmod a+x /git/build_libs.sh
 
 RUN /git/build_libs.sh
+
+# Install gettext-1.0 so rust format strings can be parsed
+RUN mkdir /depbuild \
+    && cd /depbuild \
+    && curl --output gettext-1.0.tar.xz https://ftp.gnu.org/gnu/gettext/gettext-1.0.tar.xz \
+    && echo "71132a3fb71e68245b8f2ac4e9e97137d3e5c02f415636eb508ae607bc01add7  gettext-1.0.tar.xz" >gettext-1.0.tar.xz.asc \
+    && sha256sum --check gettext-1.0.tar.xz.asc \
+    && tar xvaf gettext-1.0.tar.xz \
+    && cd gettext-1.0 \
+    && ./configure --prefix=/opt/gettext-1.0 --disable-java --disable-d --disable-modula2 --enable-year2038 --without-emacs --without-included-libintl --disable-libasprintf --disable-shared --enable-static \
+    && make -j install \
+    && rm -rf /opt/gettext-1.0/share/{doc,info,locale,man} \
+    && cd / \
+    && rm -rf /depbuild \
+    && apt-get purge -y curl \
+    && apt-get autopurge -y
