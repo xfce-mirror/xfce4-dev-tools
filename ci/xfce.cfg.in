@@ -36,6 +36,13 @@
   <define name="TUMBLER_CHECK_VERSION(major, minor, micro)" value="1"/>
   <define name="XFCE_PANEL_DEFINE_PLUGIN(TypeName, type_name, args...)" value=""/>
   <define name="XFCE_PANEL_DEFINE_PLUGIN_RESIDENT(TypeName, type_name, args...)" value=""/>
+  <!-- missing in gtk.cfg: added in 2.22.1 -->
+  <define name="G_DEFINE_ENUM_TYPE(TypeName, type_name, ...)" value=""/>
+  <define name="G_DEFINE_ENUM_VALUE(EnumValue, EnumNick)" value=""/>
+  <define name="G_DEFINE_EXTENDED_ERROR(ErrorType, error_type)" value=""/>
+  <define name="G_DEFINE_FLAGS_TYPE(TypeName, type_name, ...)" value=""/>
+  <define name="G_DEFINE_POINTER_TYPE(TypeName, type_name)" value=""/>
+  <define name="G_DEFINE_POINTER_TYPE_WITH_CODE(TypeName, type_name, _C_)" value=""/>
   <!-- missing in gtk.cfg: added in 2.21.0 -->
   <define name="G_FILE_ATTRIBUTE_STANDARD_TYPE" value="&quot;standard::type&quot;"/>
   <define name="G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN" value="&quot;standard::is-hidden&quot;"/>
