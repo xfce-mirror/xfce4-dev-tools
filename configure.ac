@@ -64,16 +64,16 @@ dnl ****************************************
 dnl *** Check for host specific programs ***
 dnl ****************************************
 case "${host_os}" in
-    freebsd*)
+    linux*)
+      GSED="sed"
+      GMAKE="make"
+      ;;
+    *)
       AC_CHECK_PROGS(GSED, [gsed], no)
       AS_IF([test x"$GSED" = x"no"], [AC_MSG_ERROR([GNU sed (gsed) missing])])
 
       AC_CHECK_PROGS(GMAKE, [gmake], no)
       AS_IF([test x"$GMAKE" = x"no"], [AC_MSG_ERROR([GNU make (gmake) missing])])
-      ;;
-    *)
-      GSED="sed"
-      GMAKE="make"
       ;;
 esac
 

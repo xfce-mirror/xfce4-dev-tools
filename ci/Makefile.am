@@ -4,7 +4,7 @@ cppcheck_DATA = \
 	xfce.cfg
 
 xfce.cfg: xfce.cfg.in
-	$(SED) "/missing in gtk.cfg: added in $(CPPCHECK_VERSION)/,/<\/def>/{/<\/def>/!d}" < $< > $@
+	$(GSED) "/missing in gtk.cfg: added in $(CPPCHECK_VERSION)/,/<\/def>/{/<\/def>/!d}" < $< > $@
 
 DISTCLEANFILES = \
 	$(cppcheck_DATA)
