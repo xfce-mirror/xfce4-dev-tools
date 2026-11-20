@@ -19,9 +19,11 @@ RUN apt-get update \
 ENV RUSTUP_HOME=/opt/rust/rustup
 ENV PATH=/opt/rust/cargo/bin:$PATH
 RUN mkdir -p $RUSTUP_HOME /opt/rust/cargo \
+    && rustup toolchain install stable --profile minimal \
+    && CARGO_HOME=/opt/rust/cargo cargo install --locked cargo-deny \
+    && rustup toolchain uninstall stable \
     && rustup toolchain install 1.92.0 --profile minimal --component clippy --component rustfmt \
     && rustup default 1.92.0 \
-    && CARGO_HOME=/opt/rust/cargo cargo install --locked cargo-deny \
     && rm -rf $RUSTUP_HOME/downloads/* $RUSTUP_HOME/tmp/* /opt/rust/cargo/registry /opt/rust/cargo/git
 
 # Build and install the latest tag for all Xfce core libraries
