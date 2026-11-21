@@ -1,3 +1,25 @@
+4.21.3 (2026-11-21)
+======
+- ci: Add "schedule" to pipelines authorized to run for po files
+- Update README after switchover to meson
+- Remove autotools build
+- Add meson build
+- Install cargo-deny in the container using latest stable rustc
+- build: Fix sed requirement
+- xfce.cfg: Add missing G_DEFINE_* macros
+- ci: Drop .translation job
+- ci: Fix .no-translation job
+- ci: Fix deprecation warning regex
+- Generate potfile after running build
+- Add xfce4-session to ci/build_libs.sh
+- Remove `--all-features` from `cargo clippy` and add var interp
+- Fix typo in `cargo clippy` command
+- Pass `--workspace --all-features` to `cargo clippy`
+- Bump rust in container to 1.92
+- Use `cargo set-version` instead of `cargo-release`
+- xfce-do-release: use + instead of - in cargo post-bump
+
+
 4.21.2 (2026-06-12)
 ======
 - Add cargo support to xfce-do-release
