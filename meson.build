@@ -30,15 +30,15 @@ else
   make = find_program('gmake', required: true)
 endif
 
-cppcheck_cfg_prefix = get_option('cppcheck-cfg-prefix')
-if cppcheck_cfg_prefix == ''
-  cppcheck_cfg_prefix = get_option('prefix') / get_option('libdir')
+cppcheck_cfg_path = get_option('cppcheck-cfg-path')
+if cppcheck_cfg_path == ''
+  cppcheck_cfg_path = get_option('prefix') / get_option('libdir') / 'cppcheck' / 'cfg'
 endif
 
 # parts of "$CPPCHECK_CFG_PREFIX/cppcheck/cfg/gtk.cfg" were added only after version 2.19, which is the
 # version we use in CI, so don't add them for users if they use cppcheck >= 2.20, as it would conflict
 cppcheck_version = '0'
-gtk_cfg = cppcheck_cfg_prefix / 'cppcheck' / 'cfg' / 'gtk.cfg'
+gtk_cfg = cppcheck_cfg_path / 'gtk.cfg'
 if fs.exists(gtk_cfg)
   contents = fs.read(gtk_cfg)
   # https://github.com/cppcheck-opensource/cppcheck/commit/8df3087f48aa70a2e0e54ec05324f7147ec3e0b6
