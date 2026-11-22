@@ -5,6 +5,6 @@ configure_file(
   command: [sed, sed_script, '@INPUT@'],
   capture: true,
   install: true,
-  install_dir: cppcheck_cfg_prefix / 'cppcheck' / 'cfg',
+  install_dir: cppcheck_cfg_path,
 )
 
