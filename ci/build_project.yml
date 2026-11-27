@@ -166,7 +166,6 @@ build-gcc-meson:
   extends:
     - .build-meson
     - .build-gcc
-    - .potfile-meson
 
 build-gcc-autotools:
   variables:
@@ -444,6 +443,8 @@ release-autotools:
   script:
     - !reference [.setup-meson, script]
     - meson dist -Cbuild --include-subprojects
+    # Additional check that was present in 'make distcheck' but is missing in 'meson dist'
+    - if [ -d po ]; then meson compile -Cbuild $CI_PROJECT_NAME-pot; fi
 
 .distcheck-autotools:
   extends: .configure-autotools
@@ -455,10 +456,6 @@ release-autotools:
     # Projects should use AM_DISTCHECK_CONFIGURE_FLAGS instead of DISTCHECK_CONFIGURE_FLAGS
     # so that the flags set here are not overwritten
     - DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" make -j$(nproc) distcheck
-
-.potfile-meson:
-  after_script:
-    - if [ -d po ]; then meson compile -Cbuild $CI_PROJECT_NAME-pot; fi
 
 .no-translation:
   rules:
